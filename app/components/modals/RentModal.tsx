@@ -89,30 +89,36 @@ const RentModal = () => {
     setStep((value) => value + 1);
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (step !== STEPS.PRICE) {
-      return onNext();
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        if (step !== STEPS.PRICE) {
+            return onNext();
+        }
+
+        setIsLoading(true);
+
+        const payload = {
+            ...data,
+            imageSrc, // Add the updated imageSrc value here
+        };
+
+        axios.post('/api/listings', payload)
+            .then(() => {
+                toast.success('تم إنشاء القائمة');
+                router.refresh();
+                reset();
+                setStep(STEPS.CATEGORY)
+                rentModal.onClose();
+            })
+            .catch(() => {
+                toast.error('هناك خطأ ما');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
-    
-    setIsLoading(true);
 
-    axios.post('/api/listings', data)
-    .then(() => {
-      toast.success('تم إنشاء القائمة');
-      router.refresh();
-      reset();
-      setStep(STEPS.CATEGORY)
-      rentModal.onClose();
-    })
-    .catch(() => {
-      toast.error('هناك خطأ ما');
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
-  }
 
-  const actionLabel = useMemo(() => {
+    const actionLabel = useMemo(() => {
     if (step === STEPS.PRICE) {
       return 'انشأ'
     }

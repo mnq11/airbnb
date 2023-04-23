@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {Prisma} from ".prisma/client";
+import ListingCreateInput = Prisma.ListingCreateInput;
 
-export async function POST(
-  request: Request, 
-) {
+export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -13,17 +13,18 @@ export async function POST(
   }
 
   const body = await request.json();
-  const { 
+  const {
     title,
     description,
-    imageSrc,
+    images = [],
     category,
     roomCount,
     bathroomCount,
     guestCount,
     location,
     price,
-   } = body;
+  } = body;
+  console.log("Received images in the POST function: ", images); // Add this line
 
   Object.keys(body).forEach((value: any) => {
     if (!body[value]) {
@@ -31,20 +32,31 @@ export async function POST(
     }
   });
 
+  // First, create the listing and its associated images
   const listing = await prisma.listing.create({
     data: {
       title,
       description,
-      imageSrc,
       category,
       roomCount,
       bathroomCount,
       guestCount,
       locationValue: location.value,
       price: parseInt(price, 10),
-      userId: currentUser.id
-    }
+      user: {
+        connect: {
+          id: currentUser.id,
+        },
+      },
+      images: {
+        create: images.map((imageUrl: string) => ({
+          url: imageUrl,
+        })),
+      },
+    } as ListingCreateInput,
+    include: { images: true },
   });
+
 
   return NextResponse.json(listing);
 }

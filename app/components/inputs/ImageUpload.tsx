@@ -1,80 +1,71 @@
-'use client';
-
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import { useCallback } from "react";
-import { TbPhotoPlus } from 'react-icons/tb'
+import { useCallback, useState } from "react";
+import { TbPhotoPlus } from "react-icons/tb";
 
 declare global {
-  var cloudinary: any
+  var cloudinary: any;
 }
 
 const uploadPreset = "ufsgae4f";
 
 interface ImageUploadProps {
-  onChange: (value: string) => void;
-  value: string;
+    onChange: (value: string[]) => void;
+    value: string[];
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({
-  onChange,
-  value
-}) => {
-  const handleUpload = useCallback((result: any) => {
-    onChange(result.info.secure_url);
-  }, [onChange]);
 
-  return (
-    <CldUploadWidget 
-      onUpload={handleUpload} 
-      uploadPreset={uploadPreset}
-      options={{
-        maxFiles: 1
-      }}
-    >
-      {({ open }) => {
-        return (
-          <div
-            onClick={() => open?.()}
-            className="
-              relative
-              cursor-pointer
-              hover:opacity-70
-              transition
-              border-dashed 
-              border-2 
-              p-20 
-              border-neutral-300
-              flex
-              flex-col
-              justify-center
-              items-center
-              gap-4
-              text-neutral-600
-            "
+const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
+    const [images, setImages] = useState(value || []);
+
+    const handleUpload = useCallback((result: any) => {
+        console.log("Upload result: ", result); // Add this line
+        if (result.event === "success") {
+            const newImages = [...images, result.info.secure_url];
+            setImages(newImages);
+            console.log("Uploading new images: ", newImages);
+            onChange(newImages);
+        }
+    }, [onChange, images]);
+
+
+
+
+
+
+    return (
+      <div>
+          <CldUploadWidget
+              onUpload={handleUpload}
+              uploadPreset={uploadPreset}
+              options={{
+                  maxFiles: 5, // Adjust this number based on how many images you want to allow
+              }}
           >
-            <TbPhotoPlus
-              size={50}
-            />
-            <div className="font-semibold text-lg">
-              Click to upload
-            </div>
-            {value && (
-              <div className="
-              absolute inset-0 w-full h-full">
-                <Image
-                  fill 
-                  style={{ objectFit: 'cover' }} 
-                  src={value} 
-                  alt="House" 
-                />
-              </div>
-            )}
-          </div>
-        ) 
-    }}
-    </CldUploadWidget>
+              {(uploadWidgetProps) => (
+                  <button onClick={() => uploadWidgetProps?.open?.()} className="...">
+                      <TbPhotoPlus size={50} />
+                      <div className="font-semibold text-lg">Click to upload</div>
+                  </button>
+              )}
+          </CldUploadWidget>
+
+
+
+          <div className="image-thumbnails">
+              {images.map((img, index) => (
+                  <div key={index} className="...">
+                      <Image
+                          width={100}
+                          height={100}
+                          src={img}
+                          alt={`Uploaded image ${index + 1}`}
+                      />
+                  </div>
+              ))}
+        </div>
+      </div>
   );
-}
+};
 
 export default ImageUpload;
