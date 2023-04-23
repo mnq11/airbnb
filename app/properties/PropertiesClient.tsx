@@ -68,6 +68,8 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
                         disabled={deletingId === listing.id}
                         actionLabel="حذف الملكية"
                         currentUser={currentUser}
+                        imageSrcs={listing.images.map((image: any) => image.url)}
+
                     />
                 ))}
             </div>
