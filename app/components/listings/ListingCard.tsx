@@ -1,16 +1,15 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 import React, {useCallback, useMemo} from "react";
 import {format} from 'date-fns';
-import SwiperCore, { Navigation, Pagination } from 'swiper';
+import {Swiper as SwiperComponent, SwiperSlide} from 'swiper/react';
+import SwiperCore, {Pagination} from 'swiper';
 import 'swiper/swiper.min.css';
-import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 
-SwiperCore.use([Navigation, Pagination]);
+SwiperCore.use([Pagination]);
 
 
 import useCountries from "@/app/hooks/useCountries";
@@ -22,7 +21,6 @@ import {
 
 import HeartButton from "../HeartButton";
 import Button from "../Button";
-import ClientOnly from "../ClientOnly";
 
 interface ListingCardProps {
     data: SafeListing;
@@ -33,7 +31,7 @@ interface ListingCardProps {
     actionId?: string;
     currentUser?: SafeUser | null;
     imageSrcs?: string[];
-};
+}
 
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -82,6 +80,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
     }, [reservation]);
 
     return (
+
+
         <div
             onClick={() => router.push(`/listings/${data.id}`)}
             className="col-span-1 cursor-pointer group"
@@ -96,13 +96,16 @@ const ListingCard: React.FC<ListingCardProps> = ({
         rounded-xl
       "
                 >
-                    <Swiper
-                        navigation={false}
-                        pagination={{ clickable: true }}
+
+                    <SwiperComponent
+                        pagination={{
+                            clickable: true,
+                        }}
                         grabCursor={true}
                         className="h-full w-full transition"
                     >
                         {imageSrcs?.map((src, index) => (
+
                             <SwiperSlide key={index}>
                                 <Image
                                     layout="fill"
@@ -112,8 +115,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                                 />
                             </SwiperSlide>
                         ))}
-                    </Swiper>
-
+                    </SwiperComponent>
 
 
                     <div className="
@@ -129,7 +131,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
                 </div>
                 <div className="font-semibold text-lg">
                     {location?.region}, {location?.label}
-                    {/*,{location?.value}*/}
                 </div>
                 <div className="font-light text-neutral-500">
                     {reservationDate || data.category}
