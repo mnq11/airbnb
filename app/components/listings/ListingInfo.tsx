@@ -36,6 +36,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   bathroomCount,
   category,
   locationValue,
+
 }) => {
   const { getByValue } = useCountries();
 

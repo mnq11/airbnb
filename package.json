@@ -36,6 +36,8 @@
     "react-responsive-carousel": "^3.2.23",
     "react-select": "^5.7.2",
     "react-spinners": "^0.13.8",
+    "sass": "^1.62.0",
+    "swiper": "^6.8.4",
     "swr": "^2.1.1",
     "typescript": "5.0.2",
     "world-countries": "^4.0.0",

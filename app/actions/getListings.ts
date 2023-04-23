@@ -80,9 +80,13 @@ export default async function getListings(
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
+      include: {
+        images: true, // Include images
+      },
     });
+
 
     const safeListings = listings.map((listing) => ({
       ...listing,
