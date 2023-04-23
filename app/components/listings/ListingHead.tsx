@@ -1,19 +1,18 @@
 'use client';
 
-import Image from "next/image";
-import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation, Pagination } from 'swiper';
-import 'swiper/swiper.min.css';
-import 'swiper/components/navigation/navigation.min.css';
-import 'swiper/components/pagination/pagination.min.css';
-
 import useCountries from "@/app/hooks/useCountries";
 import {SafeUser} from "@/app/types";
-
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 
-SwiperCore.use([Navigation, Pagination]);
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation, Thumbs } from 'swiper/core';
+
+import 'swiper/swiper-bundle.min.css';
+import {useState} from "react";
+
+
+SwiperCore.use([Navigation, Thumbs]);
 
 interface ListingHeadProps {
     title: string;
@@ -26,13 +25,14 @@ interface ListingHeadProps {
 const ListingHead: React.FC<ListingHeadProps> = ({
                                                      title,
                                                      locationValue,
-                                                     images = [], // Provide a default value for the images prop
+                                                     images,
                                                      id,
                                                      currentUser,
                                                  }) => {
-    const {getByValue} = useCountries();
-
+    const { getByValue } = useCountries();
     const location = getByValue(locationValue);
+
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
 
     return (
         <>
@@ -41,24 +41,35 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 subtitle={`${location?.region}, ${location?.label}`}
             />
             <div className="w-full h-[60vh] overflow-hidden rounded-xl relative">
-                <SwiperComponent
+                <Swiper
+                    style={{ height: '80%' }}
+                    spaceBetween={10}
                     navigation
-                    pagination={{ clickable: true }}
-                    className="h-full w-full"
+                    thumbs={{ swiper: thumbsSwiper }}
+                    className="mySwiper2"
                 >
                     {images.map((image, index) => (
                         <SwiperSlide key={index}>
-                            <Image
-                                src={image.url}
-                                layout="responsive"
-                                width={1200}
-                                height={800}
-                                className="object-cover w-full"
-                                alt="Image"
-                            />
+                            <img src={image.url} className="object-cover w-full h-full" alt="Image" />
                         </SwiperSlide>
                     ))}
-                </SwiperComponent>
+                </Swiper>
+                <Swiper
+                    onSwiper={setThumbsSwiper}
+                    spaceBetween={10}
+                    slidesPerView={4}
+                    freeMode
+                    watchSlidesVisibility
+                    watchSlidesProgress
+                    style={{ height: '20%', marginTop: '5px' }}
+                    className="mySwiper"
+                >
+                    {images.map((image, index) => (
+                        <SwiperSlide key={index}>
+                            <img src={image.url} className="object-cover w-full h-full" alt="Thumbnail" />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
                 <div className="absolute top-5 right-5">
                     <HeartButton listingId={id} currentUser={currentUser} />
                 </div>
@@ -66,5 +77,6 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         </>
     );
 };
+
 
 export default ListingHead;
