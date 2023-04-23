@@ -13,7 +13,9 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
   listings,
   currentUser
 }) => {
-  return (
+    console.log('Listings:', listings.map(listing => listing.images));
+
+    return (
     <Container>
       <Heading
         title="المفضلة"
@@ -33,10 +35,13 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
         "
       >
         {listings.map((listing: any) => (
+
           <ListingCard
             currentUser={currentUser}
             key={listing.id}
             data={listing}
+            imageSrcs={listing.images ? listing.images.map((image: any) => image.url) : []}
+
           />
         ))}
       </div>

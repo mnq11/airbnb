@@ -15,6 +15,9 @@ export default async function getFavoriteListings() {
         id: {
           in: [...(currentUser.favoriteIds || [])]
         }
+      },
+      include: {
+        images: true, // Include the images relation
       }
     });
 
