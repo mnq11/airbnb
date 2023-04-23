@@ -13,18 +13,10 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const {
-    title,
-    description,
-    images = [],
-    category,
-    roomCount,
-    bathroomCount,
-    guestCount,
-    location,
-    price,
-  } = body;
-  console.log("Received images in the POST function: ", images); // Add this line
+  const { title, description, images = [], category, roomCount, bathroomCount, guestCount, location, price } = body;
+
+
+  console.log( "body", body );
 
   Object.keys(body).forEach((value: any) => {
     if (!body[value]) {
@@ -49,7 +41,7 @@ export async function POST(request: Request) {
         },
       },
       images: {
-        create: images.map((imageUrl: string) => ({
+        create: images.map((imageUrl: any) => ({
           url: imageUrl,
         })),
       },

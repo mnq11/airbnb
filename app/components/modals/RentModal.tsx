@@ -98,7 +98,7 @@ const RentModal = () => {
 
         const payload = {
             ...data,
-            imageSrc, // Add the updated imageSrc value here
+            images: imageSrc,
         };
 
         axios.post('/api/listings', payload)
@@ -108,9 +108,12 @@ const RentModal = () => {
                 reset();
                 setStep(STEPS.CATEGORY)
                 rentModal.onClose();
+
             })
             .catch(() => {
                 toast.error('هناك خطأ ما');
+
+
             })
             .finally(() => {
                 setIsLoading(false);

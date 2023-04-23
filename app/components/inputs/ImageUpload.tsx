@@ -43,7 +43,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
               }}
           >
               {(uploadWidgetProps) => (
-                  <button onClick={() => uploadWidgetProps?.open?.()} className="...">
+                  <button onClick={() => uploadWidgetProps && uploadWidgetProps.open && uploadWidgetProps.open()} className="...">
                       <TbPhotoPlus size={50} />
                       <div className="font-semibold text-lg">Click to upload</div>
                   </button>
