@@ -37,16 +37,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
                 onUpload={handleUpload}
                 uploadPreset={uploadPreset}
                 options={{
-                    maxFiles: 2, // Adjust this number based on how many images you want to allow
+                    maxFiles: 10, // Adjust this number based on how many images you want to allow
                 }}
             >
                 {(uploadWidgetProps) => (
-                    <button onClick={() => uploadWidgetProps && uploadWidgetProps.open && uploadWidgetProps.open()} className="...">
+                    <button
+                        onClick={() => uploadWidgetProps?.open?.()}
+                        className="..."
+                    >
                         <TbPhotoPlus size={50} />
                         <div className="font-semibold text-lg">Click to upload</div>
                     </button>
                 )}
             </CldUploadWidget>
+
 
             <div className="image-thumbnails">
                 {images.map((img, index) => (
