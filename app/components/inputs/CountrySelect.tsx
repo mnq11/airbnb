@@ -28,6 +28,9 @@ const convertJsonToYemenAreas = (jsonData: any[]): CountrySelectValue[] => {
     }));
 };
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 const centeredStyles = {
     control: (provided) => ({
         ...provided,
