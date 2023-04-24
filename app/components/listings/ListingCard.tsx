@@ -80,8 +80,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
     }, [reservation]);
 
     return (
-
-
         <div
             onClick={() => router.push(`/listings/${data.id}`)}
             className="col-span-1 cursor-pointer group"
@@ -89,12 +87,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <div className="flex flex-col gap-2 w-full">
                 <div
                     className="
-        aspect-square
-        w-full
-        relative
-        overflow-hidden
-        rounded-xl
-      "
+            aspect-square
+            w-full
+            relative
+            overflow-hidden
+            rounded-xl
+          "
                 >
 
                     <SwiperComponent
@@ -128,14 +126,15 @@ const ListingCard: React.FC<ListingCardProps> = ({
                             currentUser={currentUser}
                         />
                     </div>
+
                 </div>
-                <div className="font-semibold text-lg">
+                <div className="font-semibold text-lg text-right"> {/* Add the 'text-right' class here */}
                     {location?.region}, {location?.label}
                 </div>
-                <div className="font-light text-neutral-500">
+                <div className="font-light text-neutral-500 text-right"> {/* Add the 'text-right' class here */}
                     {reservationDate || data.category}
                 </div>
-                <div className="flex flex-row items-center gap-1">
+                <div className="flex flex-row items-center gap-1 justify-end"> {/* Add 'justify-end' class here */}
                     <div className="font-semibold">
                         YER {price}
                     </div>
@@ -154,7 +153,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
             </div>
         </div>
     );
-
-}
+};
 
 export default ListingCard;
