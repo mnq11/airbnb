@@ -21,24 +21,27 @@ const UserMenu: React.FC<UserMenuProps> = ({
   currentUser
 }) => {
   const router = useRouter();
-
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const rentModal = useRentModal();
-
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
-
   const onRent = useCallback(() => {
     if (!currentUser) {
       return loginModal.onOpen();
     }
-
     rentModal.onOpen();
   }, [loginModal, rentModal, currentUser]);
+
+  const handleMenuItemClick = useCallback(
+      (action: () => void) => {
+        action();
+        toggleOpen();
+      },
+      [toggleOpen]
+  );
 
   return ( 
     <div className="relative">
@@ -104,39 +107,47 @@ const UserMenu: React.FC<UserMenuProps> = ({
               <>
                 <MenuItem 
                   label="رحلات قمت بحجزها"
-                  onClick={() => router.push('/trips')}
+                  onClick={() => handleMenuItemClick(() => router.push('/trips'))}
                 />
                 <MenuItem 
                   label="اماكن مفضلة"
-                  onClick={() => router.push('/favorites')}
+                  onClick={() => handleMenuItemClick(() => router.push('/favorites'))}
+
                 />
                 <MenuItem 
                   label="حجوزات"
-                  onClick={() => router.push('/reservations')}
+                  onClick={() => handleMenuItemClick(() => router.push('/reservations'))}
+
                 />
                 <MenuItem 
                   label="العقارات المدرجة"
-                  onClick={() => router.push('/properties')}
+                  onClick={() => handleMenuItemClick(() => router.push('/properties'))}
+
                 />
                 <MenuItem 
                   label="أضف عقار"
-                  onClick={rentModal.onOpen}
+                  // onClick={rentModal.onOpen}
+                  onClick={() => handleMenuItemClick(() => onRent())}
+
                 />
                 <hr />
                 <MenuItem 
                   label="تسجيل خروج"
-                  onClick={() => signOut()}
+                  onClick={() => handleMenuItemClick(() => signOut())}
+
                 />
               </>
             ) : (
               <>
                 <MenuItem 
                   label="تسجيل دخول"
-                  onClick={loginModal.onOpen}
+                  onClick={() => handleMenuItemClick(() => loginModal.onOpen())}
+
                 />
                 <MenuItem 
                   label="تسجيل"
-                  onClick={registerModal.onOpen}
+                  onClick={() => handleMenuItemClick(() => registerModal.onOpen())}
+
                 />
               </>
             )}

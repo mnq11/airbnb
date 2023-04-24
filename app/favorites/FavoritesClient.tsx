@@ -13,7 +13,6 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
   listings,
   currentUser
 }) => {
-    console.log('Listings:', listings.map(listing => listing.images));
 
     return (
     <Container>

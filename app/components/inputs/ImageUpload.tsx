@@ -19,11 +19,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
     const [images, setImages] = useState(value || []);
 
     const handleUpload = useCallback((result: any) => {
-        console.log("Upload result: ", result); // Add this line
         if (result.event === "success") {
             const newImages = [...images, result.info.secure_url];
             setImages(newImages);
-            console.log("Uploading new images: ", newImages);
             onChange(newImages);
         }
     }, [onChange, images]);

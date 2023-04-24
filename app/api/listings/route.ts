@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   const { title, description, images = [], category, roomCount, bathroomCount, guestCount, location, price } = body;
 
 
-  console.log( "body", body );
+  // console.log( "body", body );
 
   Object.keys(body).forEach((value: any) => {
     if (!body[value]) {
