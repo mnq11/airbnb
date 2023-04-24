@@ -25,7 +25,7 @@ const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">Op
 
 const Map: React.FC<MapProps> = ({ center }) => {
     const yemenCoordinates: L.LatLngTuple = [15.369445, 44.191456];
-    const zoomLevel = 9;
+    const zoomLevel = 13;
 
     return (
         <MapContainer
