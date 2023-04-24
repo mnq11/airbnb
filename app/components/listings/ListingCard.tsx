@@ -135,8 +135,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     {reservationDate || data.category}
                 </div>
                 <div className="flex flex-row items-center gap-1 justify-end"> {/* Add 'justify-end' class here */}
-                    <div className="font-semibold">
-                        YER {price}
+                    <div className="flex flex-row items-center gap-1 justify-end">
+                        ريال : {price}
                     </div>
                     {!reservation && (
                         <div className="font-light">اليوم</div>

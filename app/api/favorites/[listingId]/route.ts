@@ -11,7 +11,7 @@ export async function POST(
     request: Request,
     { params }: { params: IParams }
 ) {
-    const currentUser = await getCurrentUser(request);
+    const currentUser = await getCurrentUser();
 
     if (!currentUser) {
         return NextResponse.error();
@@ -43,7 +43,7 @@ export async function DELETE(
     request: Request,
     { params }: { params: IParams }
 ) {
-    const currentUser = await getCurrentUser(request);
+    const currentUser = await getCurrentUser();
 
     if (!currentUser) {
         return NextResponse.error();
