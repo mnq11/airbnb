@@ -55,7 +55,7 @@ const Search = () => {
             return `${guestCount} ضيف`;
         }
 
-        return 'أضف الضيوف';
+        return 'ابحث عن مكان بعدد الضيوف المناسب';
     }, [guestCount]);
 
     return (
