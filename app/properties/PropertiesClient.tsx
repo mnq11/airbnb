@@ -27,12 +27,16 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
         setDeletingId(id);
 
         axios.delete(`/api/listings/${id}`)
-            .then(() => {
-                toast.success('حزفت العقار بنجاح');
-                router.refresh();
+            .then((response) => {
+                if (response.status === 200) {
+                    toast.success('حزفت العقار بنجاح');
+                    router.refresh();
+                } else {
+                    toast.error(`Error: ${response.status}`);
+                }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.error)
+                toast.error(error?.response?.data?.error || 'An error occurred');
             })
             .finally(() => {
                 setDeletingId('');

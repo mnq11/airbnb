@@ -7,28 +7,38 @@ interface IParams {
   listingId?: string;
 }
 
-export async function DELETE(
-  request: Request, 
-  { params }: { params: IParams }
-) {
+export async function DELETE(request: Request) {
+  const listingId = request.url.split('/').pop();
+
+  if (!listingId) {
+    return NextResponse.error();
+  }
+
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     return NextResponse.error();
   }
 
-  const { listingId } = params;
+  try {
+    // First, delete the related ListingImage records
+    await prisma.listingImage.deleteMany({
+      where: {
+        listingId: listingId,
+      },
+    });
 
-  if (!listingId || typeof listingId !== 'string') {
-    throw new Error('Invalid ID');
+    // Then, delete the Listing record
+    await prisma.listing.delete({
+      where: {
+        id: listingId,
+      },
+    });
+
+    return NextResponse.json({ message: 'Listing deleted successfully', redirectURL: '/properties' }, { status: 200 });
+
+  } catch (error) {
+    console.error(error);
+    return NextResponse.error();
   }
-
-  const listing = await prisma.listing.deleteMany({
-    where: {
-      id: listingId,
-      userId: currentUser.id
-    }
-  });
-
-  return NextResponse.json(listing);
 }
