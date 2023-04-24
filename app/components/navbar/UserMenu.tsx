@@ -151,7 +151,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
             ) : (
               <>
                 <MenuItem
-                  label="تسجيل دخول"
+                  label=" دخول"
                   onClick={() => handleMenuItemClick(() => loginModal.onOpen())}
 
                 />

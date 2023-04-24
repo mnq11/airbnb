@@ -126,7 +126,7 @@ const RegisterModal= () => {
               cursor-pointer 
               hover:underline
             "
-            >تسجيل الدخول</span>
+            >دخول</span>
         </p>
       </div>
     </div>

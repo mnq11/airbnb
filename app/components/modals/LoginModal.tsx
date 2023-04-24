@@ -70,8 +70,8 @@ const LoginModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="مرحبابك "
-        subtitle="سحل دخولك لحسابك"
+        title="مرحبا بك "
+        subtitle="سجل دخولك لحسابك"
       />
       <Input
         id="email"
@@ -128,7 +128,7 @@ const LoginModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={loginModal.isOpen}
-      title="تسجيل الدخول"
+      title="دخول"
       actionLabel="متابعة"
       onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
