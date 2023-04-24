@@ -68,8 +68,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
                         disabled={deletingId === reservation.id}
                         actionLabel="إلغاء حجز الضيف"
                         currentUser={currentUser}
-                        // imageSrcs={reservation.id.imageSrcs[0]}
-
+                        imageSrcs={reservation.listing.images.map((image: any) => image.url)}
                     />
                 ))}
             </div>
