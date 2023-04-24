@@ -119,66 +119,66 @@ const SearchModal = () => {
   }, [step]);
 
   let bodyContent = (
-    <div className="flex flex-col gap-8">
-      <Heading
-        title="إلى أين تريد الذهاب؟"
-        subtitle="اعثر على الموقع المثالي!"
-      />
-      <CountrySelect 
-        value={location} 
-        onChange={(value) => 
-          setLocation(value as CountrySelectValue)} 
-      />
-      <hr />
-      <Map center={location?.latlng as LatLngTuple | undefined} />
-    </div>
+      <div className="flex flex-col gap-8" dir="rtl"> {/* Add dir="rtl" here */}
+        <Heading
+            title="إلى أين تريد الذهاب؟"
+            subtitle="اعثر على الموقع المثالي!"
+        />
+        <CountrySelect
+            value={location}
+            onChange={(value) =>
+                setLocation(value as CountrySelectValue)}
+        />
+        <hr />
+        <Map center={location?.latlng as LatLngTuple | undefined} />
+      </div>
   )
 
   if (step === STEPS.DATE) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="متى تخطط للذهاب؟"
-          subtitle="تأكد من أن الجميع ان المكان شاغر"
-        />
-        <Calendar
-          onChange={(value) => setDateRange(value.selection)}
-          value={dateRange}
-        />
-      </div>
+        <div className="flex flex-col gap-8" dir="rtl"> {/* Add dir="rtl" here */}
+          <Heading
+              title="متى تخطط للذهاب؟"
+              subtitle="تأكد من ان المكان شاغر"
+          />
+          <Calendar
+              onChange={(value) => setDateRange(value.selection)}
+              value={dateRange}
+          />
+        </div>
     )
   }
 
   if (step === STEPS.INFO) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="معلومات اكثر"
-          subtitle="اعثر على مكانك المثالي"
-        />
-        <Counter 
-          onChange={(value) => setGuestCount(value)}
-          value={guestCount}
-          title="ضيوف"
-          subtitle="كم عدد الضيوف القادمين؟"
-        />
-        <hr />
-        <Counter 
-          onChange={(value) => setRoomCount(value)}
-          value={roomCount}
-          title="غرف"
-          subtitle="كم عدد الغرف التي تحتاجها؟"
-        />        
-        <hr />
-        <Counter 
-          onChange={(value) => {
-            setBathroomCount(value)
-          }}
-          value={bathroomCount}
-          title="الحمامات"
-          subtitle="كم عدد الحمامات التي تحتاجها؟"
-        />
-      </div>
+        <div className="flex flex-col gap-8" dir="rtl"> {/* Add dir="rtl" here */}
+          <Heading
+              title="معلومات اكثر"
+              subtitle="اعثر على مكانك المثالي"
+          />
+          <Counter
+              onChange={(value) => setGuestCount(value)}
+              value={guestCount}
+              title="ضيوف"
+              subtitle="كم عدد الضيوف القادمين؟"
+          />
+          <hr />
+          <Counter
+              onChange={(value) => setRoomCount(value)}
+              value={roomCount}
+              title="غرف"
+              subtitle="كم عدد الغرف التي تحتاجها؟"
+          />
+          <hr />
+          <Counter
+              onChange={(value) => {
+                setBathroomCount(value)
+              }}
+              value={bathroomCount}
+              title="الحمامات"
+              subtitle="كم عدد الحمامات التي تحتاجها؟"
+          />
+        </div>
     )
   }
 
