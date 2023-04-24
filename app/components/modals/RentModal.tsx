@@ -186,7 +186,7 @@ const RentModal = () => {
 
   if (step === STEPS.INFO) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 text-center">
         <Heading
           title="شارك ببعض الأساسيات حول مكانك"
           subtitle="ما هي المرافق التي لديك؟"
@@ -267,8 +267,8 @@ const RentModal = () => {
         />
         <Input
           id="price"
-          label="السعر"
-          formatPrice 
+          label="السعر بالريال اليمني"
+          // formatPrice
           type="number" 
           disabled={isLoading}
           register={register}
