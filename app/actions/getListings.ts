@@ -9,6 +9,8 @@ export interface IListingsParams {
   endDate?: string;
   locationValue?: string;
   category?: string;
+  favoritesCount?: number;
+
 }
 
 export default async function getListings(
@@ -24,6 +26,7 @@ export default async function getListings(
       startDate,
       endDate,
       category,
+        favoritesCount
     } = params;
 
     let query: any = {};

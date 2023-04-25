@@ -5,11 +5,11 @@ import {SafeUser} from "@/app/types";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation, Thumbs } from 'swiper/core';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import SwiperCore, {Navigation, Thumbs} from 'swiper/core';
 
 import 'swiper/swiper-bundle.min.css';
-import {useState} from "react";
+import React, {useState} from "react";
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -20,6 +20,7 @@ interface ListingHeadProps {
     images: { url: string }[];
     id: string;
     currentUser?: SafeUser | null;
+    favoritesCount: number;
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
@@ -28,9 +29,11 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                                      images,
                                                      id,
                                                      currentUser,
+                                                     favoritesCount
                                                  }) => {
-    const { getByValue } = useCountries();
+    const {getByValue} = useCountries();
     const location = getByValue(locationValue);
+
 
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
 
@@ -42,15 +45,15 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             />
             <div className="w-full h-[60vh] overflow-hidden rounded-xl relative">
                 <Swiper
-                    style={{ height: '80%' }}
+                    style={{height: '80%'}}
                     spaceBetween={10}
                     navigation
-                    thumbs={{ swiper: thumbsSwiper }}
+                    thumbs={{swiper: thumbsSwiper}}
                     className="mySwiper2"
                 >
                     {images.map((image, index) => (
                         <SwiperSlide key={index}>
-                            <img src={image.url} className="object-cover w-full h-full" alt="Image" />
+                            <img src={image.url} className="object-cover w-full h-full" alt="Image"/>
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -61,17 +64,21 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                     freeMode
                     watchSlidesVisibility
                     watchSlidesProgress
-                    style={{ height: '20%', marginTop: '5px' }}
+                    style={{height: '20%', marginTop: '5px'}}
                     className="mySwiper"
                 >
                     {images.map((image, index) => (
                         <SwiperSlide key={index}>
-                            <img src={image.url} className="object-cover w-full h-full" alt="Thumbnail" />
+                            <img src={image.url} className="object-cover w-full h-full" alt="Thumbnail"/>
                         </SwiperSlide>
                     ))}
                 </Swiper>
                 <div className="absolute top-5 right-5">
-                    <HeartButton listingId={id} currentUser={currentUser} />
+                    <HeartButton
+                        listingId={id}
+                        currentUser={currentUser}
+                        favoritesCount={favoritesCount}
+                    />
                 </div>
             </div>
         </>

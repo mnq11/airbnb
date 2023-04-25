@@ -125,6 +125,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             locationValue={listing.locationValue}
             id={listing.id}
             currentUser={currentUser}
+            favoritesCount={listing.favoritesCount}
           />
           <div 
             className="
