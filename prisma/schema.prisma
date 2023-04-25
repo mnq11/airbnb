@@ -59,6 +59,7 @@ model Listing {
   user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
   price          Int
   favoritesCount Int            @default(0)
+  viewCounter    Int            @default(0)
   reservations   Reservation[]
   images         ListingImage[]
 }
