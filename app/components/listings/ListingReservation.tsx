@@ -42,7 +42,7 @@ const ListingReservation: React.FC<
           ريال :  {price}
         </div>
         <div className="font-light text-neutral-600">
-          اليوم
+          /اليوم
         </div>
       </div>
       <hr />
