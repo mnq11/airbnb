@@ -10,6 +10,7 @@ import SwiperCore, {Navigation, Thumbs} from 'swiper/core';
 
 import 'swiper/swiper-bundle.min.css';
 import React, {useState} from "react";
+import {Listing} from "@prisma/client";
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -21,6 +22,7 @@ interface ListingHeadProps {
     id: string;
     currentUser?: SafeUser | null;
     favoritesCount: number;
+    viewCounter?: number;
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
@@ -29,8 +31,11 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                                      images,
                                                      id,
                                                      currentUser,
-                                                     favoritesCount
+                                                     favoritesCount,
+                                                     viewCounter,
                                                  }) => {
+
+
     const {getByValue} = useCountries();
     const location = getByValue(locationValue);
 

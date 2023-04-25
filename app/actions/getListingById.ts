@@ -24,6 +24,7 @@ export default async function getListingById(
       return null;
     }
 
+    // @ts-ignore
     return {
       ...listing,
       createdAt: listing.createdAt.toString(),

@@ -1,3 +1,4 @@
+// app/actions/getListings.ts
 import prisma from "@/app/libs/prismadb";
 
 export interface IListingsParams {
@@ -10,7 +11,7 @@ export interface IListingsParams {
   locationValue?: string;
   category?: string;
   favoritesCount?: number;
-
+  viewsCount?: number;
 }
 
 export default async function getListings(
@@ -26,6 +27,7 @@ export default async function getListings(
       startDate,
       endDate,
       category,
+      viewsCount,
     } = params;
 
     let query: any = {};
@@ -78,7 +80,12 @@ export default async function getListings(
         }
       }
     }
-
+// Add a condition for viewsCount filter
+    if (viewsCount) {
+      query.viewsCount = {
+        gte: +viewsCount
+      }
+    }
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {

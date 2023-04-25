@@ -21,6 +21,7 @@ import {
 
 import HeartButton from "../HeartButton";
 import Button from "../Button";
+import ViewCounter from "@/app/components/ViewCounter";
 
 interface ListingCardProps {
     data: SafeListing;
@@ -32,6 +33,7 @@ interface ListingCardProps {
     currentUser?: SafeUser | null;
     imageSrcs?: string[];
     favoritesCount?: number;
+    viewCounter?: number;
 
 }
 
@@ -44,7 +46,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
                                                      actionLabel,
                                                      actionId = '',
                                                      currentUser,
-                                                     imageSrcs
+                                                     imageSrcs,
+                                                     viewCounter
 
 
                                                  }) => {
@@ -52,6 +55,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     const {getByValue} = useCountries();
 
     const location = getByValue(data.locationValue);
+
 
     const handleCancel = useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -123,17 +127,24 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     {/*<div className="font-light text-neutral-500 text-right">*/}
                     {/*    {`Favorites: ${(favoritesCount || 0).toLocaleString()}`}*/}
                     {/*</div>*/}
-                    <div className="
-        absolute
-        top-3
-        right-3
-      ">
+                    <div className="absolute top-3 right-3 ">
                         <HeartButton
                             listingId={data.id}
                             currentUser={currentUser}
                             favoritesCount={data.favoritesCount}
                         />
+
                     </div>
+                    <div className="absolute bottom-3 left-3">
+
+                        <ViewCounter
+                            listingId={data.id}
+                            currentUser={currentUser}
+                            viewCounter={data.viewCounter}
+                        />
+
+                    </div>
+
 
                 </div>
                 <div className="font-semibold text-lg text-right"> {/* Add the 'text-right' class here */}
@@ -149,6 +160,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     {!reservation && (
                         <div className="font-light">/اليوم</div>
                     )}
+
                 </div>
                 {onAction && actionLabel && (
                     <Button

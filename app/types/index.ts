@@ -3,6 +3,7 @@ import { Listing, Reservation, User } from "@prisma/client";
 export type SafeListing = Omit<Listing, "createdAt"> & {
   createdAt: string;
   images: { url: string }[];
+  viewCounter?: number;
 };
 
 export type SafeReservation = Omit<

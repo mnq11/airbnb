@@ -42,4 +42,5 @@ export async function DELETE(request: Request) {
     console.error(error);
     return NextResponse.error();
   }
+
 }

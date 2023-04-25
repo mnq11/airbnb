@@ -54,7 +54,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   }, [reservations]);
 
   const category = useMemo(() => {
-     return categories.find((items) => 
+     return categories.find((items) =>
       items.label === listing.category);
   }, [listing.category]);
 
@@ -87,8 +87,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
       })
   },
   [
-    totalPrice, 
-    dateRange, 
+    totalPrice,
+    dateRange,
     listing?.id,
     router,
     currentUser,
@@ -98,10 +98,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
       const dayCount = differenceInDays(
-        dateRange.endDate, 
+        dateRange.endDate,
         dateRange.startDate
       );
-      
+
       if (dayCount && listing.price) {
         setTotalPrice(dayCount * listing.price);
       } else {
@@ -126,6 +126,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             id={listing.id}
             currentUser={currentUser}
             favoritesCount={listing.favoritesCount}
+
           />
           <div 
             className="
