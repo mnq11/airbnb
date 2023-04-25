@@ -9,7 +9,7 @@ import ClientOnly from "./components/ClientOnly";
 
 interface HomeProps {
   searchParams: IListingsParams
-};
+}
 
 const Home = async ({ searchParams }: HomeProps) => {
   const listings = await getListings(searchParams);

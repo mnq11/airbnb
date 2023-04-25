@@ -26,7 +26,6 @@ export default async function getListings(
       startDate,
       endDate,
       category,
-        favoritesCount
     } = params;
 
     let query: any = {};
