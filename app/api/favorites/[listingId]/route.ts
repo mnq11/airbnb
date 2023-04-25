@@ -1,3 +1,4 @@
+// app/api/favorites/[listingId]/route.ts
 import { NextResponse } from "next/server";
 
 import getCurrentUser from "@/app/actions/getCurrentUser";
@@ -36,6 +37,18 @@ export async function POST(
         }
     });
 
+    // Increment the favoritesCount for the listing
+    const listing = await prisma.listing.update({
+        where: {
+            id: listingId,
+        },
+        data: {
+            favoritesCount: {
+                increment: 1,
+            },
+        },
+    });
+
     return NextResponse.json(user);
 }
 
@@ -66,6 +79,18 @@ export async function DELETE(
         data: {
             favoriteIds
         }
+    });
+
+    // Decrement the favoritesCount for the listing
+    const listing = await prisma.listing.update({
+        where: {
+            id: listingId,
+        },
+        data: {
+            favoritesCount: {
+                decrement: 1,
+            },
+        },
     });
 
     return NextResponse.json(user);

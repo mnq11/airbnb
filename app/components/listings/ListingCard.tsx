@@ -31,6 +31,8 @@ interface ListingCardProps {
     actionId?: string;
     currentUser?: SafeUser | null;
     imageSrcs?: string[];
+    favoritesCount?: number;
+
 }
 
 
@@ -42,7 +44,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
                                                      actionLabel,
                                                      actionId = '',
                                                      currentUser,
-                                                     imageSrcs,
+                                                     imageSrcs
+
+
                                                  }) => {
     const router = useRouter();
     const {getByValue} = useCountries();
@@ -80,6 +84,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     }, [reservation]);
 
     return (
+
         <div
             onClick={() => router.push(`/listings/${data.id}`)}
             className="col-span-1 cursor-pointer group"
@@ -115,7 +120,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
                         ))}
                     </SwiperComponent>
 
-
+                    {/*<div className="font-light text-neutral-500 text-right">*/}
+                    {/*    {`Favorites: ${(favoritesCount || 0).toLocaleString()}`}*/}
+                    {/*</div>*/}
                     <div className="
         absolute
         top-3
@@ -124,6 +131,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                         <HeartButton
                             listingId={data.id}
                             currentUser={currentUser}
+                            favoritesCount={data.favoritesCount}
                         />
                     </div>
 

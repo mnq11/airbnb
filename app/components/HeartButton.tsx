@@ -1,54 +1,58 @@
 'use client';
 
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 
 import useFavorite from "@/app/hooks/useFavorite";
-import { SafeUser } from "@/app/types";
+import {SafeUser} from "@/app/types";
 
 import ClientOnly from "./ClientOnly";
 
 interface HeartButtonProps {
-  listingId: string
-  currentUser?: SafeUser | null
+    listingId: string
+    currentUser?: SafeUser | null
+    favoritesCount?: number
 }
 
 const HeartButton: React.FC<HeartButtonProps> = ({
-                                                   listingId,
-                                                   currentUser
+                                                     listingId,
+                                                     currentUser,
+                                                     favoritesCount,
                                                  }) => {
-  const { hasFavorited, toggleFavorite } = useFavorite({
-    listingId,
-    currentUser
-  });
+    const { hasFavorited, toggleFavorite } = useFavorite({
+        listingId,
+        currentUser,
+    });
 
-  return (
-      <div
-          onClick={toggleFavorite}
-          className="
-        relative
-        hover:opacity-80
-        transition
-        cursor-pointer
-        z-10
-      "
-      >
-        <AiOutlineHeart
-            size={28}
-            className="
-          fill-white
-          absolute
-          -top-[2px]
-          -right-[2px]
-        "
-        />
-        <AiFillHeart
-            size={24}
-            className={
-              hasFavorited ? 'fill-rose-500' : 'fill-neutral-500/70'
-            }
-        />
-      </div>
-  );
-}
+    return (
+        <div
+            onClick={toggleFavorite}
+            className="relative hover:opacity-80 transition cursor-pointer z-10"
+        >
+            <div className="flex flex-col items-center">
+                <AiOutlineHeart
+                    size={28}
+                    className="fill-white absolute -top-[2px] -right-[2px]"
+                />
+                <AiFillHeart
+                    size={24}
+                    className={hasFavorited ? "fill-rose-500" : "fill-neutral-500/70"}
+                />
+                {/* Update the favoritesCount display */}
+                <div className="font-extrabold text-rose-500 text-center mt-1 select-none pointer-events-none">
+                    {`${(favoritesCount || 0).toLocaleString()}`}
+                </div>
+
+                <style jsx>{`
+  .select-none {
+    user-select: none;
+  }
+  .pointer-events-none {
+    pointer-events: none;
+  }
+`}</style>
+            </div>
+        </div>
+    );
+};
 
 export default HeartButton;

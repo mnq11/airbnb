@@ -48,6 +48,7 @@ const Home = async ({ searchParams }: HomeProps) => {
                     key={listing.id}
                     data={listing}
                     imageSrcs={imageSrcs}
+
                 />
             );
           })}

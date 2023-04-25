@@ -46,20 +46,21 @@ model Account {
 }
 
 model Listing {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  description   String
-  createdAt     DateTime       @default(now())
-  category      String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
-  locationValue String
-  userId        String?        @db.ObjectId
-  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
-  price         Int
-  reservations  Reservation[]
-  images        ListingImage[]
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  createdAt      DateTime       @default(now())
+  category       String
+  roomCount      Int
+  bathroomCount  Int
+  guestCount     Int
+  locationValue  String
+  userId         String?        @db.ObjectId
+  user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  price          Int
+  favoritesCount Int            @default(0)
+  reservations   Reservation[]
+  images         ListingImage[]
 }
 
 model ListingImage {

@@ -8,41 +8,40 @@ import UserMenu from "./UserMenu";
 import React from "react";
 
 interface NavbarProps {
-  currentUser?: SafeUser | null;
+    currentUser?: SafeUser | null;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-  currentUser,
-}) => {
-  return (
-    <div className="fixed w-full bg-white z-10 shadow-sm">
-      <div
-        className="
-          py-4 
+                                           currentUser,
+                                       }) => {
+    return (
+        <div className="fixed w-full bg-white z-20 shadow-sm"> {/* Increase the z-index value here to 20 */}
+            <div
+                className="
+          py-4
           border-b-[1px]
         "
-      >
-      <Container>
-        <div 
-          className="
-            flex 
-            flex-row 
-            items-center 
+            >
+                <Container>
+                    <div
+                        className="
+            flex
+            flex-row
+            items-center
             justify-between
             gap-3
             md:gap-0
           "
-        >
-          <Logo />
-          <Search />
-          <UserMenu currentUser={currentUser} />
+                    >
+                        <Logo />
+                        <Search />
+                        <UserMenu currentUser={currentUser} />
+                    </div>
+                </Container>
+            </div>
+            <Categories />
         </div>
-      </Container>
-    </div>
-    <Categories />
-  </div>
-  );
+    );
 }
-
 
 export default Navbar;
