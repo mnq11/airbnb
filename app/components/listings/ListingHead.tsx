@@ -11,6 +11,7 @@ import SwiperCore, {Navigation, Thumbs} from 'swiper/core';
 import 'swiper/swiper-bundle.min.css';
 import React, {useState,useEffect} from "react";
 import {Listing} from "@prisma/client";
+import Image from 'next/image';
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -64,7 +65,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 >
                     {images.map((image, index) => (
                         <SwiperSlide key={index}>
-                            <img src={image.url} className="object-cover w-full h-full" alt="Image"/>
+                            <Image src={image.url} className="object-cover w-full h-full" alt="Image"/>
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -80,7 +81,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 >
                     {images.map((image, index) => (
                         <SwiperSlide key={index}>
-                            <img src={image.url} className="object-cover w-full h-full" alt="Thumbnail"/>
+                            <Image src={image.url} className="object-cover w-full h-full" alt="Thumbnail"/>
                         </SwiperSlide>
                     ))}
                 </Swiper>
