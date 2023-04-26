@@ -16,7 +16,7 @@ export default async function getListingById(
       },
       include: {
         user: true,
-        images: true, // Include images
+        images: true,
       },
     });
 
@@ -24,17 +24,17 @@ export default async function getListingById(
       return null;
     }
 
-    // @ts-ignore
     return {
       ...listing,
       createdAt: listing.createdAt.toString(),
-      user: {
-        ...listing.user,
-        createdAt: listing.user.createdAt.toString(),
-        updatedAt: listing.user.updatedAt.toString(),
-        emailVerified: 
-          listing.user.emailVerified?.toString() || null,
-      }
+      user: listing.user
+          ? {
+            ...listing.user,
+            createdAt: listing.user.createdAt.toString(),
+            updatedAt: listing.user.updatedAt.toString(),
+            emailVerified: listing.user.emailVerified?.toString() || null,
+          }
+          : null,
     };
   } catch (error: any) {
     throw new Error(error);
