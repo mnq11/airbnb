@@ -1,5 +1,5 @@
 'use client';
-
+import axios from 'axios';
 import useCountries from "@/app/hooks/useCountries";
 import {SafeUser} from "@/app/types";
 import Heading from "../Heading";
@@ -9,7 +9,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import SwiperCore, {Navigation, Thumbs} from 'swiper/core';
 
 import 'swiper/swiper-bundle.min.css';
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import {Listing} from "@prisma/client";
 
 
@@ -23,6 +23,8 @@ interface ListingHeadProps {
     currentUser?: SafeUser | null;
     favoritesCount: number;
     viewCounter?: number;
+    onView: () => void; // Add this line
+
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
@@ -33,15 +35,19 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                                      currentUser,
                                                      favoritesCount,
                                                      viewCounter,
+                                                     onView, // Add this line
+
                                                  }) => {
 
 
     const {getByValue} = useCountries();
     const location = getByValue(locationValue);
-
-
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
 
+
+    useEffect(() => {
+        onView(); // Call the incrementViewCounter function when the component is mounted
+    }, [onView]);
     return (
         <>
             <Heading

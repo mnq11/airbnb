@@ -11,8 +11,9 @@ import {MdPool, MdWarehouse} from 'react-icons/md';
 
 import CategoryBox from "../CategoryBox";
 import Container from '../Container';
-import {AiTwotoneHome, FcHome, HiHomeModern} from "react-icons/all";
-
+// import {AiTwotoneHome, FcHome, HiHomeModern} from "react-icons/all";
+import { AiTwotoneHome } from 'react-icons/ai';
+import { FcHome , FcReading} from 'react-icons/fc';
 
 export const categories = [
     {
@@ -27,7 +28,7 @@ export const categories = [
     },
     {
         label: 'عصري',
-        icon: HiHomeModern,
+        icon: FcReading ,
         description: 'هذا المكان عصري !',
     },
     {

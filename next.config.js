@@ -9,7 +9,11 @@ const nextConfig = {
       'avatars.githubusercontent.com',
       'lh3.googleusercontent.com'
     ]
-  }
+  },
+  // Add this part to enable API routes
+  api: {
+    bodyParser: true,
+  },
 }
 
 module.exports = nextConfig

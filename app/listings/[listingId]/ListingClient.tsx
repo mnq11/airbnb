@@ -109,7 +109,13 @@ const ListingClient: React.FC<ListingClientProps> = ({
       }
     }
   }, [dateRange, listing.price]);
-
+  const onView = useCallback(async () => {
+    try {
+      await axios.post(`/api/views/${listing.id}`);
+    } catch (error) {
+      console.error("Failed to increment view counter:", error);
+    }
+  }, [listing.id]);
   return ( 
     <Container>
       <div 
@@ -126,6 +132,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
             id={listing.id}
             currentUser={currentUser}
             favoritesCount={listing.favoritesCount}
+            onView={onView} // Add this line
+
 
           />
           <div 
