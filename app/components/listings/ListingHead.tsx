@@ -1,5 +1,4 @@
 'use client';
-import axios from 'axios';
 import useCountries from "@/app/hooks/useCountries";
 import {SafeUser} from "@/app/types";
 import Heading from "../Heading";
@@ -10,7 +9,6 @@ import SwiperCore, {Navigation, Thumbs} from 'swiper/core';
 
 import 'swiper/swiper-bundle.min.css';
 import React, {useState,useEffect} from "react";
-import {Listing} from "@prisma/client";
 import Image from 'next/image';
 
 
@@ -35,7 +33,6 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                                      id,
                                                      currentUser,
                                                      favoritesCount,
-                                                     viewCounter,
                                                      onView, // Add this line
 
                                                  }) => {
