@@ -1,7 +1,8 @@
 'use client';
 import React, { useState } from "react";
-import Select from "react-select";
+import Select, {StylesConfig} from "react-select";
 import yemenAreas from "./yemenAreas.json";
+import {CSSObject} from "@emotion/serialize";
 
 export type CountrySelectValue = {
     flag: string;
@@ -28,27 +29,33 @@ const convertJsonToYemenAreas = (jsonData: any[]): CountrySelectValue[] => {
     }));
 };
 
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
-const centeredStyles = {
-    control: (provided) => ({
+
+const centeredStyles: StylesConfig<CountrySelectValue, false> = {
+    control: (provided: CSSObject): CSSObject => ({
         ...provided,
         display: "flex",
         alignItems: "center",
     }),
-    singleValue: (provided) => ({
+    singleValue: (provided: CSSObject): CSSObject => ({
         ...provided,
         textAlign: "center",
     }),
-    valueContainer: (provided) => ({
+    valueContainer: (provided: CSSObject): CSSObject => ({
         ...provided,
         justifyContent: "center",
     }),
-    placeholder: (provided) => ({
+    placeholder: (provided: CSSObject): CSSObject => ({
         ...provided,
         textAlign: "center",
     }),
+};
+export type AreaSelectOption = CountrySelectValue & RegionSelectValue;
+export type RegionSelectValue = {
+    label: string;
+    value: string;
+    flag?: string;
+    latlng?: number[];
+    region?: string;
 };
 
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
@@ -65,17 +72,23 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
         }
     };
 
-    const regions = Array.from(
-        new Set(convertedYemenAreas.map((area) => area.region))
-    ).map((region) => ({ label: region, value: region }));
 
+    const regions: AreaSelectOption[] = Array.from(
+        new Set(convertedYemenAreas.map((area) => area.region))
+    ).map((region) => ({
+        label: region,
+        value: region,
+        flag: "",
+        latlng: [0, 0],
+        region: region,
+    }));
     return (
         <div>
             <Select
                 placeholder="أي محافظة ؟"
                 isClearable
                 options={regions}
-                value={selectedRegion ? { label: selectedRegion, value: selectedRegion } : null}
+                value={selectedRegion ? { label: selectedRegion, value: selectedRegion } as CountrySelectValue : null}
                 onChange={(value) => handleRegionChange(value ? value.value : null)}
                 styles={centeredStyles}
                 theme={(theme) => ({
@@ -88,6 +101,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
                     },
                 })}
             />
+
             {selectedRegion && (
                 <Select
                     placeholder="اختر المنطقة"
