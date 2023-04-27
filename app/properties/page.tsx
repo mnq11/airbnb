@@ -6,26 +6,20 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import getListings from "@/app/actions/getListings";
 
 import PropertiesClient from "./PropertiesClient";
-import { images } from 'next/dist/build/webpack/config/blocks/images';
 
 const PropertiesPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return (
-      <EmptyState title="Unauthorized" subtitle="Please login" />
-    );
+    return <EmptyState
+      title="Unauthorized"
+      subtitle="Please login"
+    />
   }
 
   const listings = await getListings({ userId: currentUser.id });
 
-  // Add images property to each listing object
-  const safeListings = listings.map((listing) => ({
-    ...listing,
-    images: images.images || [], // Add this line
-  }));
-
-  if (safeListings.length === 0) {
+  if (listings.length === 0) {
     return (
       <ClientOnly>
         <EmptyState
@@ -39,11 +33,11 @@ const PropertiesPage = async () => {
   return (
     <ClientOnly>
       <PropertiesClient
-        listings={safeListings}
+        listings={listings}
         currentUser={currentUser}
       />
     </ClientOnly>
   );
-};
-
+}
+ 
 export default PropertiesPage;
