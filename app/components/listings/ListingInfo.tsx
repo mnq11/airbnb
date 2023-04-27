@@ -68,13 +68,13 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           "
         >
           <div>
-              سعة الضيوف : {guestCount}
+              سعة الضيوف : {guestCount.toLocaleString('ar-EG')}
           </div>
           <div>
-           عدد الغرف :  {roomCount}
+           عدد الغرف :  {roomCount.toLocaleString('ar-EG')}
           </div>
           <div>
-             عدد الحمامات :  {bathroomCount}
+             عدد الحمامات :  {bathroomCount.toLocaleString('ar-EG')}
           </div>
         </div>
       </div>

@@ -39,10 +39,10 @@ const ListingReservation: React.FC<
       <div className="
       flex flex-row items-center gap-1 p-4">
         <div className="text-2xl font-semibold text-right">
-          ريال :  {price}
+          {price.toLocaleString('ar-EG')}
         </div>
         <div className="font-light text-neutral-600">
-          /اليوم
+          ريال / اليوم
         </div>
       </div>
       <hr />
@@ -76,7 +76,7 @@ const ListingReservation: React.FC<
           السعر الكلي
         </div>
         <div>
-          ريال :  {totalPrice}
+             {totalPrice.toLocaleString('ar-EG')}ريال
         </div>
       </div>
     </div>

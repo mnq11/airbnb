@@ -154,10 +154,10 @@ const ListingCard: React.FC<ListingCardProps> = ({
                 </div>
                 <div className="flex flex-row items-center gap-1 justify-end"> {/* Add 'justify-end' class here */}
                     <div className="flex flex-row items-center gap-1 justify-end">
-                        ريال : {price}
+                        {price.toLocaleString('ar-EG')}
                     </div>
                     {!reservation && (
-                        <div className="font-light">/اليوم</div>
+                        <div className="font-light">/ اليوم</div>
                     )}
 
                 </div>

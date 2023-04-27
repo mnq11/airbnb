@@ -40,7 +40,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({
             {/* Update the favoritesCount display */}
             <div className="w-12 text-center"> {/* Add 'w-12 text-center' classes here */}
                 <div className="font-extrabold text-rose-500 mt-1 select-none pointer-events-none">
-                    {`${(favoritesCount || 0).toLocaleString()}`}
+                    {` ${(favoritesCount || 0).toLocaleString('ar-EG')}`}
                 </div>
             </div>
             <style jsx>{`

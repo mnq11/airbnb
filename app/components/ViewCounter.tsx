@@ -19,7 +19,7 @@ const ViewCounter: React.FC<viewCounterProps> = ({
         <div className="relative hover:opacity-80 transition cursor-pointer z-10">
             <div className="flex flex-row items-center">
                 <div className="font-extrabold text-red-700 mr-9 select-none pointer-events-none">
-                    {`${(viewCounter || 0).toLocaleString()}`}
+                    {` ${(viewCounter || 0).toLocaleString('ar-EG')} `}
                 </div>
                 <BsEye
                     size={28}
