@@ -1,5 +1,3 @@
-'use client';
-
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import useFavorite from "@/app/hooks/useFavorite";
 import { SafeUser } from "@/app/types";
@@ -38,21 +36,22 @@ const HeartButton: React.FC<HeartButtonProps> = ({
 
             </div>
             {/* Update the favoritesCount display */}
-            <div className="w-12 text-center"> {/* Add 'w-12 text-center' classes here */}
-                <div className="font-extrabold text-rose-500 mt-1 select-none pointer-events-none">
+            <div className="w-12 text-center">
+                <div className="bg-white bg-opacity-50 rounded-md py-0.5 px-1.5 font-extrabold text-rose-500 select-none pointer-events-none">
                     {` ${(favoritesCount || 0).toLocaleString('ar-EG')}`}
                 </div>
             </div>
             <style jsx>{`
-        .select-none {
-          user-select: none;
-        }
-        .pointer-events-none {
-          pointer-events: none;
-        }
-      `}</style>
+              .select-none {
+                user-select: none;
+              }
+              .pointer-events-none {
+                pointer-events: none;
+              }
+            `}</style>
         </div>
     );
+
 };
 
 export default HeartButton;
