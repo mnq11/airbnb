@@ -2,24 +2,24 @@
 
 import {usePathname, useSearchParams} from 'next/navigation';
 import {
-    GiCampingTent, GiCaveEntrance, GiFlyingTrout
+    GiCampingTent, GiFlyingTrout
     , GiHutsVillage, GiMountainCave, GiWaterTower, GiWaveSurfer
 } from 'react-icons/gi';
-import {FaHotel} from 'react-icons/fa';
+import {FaCarAlt, FaHotel} from 'react-icons/fa';
 
 import {MdPool, MdWarehouse} from 'react-icons/md';
 
 import CategoryBox from "../CategoryBox";
 import Container from '../Container';
-// import {AiTwotoneHome, FcHome, HiHomeModern} from "react-icons/all";
 import { AiTwotoneHome } from 'react-icons/ai';
 import { FcHome , FcReading} from 'react-icons/fc';
+import {RiCarLine} from "react-icons/ri";
 
 export const categories = [
     {
         label: 'طيرمان',
         icon: GiFlyingTrout,
-        description: 'هذا العقار يحتوي على طيرمان !',
+        description: 'هذا العقار يحتوي على طيرمان ',
     },
     {
         label: 'دشمة',
@@ -29,7 +29,7 @@ export const categories = [
     {
         label: 'عصري',
         icon: FcReading ,
-        description: 'هذا المكان عصري !',
+        description: 'هذا المكان عصري ',
     },
     {
         label: 'ريف',
@@ -39,37 +39,32 @@ export const categories = [
     {
         label: 'مسابح',
         icon: MdPool,
-        description: 'هذا المكان يحتوي على مسبح !',
+        description: 'هذا المكان يحتوي على مسبح ',
     },
     {
         label: 'جبال',
         icon: GiMountainCave,
-        description: 'هذا العقار يتواجد في جبال !',
+        description: 'هذا العقار يتواجد في جبال ',
     },
     {
         label: 'ساحل',
         icon: GiWaveSurfer,
-        description: 'هذا المكان يتواجد على الساحل !',
-    },
-    {
-        label: 'كهوف',
-        icon: GiCaveEntrance,
-        description: ' يتواجد في كهف !',
+        description: 'هذا المكان يتواجد على الساحل ',
     },
     {
         label: 'فنادق',
         icon: FaHotel,
-        description: 'هذا المكان يتواجد في فندق !',
+        description: 'هذا المكان يتواجد في فندق ',
     },
     {
-        label: 'مخيمات',
+        label: 'خيام',
         icon: GiCampingTent,
         description: 'للتخييم',
     },
     {
         label: 'بيوت للأيجار',
         icon: AiTwotoneHome,
-        description: 'هذا العقار للأيجار !',
+        description: 'هذا العقار للأيجار ',
     },
     {
         label: 'بيوت للبيع',
@@ -79,8 +74,20 @@ export const categories = [
     {
         label: 'هناجر',
         icon: MdWarehouse,
-        description: 'هذا العقار يتواجد فية مخزن !',
+        description: 'هذا العقار يتواجد فية مخزن ',
     },
+    // {
+    //     label: 'سيارات للايجار',
+    //     icon: RiCarLine,
+    //     description: 'هذه السيارة للأيجار',
+    // }
+    // ,
+    // {
+    //     label: 'سيارات للبيع',
+    //     icon: FaCarAlt,
+    //     description: 'هذه السيارة للبيع',
+    //
+    // }
 ]
 
 const Categories = () => {
