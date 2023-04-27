@@ -46,10 +46,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                                                      actionLabel,
                                                      actionId = '',
                                                      currentUser,
-                                                     imageSrcs,
-                                                     viewCounter
-
-
+                                                     imageSrcs
                                                  }) => {
     const router = useRouter();
     const {getByValue} = useCountries();
