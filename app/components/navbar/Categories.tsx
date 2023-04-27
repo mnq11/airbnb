@@ -3,7 +3,7 @@
 import {usePathname, useSearchParams} from 'next/navigation';
 import {
     GiCampingTent, GiFlyingTrout
-    , GiHutsVillage, GiMountainCave, GiWaterTower, GiWaveSurfer
+    , GiHutsVillage, GiMountainCave, GiSofa, GiWaterTower, GiWaveSurfer,
 } from 'react-icons/gi';
 import {FaHotel} from 'react-icons/fa';
 
@@ -12,13 +12,15 @@ import {MdPool, MdWarehouse} from 'react-icons/md';
 import CategoryBox from "../CategoryBox";
 import Container from '../Container';
 import { AiTwotoneHome } from 'react-icons/ai';
-import { FcHome , FcReading} from 'react-icons/fc';
+import { FcHome } from 'react-icons/fc';
+import { SiInfluxdb } from 'react-icons/si';
+import { TbHomeStar } from 'react-icons/tb';
 
 export const categories = [
     {
         label: 'طيرمان',
         icon: GiFlyingTrout,
-        description: 'هذا العقار يحتوي على طيرمان ',
+        description: 'هذا العقار يحتوي على طيرمان !',
     },
     {
         label: 'دشمة',
@@ -26,9 +28,13 @@ export const categories = [
         description: 'هذا المكان يحتوي على دشمة ',
     },
     {
+        label: 'شاليهات',
+        icon: GiSofa ,
+        description: 'هذا المكان شالي ',
+    }, {
         label: 'عصري',
-        icon: FcReading ,
-        description: 'هذا المكان عصري ',
+        icon: SiInfluxdb ,
+        description: 'هذا المكان عصري',
     },
     {
         label: 'ريف',
@@ -38,55 +44,43 @@ export const categories = [
     {
         label: 'مسابح',
         icon: MdPool,
-        description: 'هذا المكان يحتوي على مسبح ',
+        description: 'هذا المكان يحتوي على مسبح',
     },
     {
         label: 'جبال',
         icon: GiMountainCave,
-        description: 'هذا العقار يتواجد في جبال ',
+        description: 'هذا العقار يتواجد في جبال',
     },
     {
         label: 'ساحل',
         icon: GiWaveSurfer,
-        description: 'هذا المكان يتواجد على الساحل ',
+        description: 'هذا المكان يتواجد على الساحل',
     },
     {
         label: 'فنادق',
         icon: FaHotel,
-        description: 'هذا المكان يتواجد في فندق ',
+        description: 'هذا المكان يتواجد في فندق',
     },
     {
-        label: 'خيام',
+        label: 'مخيمات',
         icon: GiCampingTent,
         description: 'للتخييم',
     },
     {
         label: 'بيوت للأيجار',
         icon: AiTwotoneHome,
-        description: 'هذا العقار للأيجار ',
+        description: 'هذا العقار للأيجار',
     },
     {
         label: 'بيوت للبيع',
-        icon: FcHome,
+        icon: TbHomeStar,
         description: 'This property is brand new and luxurious!'
     },
     {
         label: 'هناجر',
         icon: MdWarehouse,
-        description: 'هذا العقار يتواجد فية مخزن ',
+        description: 'هذا العقار يتواجد فية مخزن',
     },
-    // {
-    //     label: 'سيارات للايجار',
-    //     icon: RiCarLine,
-    //     description: 'هذه السيارة للأيجار',
-    // }
-    // ,
-    // {
-    //     label: 'سيارات للبيع',
-    //     icon: FaCarAlt,
-    //     description: 'هذه السيارة للبيع',
-    //
-    // }
 ]
 
 const Categories = () => {
@@ -100,27 +94,27 @@ const Categories = () => {
     }
 
     return (
-        <Container>
-            <div
-                className="
+      <Container>
+          <div
+            className="
           pt-4
-          flex 
-          flex-row 
-          items-center 
+          flex
+          flex-row
+          items-center
           justify-between
           overflow-x-auto
         "
-            >
-                {categories.map((item) => (
-                    <CategoryBox
-                        key={item.label}
-                        label={item.label}
-                        icon={item.icon}
-                        selected={category === item.label}
-                    />
-                ))}
-            </div>
-        </Container>
+          >
+              {categories.map((item) => (
+                <CategoryBox
+                  key={item.label}
+                  label={item.label}
+                  icon={item.icon}
+                  selected={category === item.label}
+                />
+              ))}
+          </div>
+      </Container>
     );
 }
 
