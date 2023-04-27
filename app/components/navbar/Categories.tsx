@@ -32,7 +32,7 @@ export const categories = [
     icon: GiSofa,
     description: 'هذا المكان شالي ',
   }, {
-    label: 'قاعة اعراس ومناسبات',
+    label: 'قاعة',
     icon: FaSchool,
     description: 'هذا المكان قاعة اعراس ومناسبات ',
   }, {
