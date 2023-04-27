@@ -8,10 +8,21 @@ const mockListing = {
   locationValue: 'US',
   images: [{ url: 'https://example.com/image1.jpg' }, { url: 'https://example.com/image2.jpg' }],
   id: '1',
-  currentUser: { id: '1', name: 'John Doe' },
+  currentUser: {
+    id: '1',
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    image: 'https://example.com/johndoe.jpg',
+    hashedPassword: 'hashedpassword',
+    favoriteIds: [],
+    createdAt: new Date().toString(),
+    updatedAt: new Date().toString(),
+    emailVerified: null
+  },
   favoritesCount: 10,
   viewCounter: 20,
 };
+
 
 const ListingPage: React.FC = () => {
   const router = useRouter();
@@ -30,6 +41,7 @@ const ListingPage: React.FC = () => {
         currentUser={mockListing.currentUser}
         favoritesCount={mockListing.favoritesCount}
         viewCounter={mockListing.viewCounter}
+        onView={() => void 0}
       />
 
     </div>
