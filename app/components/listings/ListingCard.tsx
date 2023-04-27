@@ -115,10 +115,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
                             <SwiperSlide key={index}>
                                 <Image
-                                    layout="fill"
+                                    layout="responsive"
                                     className="object-cover h-full w-full"
                                     src={src}
                                     alt={`Listing image ${index + 1}`}
+                                    width={500}
+                                    height={500}
                                 />
                             </SwiperSlide>
                         ))}
