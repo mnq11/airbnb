@@ -5,7 +5,7 @@ import {
     GiCampingTent, GiFlyingTrout
     , GiHutsVillage, GiMountainCave, GiWaterTower, GiWaveSurfer
 } from 'react-icons/gi';
-import {FaCarAlt, FaHotel} from 'react-icons/fa';
+import {FaHotel} from 'react-icons/fa';
 
 import {MdPool, MdWarehouse} from 'react-icons/md';
 
@@ -13,7 +13,6 @@ import CategoryBox from "../CategoryBox";
 import Container from '../Container';
 import { AiTwotoneHome } from 'react-icons/ai';
 import { FcHome , FcReading} from 'react-icons/fc';
-import {RiCarLine} from "react-icons/ri";
 
 export const categories = [
     {
