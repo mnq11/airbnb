@@ -1,42 +1,36 @@
-'use client';
-
-import {SafeUser} from "@/app/types";
+import { SafeUser } from "@/app/types";
 import React from "react";
-import { BsEye, BsEyeFill } from 'react-icons/bs';
+import { BsEye } from "react-icons/bs";
 
-interface viewCounterProps {
-    listingId: string
-    currentUser?: SafeUser | null
-    viewCounter?: number
+interface ViewCounterProps {
+    listingId: string;
+    currentUser?: SafeUser | null;
+    viewCounter?: number;
 }
 
-const ViewCounter: React.FC<viewCounterProps> = ({
-                                                     listingId,
-                                                     currentUser,
-                                                     viewCounter,
-                                                 }) => {
+const ViewCounter: React.FC<ViewCounterProps> = ({ viewCounter }) => {
     return (
-        <div className="relative hover:opacity-80 transition cursor-pointer z-10">
-            <div className="flex flex-row items-center">
-                <div className="font-extrabold text-red-700 mr-9 select-none pointer-events-none">
-                    {` ${(viewCounter || 0).toLocaleString('ar-EG')} `}
+        <div className="relative hover:opacity-80 transition z-10">
+            <div className="flex items-center justify-center bg-white text-gray-900 rounded-md py-0.5 px-1">
+                <div className="font-extrabold text-red-700 select-none pointer-events-none">
+                    {` ${(viewCounter || 0).toLocaleString("ar-EG")} `}
                 </div>
-                <BsEye
-                    size={28}
-                    className={viewCounter ? "text-red-700" : "text-neutral-500/70"}
-                />
+                <div className="flex items-center bg-white text-gray-900 rounded-md py-0.5 px-1">
+                    <BsEye className={viewCounter ? "text-red-700 ml-1" : "text-neutral-500/70 ml-1"} />
+                </div>
             </div>
-            <style jsx>{`
-      .select-none {
-        user-select: none;
-      }
 
-      .pointer-events-none {
-        pointer-events: none;
-      }
-    `}</style>
+            <style jsx>{`
+        .select-none {
+          user-select: none;
+        }
+
+        .pointer-events-none {
+          pointer-events: none;
+        }
+      `}</style>
         </div>
     );
 };
 
-    export default ViewCounter;
+export default ViewCounter;
