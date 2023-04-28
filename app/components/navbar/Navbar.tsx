@@ -25,6 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <Container>
                     <div
                         className="
+
             flex
             flex-row
             items-center

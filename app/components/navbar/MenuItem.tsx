@@ -3,26 +3,31 @@
 interface MenuItemProps {
   onClick: () => void;
   label: string;
+  icon: React.ElementType;
+
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
   onClick,
-  label
+  label,
+    icon:Icon
 }) => {
-  return ( 
-    <div 
-      onClick={onClick} 
-      className="
-        px-4 
-        py-3 
-        hover:bg-neutral-100 
+  return (
+      <div
+          onClick={onClick}
+          className="
+        px-4
+        py-3
+        hover:bg-neutral-100
         transition
         font-semibold
+        flex items-center gap-2
       "
-    >
-      {label}
-    </div>
-   );
-}
- 
+      >
+        <Icon className="text-xl" />
+        {label}
+      </div>
+  );
+};
+
 export default MenuItem;

@@ -1,52 +1,51 @@
-'use client';
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { IconType } from 'react-icons';
+import { IoMdPerson, IoMdBed, IoMdWater } from 'react-icons/io'; // Import the icons
 
-import dynamic from "next/dynamic";
-import { IconType } from "react-icons";
+import useCountries from '@/app/hooks/useCountries';
+import { SafeUser } from '@/app/types';
 
-import useCountries from "@/app/hooks/useCountries";
-import { SafeUser } from "@/app/types";
+import Avatar from '../Avatar';
+import ListingCategory from './ListingCategory';
+import { LatLngTuple } from 'leaflet';
 
-import Avatar from "../Avatar";
-import ListingCategory from "./ListingCategory";
-import {LatLngTuple} from "leaflet";
-
-const Map = dynamic(() => import('../Map'), { 
-  ssr: false 
+const Map = dynamic(() => import('../Map'), {
+    ssr: false,
 });
 
 interface ListingInfoProps {
-  user: SafeUser| null,
-  description: string;
-  guestCount: number;
-  roomCount: number;
-  bathroomCount: number;
-  category: {
-    icon: IconType,
-    label: string;
+    user: SafeUser | null;
     description: string;
-  } | undefined
-  locationValue: string;
+    guestCount: number;
+    roomCount: number;
+    bathroomCount: number;
+    category: {
+        icon: IconType;
+        label: string;
+        description: string;
+    } | undefined;
+    locationValue: string;
 }
 
 const ListingInfo: React.FC<ListingInfoProps> = ({
-  user,
-  description,
-  guestCount,
-  roomCount,
-  bathroomCount,
-  category,
-  locationValue,
+                                                     user,
+                                                     description,
+                                                     guestCount,
+                                                     roomCount,
+                                                     bathroomCount,
+                                                     category,
+                                                     locationValue,
+                                                 }) => {
+    const { getByValue } = useCountries();
 
-}) => {
-  const { getByValue } = useCountries();
+    const coordinates = getByValue(locationValue)?.latlng;
 
-  const coordinates = getByValue(locationValue)?.latlng
-
-  return ( 
-    <div className="col-span-4 flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <div 
-          className="
+    return (
+        <div className="col-span-4 flex flex-col gap-8">
+            <div className="flex flex-col gap-2">
+                <div
+                    className="
             text-xl 
             font-semibold 
             flex 
@@ -54,11 +53,12 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
             items-center
             gap-2
           "
-        >
-          <div>المستضيف {user?.name} </div>
-          <Avatar src={user?.image} />
-        </div>
-        <div className="
+                >
+                    <div>المستضيف {user?.name} </div>
+                    <Avatar src={user?.image} />
+                </div>
+                <div
+                    className="
             flex 
             flex-row 
             items-center 
@@ -66,35 +66,37 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
             font-light
             text-neutral-500
           "
-        >
-          <div>
-              سعة الضيوف : {guestCount.toLocaleString('ar-EG')}
-          </div>
-          <div>
-           عدد الغرف :  {roomCount.toLocaleString('ar-EG')}
-          </div>
-          <div>
-             عدد الحمامات :  {bathroomCount.toLocaleString('ar-EG')}
-          </div>
+                >
+                    <div>
+                        <IoMdPerson /> سعة الضيوف :{' '}
+                        {guestCount.toLocaleString('ar-EG')}
+                    </div>
+                    <div>
+                        <IoMdBed /> عدد الغرف :{' '}
+                        {roomCount.toLocaleString('ar-EG')}
+                    </div>
+                    <div>
+                        <IoMdWater /> عدد الحمامات :{' '}
+                        {bathroomCount.toLocaleString('ar-EG')}
+                    </div>
+                </div>
+            </div>
+            <hr />
+            {category && (
+                <ListingCategory
+                    icon={category.icon}
+                    label={category?.label}
+                    description={category?.description}
+                />
+            )}
+            <hr />
+            <div className="text-lg font-light text-neutral-500">
+                {description}
+            </div>
+            <hr />
+            <Map center={coordinates as LatLngTuple | undefined} />
         </div>
-      </div>
-      <hr />
-      {category && (
-        <ListingCategory
-          icon={category.icon} 
-          label={category?.label}
-          description={category?.description} 
-        />
-      )}
-      <hr />
-      <div className="
-      text-lg font-light text-neutral-500">
-        {description}
-      </div>
-      <hr />
-      <Map center={coordinates as LatLngTuple | undefined} />
-    </div>
-   );
-}
- 
+    );
+};
+
 export default ListingInfo;
