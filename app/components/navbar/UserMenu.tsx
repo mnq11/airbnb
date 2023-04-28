@@ -5,7 +5,7 @@ import {AiOutlineMenu} from "react-icons/ai";
 import {signOut} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
-import {FaUser, FaHeart, FaCalendarCheck, FaHome, FaPlus, FaSignInAlt, FaUserPlus, FaSignOutAlt} from "react-icons/fa";
+import { FaUser, FaHeart, FaCalendarCheck, FaHome, FaPlus, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
@@ -120,6 +120,12 @@ const UserMenu: React.FC<UserMenuProps> = ({
                                 {currentUser ? (
                                     <>
                                         <MenuItem
+                                            label="الرئيسية"
+                                            icon={FaUser}
+                                            onClick={() => handleMenuItemClick(() => router.push('/'))}
+                                        />
+
+                                        <MenuItem
                                             label="رحلات قمت بحجزها"
                                             icon={FaCalendarCheck}
                                             onClick={() => handleMenuItemClick(() => router.push('/trips'))}
@@ -163,6 +169,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                                             icon={FaUserPlus}
                                             onClick={() => handleMenuItemClick(() => registerModal.onOpen())}
                                         />
+
                                     </>
                                 )}
                             </>
