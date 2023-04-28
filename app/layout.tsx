@@ -30,6 +30,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+    <head>
+      <link rel="icon" href="/favicon-16x16.png" />
+    </head>
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
