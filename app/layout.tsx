@@ -13,8 +13,8 @@ import ClientOnly from './components/ClientOnly';
 import getCurrentUser from './actions/getCurrentUser';
 
 export const metadata = {
-  title: 'Airbnb',
-  description: 'Airbnb Clone',
+  title: 'جولتنا',
+  description: 'منصة جولتنا هي منصة تساعد المستخدمة لتحديد المناطق الذي نعتقد انها تستحق قضاء جولة فيها بأرخص الاسعار',
 }
 
 const font = Nunito({ 
