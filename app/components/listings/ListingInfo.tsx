@@ -1,14 +1,14 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { IconType } from 'react-icons';
-import { IoMdPerson, IoMdBed, IoMdWater } from 'react-icons/io'; // Import the icons
+import {IconType} from 'react-icons';
+import {IoMdPerson, IoMdBed, IoMdWater} from 'react-icons/io'; // Import the icons
 
 import useCountries from '@/app/hooks/useCountries';
-import { SafeUser } from '@/app/types';
+import {SafeUser} from '@/app/types';
 
 import Avatar from '../Avatar';
 import ListingCategory from './ListingCategory';
-import { LatLngTuple } from 'leaflet';
+import {LatLngTuple} from 'leaflet';
 
 const Map = dynamic(() => import('../Map'), {
     ssr: false,
@@ -37,7 +37,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                                                      category,
                                                      locationValue,
                                                  }) => {
-    const { getByValue } = useCountries();
+    const {getByValue} = useCountries();
 
     const coordinates = getByValue(locationValue)?.latlng;
 
@@ -55,7 +55,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           "
                 >
                     <div>المستضيف {user?.name} </div>
-                    <Avatar src={user?.image} />
+                    <Avatar src={user?.image}/>
                 </div>
                 <div
                     className="
@@ -68,20 +68,20 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           "
                 >
                     <div>
-                        <IoMdPerson /> سعة الضيوف :{' '}
+                        <IoMdPerson/> سعة الضيوف :{' '}
                         {guestCount.toLocaleString('ar-EG')}
                     </div>
                     <div>
-                        <IoMdBed /> عدد الغرف :{' '}
+                        <IoMdBed/> عدد الغرف :{' '}
                         {roomCount.toLocaleString('ar-EG')}
                     </div>
                     <div>
-                        <IoMdWater /> عدد الحمامات :{' '}
+                        <IoMdWater/> عدد الحمامات :{' '}
                         {bathroomCount.toLocaleString('ar-EG')}
                     </div>
                 </div>
             </div>
-            <hr />
+            <hr/>
             {category && (
                 <ListingCategory
                     icon={category.icon}
@@ -89,12 +89,15 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                     description={category?.description}
                 />
             )}
-            <hr />
+            <hr/>
             <div className="text-lg font-light text-neutral-500">
                 {description}
             </div>
-            <hr />
-            <Map center={coordinates as LatLngTuple | undefined} />
+            <hr/>
+            <Map center={coordinates as LatLngTuple | undefined}/>
+            <div className="text-lg font-light text-neutral-500">
+                النقطة على الخريطة لاتحدد بدقة انما تحدد المنطقة التقريبية فقط
+            </div>
         </div>
     );
 };
