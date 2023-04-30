@@ -51,11 +51,11 @@ const RentModal = () => {
         defaultValues: {
             category: '',
             location: null,
-            guestCount: 1,
-            roomCount: 1,
-            bathroomCount: 1,
+            guestCount: 0,
+            roomCount: 0,
+            bathroomCount: 0,
             imageSrc: '',
-            price: 1,
+            price: 1000,
             title: '',
             description: '',
         }
@@ -97,8 +97,8 @@ const RentModal = () => {
                 }
                 return !!category;
             case STEPS.LOCATION:
-                if (!location) {
-                    toast.error('يرجى تحديد الموقع');
+                if (!location || location.label === '' || location.value === '') {
+                    toast.error('يرجى تحديد المنطقة والموقع');
                     return false;
                 }
                 return !!location;
@@ -184,9 +184,9 @@ const RentModal = () => {
             />
             <div
                 className="
-          grid 
-          grid-cols-1 
-          md:grid-cols-2 
+          grid
+          grid-cols-1
+          md:grid-cols-2
           gap-3
           max-h-[50vh]
           overflow-y-auto

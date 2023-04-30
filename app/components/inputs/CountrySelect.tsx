@@ -1,36 +1,23 @@
-'use client';
 import React, { useState } from "react";
-import Select, {StylesConfig} from "react-select";
+import Select, { StylesConfig } from "react-select";
+import { CSSObject } from "@emotion/serialize";
 import yemenAreas from "./yemenAreas.json";
-import {CSSObject} from "@emotion/serialize";
 
-export type CountrySelectValue = {
-    flag: string;
+export type RegionSelectValue = {
     label: string;
-    latlng: number[];
-    region: string;
     value: string;
-    district?: string;
 };
 
 interface CountrySelectProps {
-    value?: CountrySelectValue;
-    onChange: (value: CountrySelectValue) => void;
+    value?: RegionSelectValue;
+    onChange: (value: RegionSelectValue) => void;
 }
 
-const convertJsonToYemenAreas = (jsonData: any[]): CountrySelectValue[] => {
-    return jsonData.map((area) => ({
-        flag: area.flag,
-        label: area.label,
-        latlng: area.latlng,
-        region: area.region,
-        value: area.value,
-        district: area.district,
-    }));
-};
-
-
-const centeredStyles: StylesConfig<CountrySelectValue, false> = {
+const centeredStyles: StylesConfig<RegionSelectValue, false> = {
+    menu: (provided: CSSObject): CSSObject => ({
+        ...provided,
+        textAlign: "center",
+    }),
     control: (provided: CSSObject): CSSObject => ({
         ...provided,
         display: "flex",
@@ -49,46 +36,39 @@ const centeredStyles: StylesConfig<CountrySelectValue, false> = {
         textAlign: "center",
     }),
 };
-export type AreaSelectOption = CountrySelectValue & RegionSelectValue;
-export type RegionSelectValue = {
-    label: string;
-    value: string;
-    flag?: string;
-    latlng?: number[];
-    region?: string;
-};
+
+const regions: RegionSelectValue[] = Array.from(
+    new Set(yemenAreas.map((area) => area.region))
+).map((region) => ({
+    label: region,
+    value: region,
+}));
 
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
-    const convertedYemenAreas = convertJsonToYemenAreas(yemenAreas);
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-    const [filteredAreas, setFilteredAreas] = useState<CountrySelectValue[]>([]);
+    const [filteredAreas, setFilteredAreas] = useState<any[]>([]);
 
     const handleRegionChange = (value: string | null) => {
         setSelectedRegion(value);
+        onChange({ label: '', value: '' }); // Reset selected area when changing region
         if (value) {
-            setFilteredAreas(convertedYemenAreas.filter((area) => area.region === value));
+            setFilteredAreas(yemenAreas.filter((area) => area.region === value));
         } else {
             setFilteredAreas([]);
         }
     };
 
-
-    const regions: AreaSelectOption[] = Array.from(
-        new Set(convertedYemenAreas.map((area) => area.region))
-    ).map((region) => ({
-        label: region,
-        value: region,
-        flag: "",
-        latlng: [0, 0],
-        region: region,
-    }));
     return (
         <div>
             <Select
-                placeholder="أي محافظة ؟"
+                placeholder="حدد المحافظة"
                 isClearable
                 options={regions}
-                value={selectedRegion ? { label: selectedRegion, value: selectedRegion } as CountrySelectValue : null}
+                value={
+                    selectedRegion
+                        ? { label: selectedRegion, value: selectedRegion }
+                        : null
+                }
                 onChange={(value) => handleRegionChange(value ? value.value : null)}
                 styles={centeredStyles}
                 theme={(theme) => ({
@@ -104,18 +84,14 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
 
             {selectedRegion && (
                 <Select
-                    placeholder="اختر المنطقة"
+                    placeholder="حدد المنطقة"
                     isClearable
-                    options={filteredAreas}
+                    options={filteredAreas.map((area) => ({
+                        label: area.label,
+                        value: area.value,
+                    }))}
                     value={value}
-                    onChange={(value) => onChange(value as CountrySelectValue)}
-                    formatOptionLabel={(option: CountrySelectValue) => (
-                        <div className="flex w-full justify-center">
-                            <div>
-                                {option.label}
-                            </div>
-                        </div>
-                    )}
+                    onChange={(value) => onChange(value as RegionSelectValue)}
                     styles={centeredStyles}
                     theme={(theme) => ({
                         ...theme,
