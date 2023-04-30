@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Select, { StylesConfig } from "react-select";
 import { CSSObject } from "@emotion/serialize";
 import yemenAreas from "./yemenAreas.json";
+import {LatLngTuple} from "leaflet";
 
 export type RegionSelectValue = {
     label: string;
     value: string;
+    latlng?: LatLngTuple;
 };
 
 interface CountrySelectProps {
