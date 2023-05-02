@@ -54,7 +54,18 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
         setSelectedRegion(value);
         onChange({ label: '', value: '' }); // Reset selected area when changing region
         if (value) {
-            setFilteredAreas(yemenAreas.filter((area) => area.region === value));
+            const newFilteredAreas = yemenAreas.filter((area) => area.region === value);
+            setFilteredAreas(newFilteredAreas);
+
+            // Automatically select the only available option in the second dropdown
+            if (newFilteredAreas.length === 1) {
+                const singleArea = newFilteredAreas[0];
+                onChange({
+                    label: singleArea.label,
+                    value: singleArea.value,
+                    latlng: singleArea.latlng as LatLngTuple,
+                });
+            }
         } else {
             setFilteredAreas([]);
         }
@@ -91,6 +102,8 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
                     options={filteredAreas.map((area) => ({
                         label: area.label,
                         value: area.value,
+                        latlng: area.latlng as LatLngTuple,
+
                     }))}
                     value={value}
                     onChange={(value) => onChange(value as RegionSelectValue)}

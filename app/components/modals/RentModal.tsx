@@ -9,16 +9,17 @@ import {
 } from 'react-hook-form';
 import dynamic from 'next/dynamic'
 import {useRouter} from 'next/navigation';
-import {useMemo, useState} from "react";
+import {useMemo, useState, useEffect} from "react";
 
 import useRentModal from '@/app/hooks/useRentModal';
-
 import Modal from "./Modal";
 import Counter from "../inputs/Counter";
+
 import CategoryInput from '../inputs/CategoryInput';
 import CountrySelect from "../inputs/CountrySelect";
 import {categories} from '../navbar/Categories';
 import ImageUpload from '../inputs/ImageUpload';
+
 import Input from '../inputs/Input';
 import Heading from '../Heading';
 
@@ -34,6 +35,7 @@ enum STEPS {
 const RentModal = () => {
     const router = useRouter();
     const rentModal = useRentModal();
+    const [mapCenter, setMapCenter] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState(STEPS.CATEGORY);
@@ -206,6 +208,13 @@ const RentModal = () => {
             </div>
         </div>
     )
+    useEffect(() => {
+        if (location && location.latlng) {
+            // Update the map center here with the new location
+            // Assuming you have a function called `setMapCenter` that takes the new coordinates
+            setMapCenter(location.latlng);
+        }
+    }, [location]);
 
     if (step === STEPS.LOCATION) {
         bodyContent = (
@@ -219,6 +228,11 @@ const RentModal = () => {
                     onChange={(value) => setCustomValue('location', value)}
                 />
                 <Map center={location?.latlng}/>
+                <span style={{fontSize: "0.8rem"}}>
+                    <hr dir="rtl" style={{marginBottom: "0.3rem"}}/>
+                    الخريطة تحدد المنطقة التقريبية للمكان وليس الفعلي
+                </span>
+
             </div>
         );
     }
