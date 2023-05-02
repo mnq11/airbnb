@@ -1,3 +1,4 @@
+'use clinet';
 import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import {Swiper, SwiperSlide} from "swiper/react";
@@ -30,7 +31,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                                      currentUser,
                                                      favoritesCount,
                                                      onView,
-                                                     viewCounter ,
+                                                     viewCounter,
                                                  }) => {
     const {getByValue} = useCountries();
     const location = getByValue(locationValue);
@@ -49,10 +50,22 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 <Swiper
                     style={{height: "80%"}}
                     spaceBetween={10}
-                    navigation
+                    navigation={{
+                        prevEl: '.swiper-button-prev-custom',
+                        nextEl: '.swiper-button-next-custom',
+                    }}
                     thumbs={{swiper: thumbsSwiper}}
-                    className="mySwiper2"
-                >
+                    className="mySwiper2">
+                    <div
+                        className="swiper-button-prev-custom absolute top-1/2 left-3 z-10 text-white text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md"
+                    >
+                        ←
+                    </div>
+                    <div
+                        className="swiper-button-next-custom absolute top-1/2 right-3 z-10 text-white text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md"
+                    >
+                        →
+                    </div>
                     {images.map((image, index) => (
                         <SwiperSlide key={index} className="flex items-center justify-center">
                             <div className="w-full h-full relative">
@@ -63,7 +76,6 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                     className="absolute top-0 left-0 lg:h-full lg:w-full lg:object-contain"
                                     alt="Image"
                                 />
-
                             </div>
                             <div className="absolute bottom-3 left-3">
                                 <ViewCounter
@@ -73,8 +85,13 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                 />
                             </div>
                         </SwiperSlide>
+
                     ))}
+
                 </Swiper>
+
+
+
                 <Swiper
                     onSwiper={setThumbsSwiper}
                     spaceBetween={10}
