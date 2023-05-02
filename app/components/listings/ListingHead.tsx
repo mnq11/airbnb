@@ -58,15 +58,16 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                     thumbs={{swiper: thumbsSwiper}}
                     className="mySwiper2">
                     <div
-                        className="swiper-button-prev-custom absolute top-1/2 left-3 z-10 text-white text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                        className="swiper-button-prev-custom absolute top-1/2 left-1 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
                     >
                         <TiArrowLeftOutline />
                     </div>
                     <div
-                        className="swiper-button-next-custom absolute top-1/2 right-3 z-10 text-white text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                        className="swiper-button-next-custom absolute top-1/2 right-1 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
                     >
                         <TiArrowRightOutline />
                     </div>
+
                     {images.map((image, index) => (
                         <SwiperSlide key={index} className="flex items-center justify-center">
                             <div className="w-full h-full relative">
@@ -78,7 +79,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                     alt="Image"
                                 />
                             </div>
-                            <div className="absolute bottom-3 left-3">
+                            <div className="absolute bottom-3 left-10  ">
                                 <ViewCounter
                                     listingId={id}
                                     currentUser={currentUser}
@@ -116,7 +117,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                <div className="absolute top-5 right-5">
+                <div className="absolute top-5 right-7">
                     <HeartButton
                         listingId={id}
                         currentUser={currentUser}

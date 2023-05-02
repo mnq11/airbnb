@@ -66,6 +66,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
             if (!currentUser) {
                 return loginModal.onOpen();
             }
+            // @ts-ignore
+            if (currentUser.id !== listing.user.id) {
+                toast.error('عذراً، لا يمكنك حجز هذه الملكية. يمكن فقط لمالك الملكية إجراء الحجز');
+                return;
+            }
             setIsLoading(true);
 
             axios.post('/api/reservations', {
