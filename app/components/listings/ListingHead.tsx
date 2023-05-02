@@ -59,8 +59,8 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                                 <Image
                                     src={image.url}
                                     layout="fill"
-                                    objectFit="contain"
-                                    className="absolute top-0 left-0"
+                                    objectFit="cover"
+                                    className="absolute top-0 left-0 lg:h-full lg:w-full lg:object-contain"
                                     alt="Image"
                                 />
 
@@ -89,8 +89,8 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                         <SwiperSlide key={index}>
                             <Image
                                 src={image.url}
-                                width={100}
-                                height={100}
+                                width={200}
+                                height={200}
                                 className="object-cover w-full h-full"
                                 alt="Thumbnail"
                             />
