@@ -46,7 +46,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
                         className="..."
                     >
                         <TbPhotoPlus size={50} />
-                        <div className="font-semibold text-lg">Click to upload</div>
+                        <div className="font-semibold text-lg">التالي</div>
                     </button>
                 )}
             </CldUploadWidget>
