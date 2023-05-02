@@ -95,9 +95,6 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
             </div>
             <hr/>
             <Map center={coordinates as LatLngTuple | undefined}/>
-            <div className="text-lg font-light text-neutral-500">
-                النقطة على الخريطة لاتحدد بدقة انما تحدد المنطقة التقريبية فقط
-            </div>
         </div>
     );
 };

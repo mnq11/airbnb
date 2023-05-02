@@ -228,11 +228,6 @@ const RentModal = () => {
                     onChange={(value) => setCustomValue('location', value)}
                 />
                 <Map center={location?.latlng}/>
-                <span style={{fontSize: "0.8rem"}}>
-                    <hr dir="rtl" style={{marginBottom: "0.3rem"}}/>
-                    الخريطة تحدد المنطقة التقريبية للمكان وليس الفعلي
-                </span>
-
             </div>
         );
     }

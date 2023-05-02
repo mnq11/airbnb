@@ -1,28 +1,28 @@
 'use client';
+import Loader from "@/app/components/Loader";
 
 import qs from 'query-string';
 import dynamic from 'next/dynamic'
-import { useCallback, useMemo, useState, useEffect } from "react";
-import { Range } from 'react-date-range';
-import { formatISO } from 'date-fns';
-import { useRouter, useSearchParams } from 'next/navigation';
+import {useCallback, useMemo, useState, useEffect} from "react";
+import {Range} from 'react-date-range';
+import {formatISO} from 'date-fns';
+import {useRouter, useSearchParams} from 'next/navigation';
 
 import useSearchModal from "@/app/hooks/useSearchModal";
 
 import Modal from "./Modal";
 import Calendar from "../inputs/Calendar";
 import Counter from "../inputs/Counter";
-import CountrySelect, { RegionSelectValue as CountrySelectValue } from "../inputs/CountrySelect";
+import CountrySelect, {RegionSelectValue as CountrySelectValue} from "../inputs/CountrySelect";
 
 import Heading from '../Heading';
-import { LatLngTuple } from 'leaflet';
+import {LatLngTuple} from 'leaflet';
 
 enum STEPS {
     LOCATION = 0,
     DATE = 1,
     INFO = 2,
 }
-
 
 const SearchModal = () => {
     const router = useRouter();
@@ -40,11 +40,17 @@ const SearchModal = () => {
         endDate: new Date(),
         key: 'selection'
     });
+
+    // Move the useState hook for isLoading inside the SearchModal component
+    const [isLoading, setIsLoading] = useState(false);
+    const loader = isLoading ? <Loader/> : null;
+
     useEffect(() => {
         if (location?.latlng) {
             // Add any code necessary to update the map's center
         }
     }, [location]);
+
     const Map = useMemo(
         () =>
             dynamic(
@@ -69,6 +75,8 @@ const SearchModal = () => {
             if (step !== STEPS.INFO) {
                 return onNext();
             }
+
+            setIsLoading(true);
 
             let currentQuery = {};
 
@@ -95,11 +103,12 @@ const SearchModal = () => {
             const url = qs.stringifyUrl({
                 url: '/',
                 query: updatedQuery,
-            }, { skipNull: true });
+            }, {skipNull: true});
 
             setStep(STEPS.LOCATION);
             searchModal.onClose();
-            router.push(url);
+            await router.push(url);
+            setIsLoading(false);
         },
         [
             step,
@@ -141,8 +150,8 @@ const SearchModal = () => {
                 onChange={(value) =>
                     setLocation(value as CountrySelectValue)}
             />
-            <hr />
-            <Map center={location?.latlng as LatLngTuple | undefined} />
+            <hr/>
+            <Map center={location?.latlng as LatLngTuple | undefined}/>
         </div>
     )
 
@@ -163,33 +172,36 @@ const SearchModal = () => {
 
     if (step === STEPS.INFO) {
         bodyContent = (
-            <div className="flex flex-col gap-8" dir="rtl"> {/* Add dir="rtl" here */}
-                <Heading
-                    title="معلومات اكثر"
-                    subtitle="اعثر على مكانك المثالي"
-                />
-                <Counter
-                    onChange={(value) => setGuestCount(value)}
-                    value={guestCount}
-                    title="ضيوف"
-                    subtitle="كم عدد الضيوف القادمين؟"
-                />
-                <hr />
-                <Counter
-                    onChange={(value) => setRoomCount(value)}
-                    value={roomCount}
-                    title="غرف"
-                    subtitle="كم عدد الغرف التي تحتاجها؟"
-                />
-                <hr />
-                <Counter
-                    onChange={(value) => {
-                        setBathroomCount(value)
-                    }}
-                    value={bathroomCount}
-                    title="الحمامات"
-                    subtitle="كم عدد الحمامات التي تحتاجها؟"
-                />
+            <div style={{position: 'relative'}}>
+                {loader}
+                <div className="flex flex-col gap-8" dir="rtl"> {/* Add dir="rtl" here */}
+                    <Heading
+                        title="معلومات اكثر"
+                        subtitle="اعثر على مكانك المثالي"
+                    />
+                    <Counter
+                        onChange={(value) => setGuestCount(value)}
+                        value={guestCount}
+                        title="ضيوف"
+                        subtitle="كم عدد الضيوف القادمين؟"
+                    />
+                    <hr/>
+                    <Counter
+                        onChange={(value) => setRoomCount(value)}
+                        value={roomCount}
+                        title="غرف"
+                        subtitle="كم عدد الغرف التي تحتاجها؟"
+                    />
+                    <hr/>
+                    <Counter
+                        onChange={(value) => {
+                            setBathroomCount(value)
+                        }}
+                        value={bathroomCount}
+                        title="الحمامات"
+                        subtitle="كم عدد الحمامات التي تحتاجها؟"
+                    />
+                </div>
             </div>
         )
     }
