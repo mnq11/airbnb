@@ -35,7 +35,7 @@ enum STEPS {
 const RentModal = () => {
     const router = useRouter();
     const rentModal = useRentModal();
-    const [mapCenter, setMapCenter] = useState(null);
+    const [, setMapCenter] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState(STEPS.CATEGORY);
@@ -71,7 +71,7 @@ const RentModal = () => {
     const imageSrc = watch('imageSrc');
 
     const Map = useMemo(() => dynamic(() => import('../Map'), {
-        ssr: false
+        ssr: true
     }), [location]);
 
 
@@ -131,14 +131,19 @@ const RentModal = () => {
             return;
         }
         if (step !== STEPS.PRICE) {
-
             return onNext();
         }
 
         setIsLoading(true);
 
+        // Concatenate the phone and payment method to the description
+        const updatedDescription = `${data.description}\n\nرقم الهاتف: ${
+            data.phone
+        }\nطريقة الدفع المفضلة: ${data.paymentMethod}`;
+
         const payload = {
             ...data,
+            description: updatedDescription, // Use the updated description
             images: imageSrc,
         };
 
@@ -153,13 +158,13 @@ const RentModal = () => {
             })
             .catch(() => {
                 toast.error('هناك خطأ ما');
-
-
             })
             .finally(() => {
                 setIsLoading(false);
             })
     }
+
+
 
 
     const actionLabel = useMemo(() => {
@@ -283,23 +288,48 @@ const RentModal = () => {
             <div className="flex flex-col gap-8">
                 <Heading
                     title="كيف تصف مكانك؟"
-                    subtitle="اختصار الوصف في كلمات قليلة و أضف رقم هاتفك"
+                    subtitle="اخبر الضيوف عن مكانك و طريقة التواصل معك و طريقة الدفع المفضلة"
                 />
                 <Input
                     id="title"
-                    label="العنوان"
+                    label="اختر عنوان لمكانك "
                     disabled={isLoading}
                     register={register}
                     errors={errors}
+                    textDirection="rtl"
+
                     required
                 />
                 <hr/>
                 <Input
                     id="description"
-                    label="الوصف"
+                    label="اوصف مكانك بشكل مختصر"
                     disabled={isLoading}
                     register={register}
                     errors={errors}
+                    textDirection="rtl"
+                    required
+
+                />
+                <hr/>
+                <Input
+                    id="phone"
+                    label="رقم الهاتف"
+                    type="tel"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    textDirection="rtl"
+                    required
+                />
+                <hr/>
+                <Input
+                    id="paymentMethod"
+                    label="طريقة الدفع المفضلة"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    textDirection="rtl"
                     required
                 />
             </div>

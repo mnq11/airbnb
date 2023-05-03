@@ -59,12 +59,12 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                 </div>
                 <div
                     className="
-            flex 
-            flex-row 
-            items-center 
-            gap-4 
-            font-light
-            text-neutral-500
+              flex
+        flex-col
+        items-start
+        gap-4
+        font-light
+        text-neutral-500
           "
                 >
                     <div>
@@ -90,9 +90,10 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                 />
             )}
             <hr/>
-            <div className="text-lg font-light text-neutral-500">
+            <div className="text-lg font-light text-neutral-500 whitespace-pre-line">
                 {description}
             </div>
+
             <hr/>
             <Map center={coordinates as LatLngTuple | undefined}/>
         </div>
