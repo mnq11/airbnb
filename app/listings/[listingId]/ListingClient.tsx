@@ -68,7 +68,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
             }
             // @ts-ignore
             if (currentUser.id !== listing.user.id) {
-                toast.error('عذراً، لا يمكنك حجز هذه الملكية. يمكن فقط لمالك الملكية إجراء الحجز');
+                toast.error(' حتى نتمكن من تأكيد الحجز: تواصل مع المستضيف معلوماتة ستجدها في صندوق الوصف ', {
+                    className: 'rtl-toast-container', // Add this line
+                });
                 return;
             }
             setIsLoading(true);

@@ -90,3 +90,7 @@ body,
   left: 0.5rem;
   down: 0.5rem;
 }
+/* custom-toast.css */
+.rtl-toast-container {
+  text-align: right;
+}
