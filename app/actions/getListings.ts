@@ -2,6 +2,7 @@
 import prisma from "@/app/libs/prismadb";
 
 export interface IListingsParams {
+  page?: number;
   userId?: string;
   guestCount?: number;
   roomCount?: number;
@@ -94,6 +95,8 @@ export default async function getListings(
       include: {
         images: true, // Include images
       },
+      take: 10, // Limit the number of results per page
+      skip: (params.page ? params.page - 1 : 0) * 10, // Calculate the offset based on the current page
     });
 
 
