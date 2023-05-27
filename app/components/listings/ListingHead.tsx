@@ -121,8 +121,8 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                             <SwiperSlide key={index}>
                                 <Image
                                     src={image.url}
-                                    width={200}
-                                    height={200}
+                                    width={500}
+                                    height={500}
                                     className="object-cover w-full h-full"
                                     alt="Thumbnail"
                                     onLoad={handleImageLoad}
