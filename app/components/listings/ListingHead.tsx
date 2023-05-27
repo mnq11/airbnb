@@ -69,15 +69,19 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                         thumbs={{swiper: thumbsSwiper}}
                         className="mySwiper2">
                         <div
-                            className="swiper-button-prev-custom absolute top-1/2 left-1 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                            className="swiper-button-prev-custom absolute top-3/4 -translate-y-1/2 left-4 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                            style={{width: "40px", height: "40px" ,marginTop: '120px'}}
                         >
-                            <TiArrowLeftOutline/>
+                            <TiArrowLeftOutline style={{marginTop: '-3px'}}/>
                         </div>
                         <div
-                            className="swiper-button-next-custom absolute top-1/2 right-1 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                            className="swiper-button-next-custom absolute top-3/4 -translate-y-1/2 right-4 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
+                            style={{width: "40px", height: "40px" ,marginTop: '120px'}}
                         >
-                            <TiArrowRightOutline/>
+                            <TiArrowRightOutline style={{marginTop: '-3px'}}/>
                         </div>
+
+
 
                         {images.map((image, index) => (
                             <SwiperSlide key={index} className="flex items-center justify-center">

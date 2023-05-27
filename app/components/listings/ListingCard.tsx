@@ -116,8 +116,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
                                     className="object-cover h-full w-full"
                                     src={src}
                                     alt={`Listing image ${index + 1}`}
-                                    width={500}
-                                    height={500}
+                                    width={100}
+                                    height={100}
                                 />
                             </SwiperSlide>
                         ))}
