@@ -6,6 +6,7 @@ import getListings, {
 } from "@/app/actions/getListings";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import ClientOnly from "./components/ClientOnly";
+import Footer from "@/app/components/Footer";
 
 interface HomeProps {
   searchParams: IListingsParams
@@ -53,6 +54,7 @@ const Home = async ({ searchParams }: HomeProps) => {
             );
           })}
         </div>
+        <Footer />
       </Container>
     </ClientOnly>
   )
