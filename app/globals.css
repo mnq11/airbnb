@@ -1,60 +1,59 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 html,
 body,
 :root {
   height: 100%;
+  font-family: 'Inter', sans-serif; /* Changed to a more modern font */
 }
 
-.leaflet-bottom,
 .leaflet-control,
 .leaflet-pane,
-.leaflet-top {
+.leaflet-top,
+.leaflet-bottom {
   z-index: 0 !important;
 }
 
-.rdrMonth {
-  width: 100% !important;
-}
-
+.rdrMonth,
 .rdrCalendarWrapper {
-  font-size: 16px !important;
   width: 100% !important;
+  font-size: 1.125rem !important; /* Use rem for scalable design */
 }
 
 .swiper-button-prev-custom,
 .swiper-button-next-custom {
-  background: linear-gradient(to right, rgba(237, 56, 88, 0.15), rgba(242, 63, 93, 0.53));
+  background: linear-gradient(90deg, rgba(237, 56, 88, 0.15), rgba(242, 63, 93, 0.53));
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  border-radius: 60%;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  height: 300px;
+  width: 2.5rem;
+  height: 18.75rem;
   transition: all 0.3s ease-in-out;
+  color: #fff;
 }
 
 .swiper-button-prev-custom:hover,
 .swiper-button-next-custom:hover,
-.swiper-button-prev-custom:active,
-.swiper-button-next-custom:active {
+.swiper-button-prev-custom:focus,
+.swiper-button-next-custom:focus {
   transform: rotate(90deg) scale(1.1);
-  box-shadow: 0 0 10px rgb(242, 63, 93, 0.9);
+  box-shadow: 0 0 10px rgba(242, 63, 93, 0.9);
 }
 
 .swiper-slide .icon {
   position: relative;
-  background-color: #ff0707;
-  border-radius: 80%;
-  padding: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+  padding: 0.625rem;
   transition: all 0.3s ease-in-out;
 }
 
 .swiper-slide .icon:hover,
-.swiper-slide .icon:active {
+.swiper-slide .icon:focus {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
@@ -73,23 +72,17 @@ body,
 }
 
 .swiper-slide .icon:hover::before,
-.swiper-slide .icon:active::before {
+.swiper-slide .icon:focus::before {
   transform: scale(1.5);
   opacity: 0;
 }
 
-/* Adjust vertical position of arrows */
-.swiper-button-prev-custom {
-  top:  0.5rem;
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  top: 0.5rem;
   left: 0.5rem;
-  down: 0.5rem;
 }
 
-.swiper-button-next-custom {
-  top:  0.5rem;
-  left: 0.5rem;
-  down: 0.5rem;
-}
 /* custom-toast.css */
 .rtl-toast-container {
   text-align: right;

@@ -122,9 +122,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                         ))}
                     </SwiperComponent>
 
-                    {/*<div className="font-light text-neutral-500 text-right">*/}
-                    {/*    {`Favorites: ${(favoritesCount || 0).toLocaleString()}`}*/}
-                    {/*</div>*/}
+
                     <div className="absolute top-3 right-3 ">
                         <HeartButton
                             listingId={data.id}

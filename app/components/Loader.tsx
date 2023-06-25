@@ -1,24 +1,28 @@
 'use client';
 
+import React from 'react';
+import styled from 'styled-components';
 import { PuffLoader } from "react-spinners";
 
-const Loader = () => {
-  return ( 
-    <div
-    className="
-      h-[70vh]
-      flex 
-      flex-col 
-      justify-center 
-      items-center 
-    "
-    >
-      <PuffLoader
-        size={100}
-        color="red"
-      />
-    </div>
-   );
+const LoaderContainer = styled.div`
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+interface LoaderProps {
+  size?: number;
+  color?: string;
 }
- 
+
+const Loader: React.FC<LoaderProps> = ({ size = 100, color = "red" }) => {
+  return (
+      <LoaderContainer>
+        <PuffLoader size={size} color={color} />
+      </LoaderContainer>
+  );
+};
+
 export default Loader;

@@ -7,10 +7,12 @@ import SearchModal from '@/app/components/modals/SearchModal';
 import RentModal from '@/app/components/modals/RentModal';
 
 import ToasterProvider from '@/app/providers/ToasterProvider';
+import Footer from "@/app/components/Footer";
 
 import './globals.css'
 import ClientOnly from './components/ClientOnly';
 import getCurrentUser from './actions/getCurrentUser';
+import React from "react";
 
 export const metadata = {
   title: 'جولتنا',
@@ -50,6 +52,7 @@ export default async function RootLayout({
         <div className="pb-20 pt-28">
           {children}
         </div>
+        <Footer />
       </body>
     </html>
   )

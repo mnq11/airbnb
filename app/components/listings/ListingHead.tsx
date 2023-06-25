@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import {Swiper, SwiperSlide} from "swiper/react";
@@ -50,6 +50,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     useEffect(() => {
         onView();
     }, [onView]);
+    // @ts-ignore
     return (
         <div style={{position: 'relative'}}>
             {loader}
