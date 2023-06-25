@@ -7,7 +7,6 @@ import {format} from 'date-fns';
 import {Swiper as SwiperComponent, SwiperSlide} from 'swiper/react';
 import SwiperCore, {Pagination} from 'swiper';
 import 'swiper/swiper.min.css';
-import 'swiper/components/pagination/pagination.min.css';
 
 SwiperCore.use([Pagination]);
 
