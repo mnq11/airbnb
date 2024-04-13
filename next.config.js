@@ -1,15 +1,10 @@
-/** @type {import('next').NextConfig} */
+// next.config.js
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
-    domains: [
-      'res.cloudinary.com',
-      'avatars.githubusercontent.com',
-      'lh3.googleusercontent.com'
-    ]
-  }
-}
+    domains: ['res.cloudinary.com', 'avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
+  },
+  reactStrictMode: true,
+  swcMinify: true,
+};
 
 module.exports = nextConfig;

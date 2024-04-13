@@ -26,22 +26,18 @@ interface MapUpdaterProps {
 
 const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const attribution = ' النقطة على الخريطة لاتحدد بدقة انما تحدد المنطقة التقريبية فقط</a> ';
+const yemenCoordinates: LatLngTuple = [15.369445, 44.191456];
+
 const MapUpdater: React.FC<MapUpdaterProps> = ({ center, duration = 1 }) => {
-    const yemenCoordinates: LatLngTuple = [15.369445, 44.191456];
     const mapInstance = useMap();
 
     useEffect(() => {
-        if (center) {
-            mapInstance.flyTo(center, mapInstance.getZoom(), { duration });
-        } else {
-            mapInstance.flyTo(yemenCoordinates, mapInstance.getZoom(), { duration });
-        }
-    }, [center, yemenCoordinates, mapInstance, duration]);
-
+        const targetCenter = center || yemenCoordinates;
+        mapInstance.flyTo(targetCenter, mapInstance.getZoom(), { duration });
+    }, [center, mapInstance, duration]);  // Removed yemenCoordinates from dependencies
 
     return null;
 };
-
 const Map: React.FC<MapProps> = ({ center }) => {
     const yemenCoordinates: L.LatLngTuple = [15.369445, 44.191456];
     const zoomLevel = 13;
