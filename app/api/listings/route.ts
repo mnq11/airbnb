@@ -3,7 +3,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/app/libs/prismadb';
 import getCurrentUser from '@/app/actions/getCurrentUser';
-import { Prisma } from '.prisma/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
