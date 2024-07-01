@@ -1,5 +1,5 @@
-// app/actions/getListings.ts
 import prisma from '@/app/libs/prismadb';
+import { SafeListing } from '@/app/types';
 
 export interface IListingsParams {
   userId?: string;
@@ -10,19 +10,18 @@ export interface IListingsParams {
   endDate?: string;
   locationValue?: string;
   category?: string;
-  favoritesCount?: number;
   viewsCount?: number;
 }
 
 export default async function getListings(
-  params: IListingsParams
-) {
+    params: IListingsParams
+): Promise<SafeListing[]> {
   try {
     const {
       userId,
-      roomCount, 
-      guestCount, 
-      bathroomCount, 
+      roomCount,
+      guestCount,
+      bathroomCount,
       locationValue,
       startDate,
       endDate,
@@ -43,19 +42,19 @@ export default async function getListings(
     if (roomCount) {
       query.roomCount = {
         gte: +roomCount
-      }
+      };
     }
 
     if (guestCount) {
       query.guestCount = {
         gte: +guestCount
-      }
+      };
     }
 
     if (bathroomCount) {
       query.bathroomCount = {
         gte: +bathroomCount
-      }
+      };
     }
 
     if (locationValue) {
@@ -78,28 +77,29 @@ export default async function getListings(
             ]
           }
         }
-      }
+      };
     }
-// Add a condition for viewsCount filter
+
     if (viewsCount) {
       query.viewsCount = {
         gte: +viewsCount
-      }
+      };
     }
+
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
         createdAt: 'desc',
       },
       include: {
-        images: true, // Include images
+        images: true,
       },
     });
 
-
-    return listings.map((listing: { createdAt: { toISOString: () => any; }; }) => ({
+    return listings.map(listing => ({
       ...listing,
       createdAt: listing.createdAt.toISOString(),
+      images: listing.images.map(image => ({ url: image.url })),
     }));
   } catch (error: any) {
     throw new Error(error);
