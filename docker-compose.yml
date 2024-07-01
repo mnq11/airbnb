@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NEXTAUTH_URL: "http://localhost:3000"
+      DATABASE_URL: "your-database-url"  # Update with your actual database URL
+    volumes:
+      - .:/app
+      - /app/node_modules
