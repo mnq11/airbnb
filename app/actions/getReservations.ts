@@ -16,7 +16,7 @@ export default async function getReservations(
         
     if (listingId) {
       query.listingId = listingId;
-    };
+    }
 
     if (userId) {
       query.userId = userId;
@@ -40,19 +40,17 @@ export default async function getReservations(
       }
     });
 
-    const safeReservations = reservations.map(
-      (reservation) => ({
-      ...reservation,
-      createdAt: reservation.createdAt.toISOString(),
-      startDate: reservation.startDate.toISOString(),
-      endDate: reservation.endDate.toISOString(),
-      listing: {
-        ...reservation.listing,
-        createdAt: reservation.listing.createdAt.toISOString(),
-      },
-    }));
-
-    return safeReservations;
+    return reservations.map(
+        (reservation) => ({
+          ...reservation,
+          createdAt: reservation.createdAt.toISOString(),
+          startDate: reservation.startDate.toISOString(),
+          endDate: reservation.endDate.toISOString(),
+          listing: {
+            ...reservation.listing,
+            createdAt: reservation.listing.createdAt.toISOString(),
+          },
+        }));
   } catch (error: any) {
     throw new Error(error);
   }
