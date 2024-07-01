@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma": "npx prisma",
+    "generate": "npx prisma generate",
+    "studio": "npx prisma studio",
+    "postinstall": "next build"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "1.0.7",
