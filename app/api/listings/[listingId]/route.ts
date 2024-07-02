@@ -1,10 +1,9 @@
-// app/api/listings/[listingId]/route.ts
 import { NextResponse } from 'next/server';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import prisma from '@/app/libs/prismadb';
 
 interface IParams {
-  listingId?: string;
+  listingId: string;
 }
 
 export async function POST(request: Request, { params }: { params: IParams }) {
@@ -51,20 +50,34 @@ export async function DELETE(request: Request, { params }: { params: IParams }) 
     throw new Error('Invalid ID');
   }
 
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
-
-  favoriteIds = favoriteIds.filter((id) => id !== listingId);
-
-  const user = await prisma.user.update({
-    where: { id: currentUser.id },
-    data: { favoriteIds },
-  });
-
-  // Decrement the favoritesCount for the listing
-  await prisma.listing.update({
+  // Check if the listing exists and belongs to the current user
+  const listing = await prisma.listing.findUnique({
     where: { id: listingId },
-    data: { favoritesCount: { decrement: 1 } },
+    select: { favoritesCount: true, userId: true },
   });
 
-  return NextResponse.json(user);
+  if (!listing) {
+    return NextResponse.error();
+  }
+
+  if (listing.userId !== currentUser.id) {
+    return NextResponse.error();
+  }
+
+  // Decrement the favoritesCount for the listing if it's greater than 0
+  if (listing.favoritesCount > 0) {
+    await prisma.listing.update({
+      where: { id: listingId },
+      data: { favoritesCount: { decrement: 1 } },
+    });
+  } else {
+    console.log(`Cannot decrement favoritesCount for listing ${listingId}. Current count is ${listing.favoritesCount}`);
+  }
+
+  // Delete the listing
+  await prisma.listing.delete({
+    where: { id: listingId },
+  });
+
+  return NextResponse.json({ message: 'Listing deleted successfully' });
 }

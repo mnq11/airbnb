@@ -1,27 +1,27 @@
 'use client';
 
 import axios from 'axios';
-import {toast} from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import {
     FieldValues,
     SubmitHandler,
     useForm
 } from 'react-hook-form';
 import dynamic from 'next/dynamic'
-import {useRouter} from 'next/navigation';
-import {useMemo, useState, useEffect} from "react";
+import { useRouter } from 'next/navigation';
+import { useMemo, useState, useEffect } from "react";
 
 import useRentModal from '@/app/hooks/useRentModal';
 import Modal from "./Modal";
 import Counter from "../inputs/Counter";
 
 import CategoryInput from '../inputs/CategoryInput';
-import CountrySelect from "../inputs/CountrySelect";
-import {categories} from '../navbar/Categories';
+import { categories } from '../navbar/Categories';
 import ImageUpload from '../inputs/ImageUpload';
 
 import Input from '../inputs/Input';
 import Heading from '../Heading';
+import CountrySelect from "@/app/components/inputs/CountrySelect";
 
 enum STEPS {
     CATEGORY = 0,
@@ -56,10 +56,12 @@ const RentModal = () => {
             guestCount: 0,
             roomCount: 0,
             bathroomCount: 0,
-            imageSrc: '',
+            imageSrc: [],
             price: 1000,
             title: '',
             description: '',
+            phone: '',
+            paymentMethod: '',
         }
     });
 
@@ -73,7 +75,6 @@ const RentModal = () => {
     const Map = useMemo(() => dynamic(() => import('../Map'), {
         ssr: true
     }), []);
-
 
     const setCustomValue = (id: string, value: any) => {
         setValue(id, value, {
@@ -90,6 +91,7 @@ const RentModal = () => {
     const onNext = () => {
         setStep((value) => value + 1);
     }
+
     const isStepValid = () => {
         switch (step) {
             case STEPS.CATEGORY:
@@ -105,14 +107,13 @@ const RentModal = () => {
                 }
                 return !!location;
             case STEPS.INFO:
-                // if only one of them is filled
                 if (guestCount + roomCount + bathroomCount <= 0) {
                     toast.error('يرجى تحديد عدد الضيوف والغرف والحمامات او احداها');
                     return false;
                 }
                 return !!STEPS.INFO;
             case STEPS.IMAGES:
-                if (!imageSrc) {
+                if (imageSrc.length === 0) {
                     toast.error('يرجى تحميل صور توضيحية');
                     return false;
                 }
@@ -136,15 +137,14 @@ const RentModal = () => {
 
         setIsLoading(true);
 
-        // Concatenate the phone and payment method to the description
-        const updatedDescription = `${data.description}\n\nرقم الهاتف: ${
-            data.phone
-        }\nطريقة الدفع المفضلة: ${data.paymentMethod}`;
+        const updatedDescription = `${data.description}\n\nرقم الهاتف: ${data.phone}\nطريقة الدفع المفضلة: ${data.paymentMethod}`;
 
         const payload = {
             ...data,
-            description: updatedDescription, // Use the updated description
-            images: imageSrc,
+            description: updatedDescription,
+            imageSrc: data.imageSrc, // Ensure imageSrc is an array of string URLs
+            location: data.location, // Ensure location is included with value
+            price: parseInt(data.price, 10), // Convert price to integer
         };
 
         axios.post('/api/listings', payload)
@@ -152,9 +152,8 @@ const RentModal = () => {
                 toast.success('تم إنشاء القائمة');
                 router.refresh();
                 reset();
-                setStep(STEPS.CATEGORY)
+                setStep(STEPS.CATEGORY);
                 rentModal.onClose();
-
             })
             .catch(() => {
                 toast.error('هناك خطأ ما');
@@ -164,14 +163,10 @@ const RentModal = () => {
             })
     }
 
-
-
-
     const actionLabel = useMemo(() => {
         if (step === STEPS.PRICE) {
             return 'انشأ'
         }
-
         return 'التالي'
     }, [step]);
 
@@ -179,7 +174,6 @@ const RentModal = () => {
         if (step === STEPS.CATEGORY) {
             return undefined
         }
-
         return 'الخلف'
     }, [step]);
 
@@ -189,16 +183,14 @@ const RentModal = () => {
                 title="أي مما يلي يصف مكانك بأفضل شكل؟"
                 subtitle="اختر فئة"
             />
-            <div
-                className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          gap-3
-          max-h-[50vh]
-          overflow-y-auto
-        "
-            >
+            <div className="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-3
+        max-h-[50vh]
+        overflow-y-auto
+      ">
                 {categories.map((item) => (
                     <div key={item.label} className="col-span-1">
                         <CategoryInput
@@ -213,10 +205,9 @@ const RentModal = () => {
             </div>
         </div>
     )
+
     useEffect(() => {
         if (location && location.latlng) {
-            // Update the map center here with the new location
-            // Assuming you have a function called `setMapCenter` that takes the new coordinates
             setMapCenter(location.latlng);
         }
     }, [location]);
@@ -232,7 +223,7 @@ const RentModal = () => {
                     value={location}
                     onChange={(value) => setCustomValue('location', value)}
                 />
-                <Map center={location?.latlng}/>
+                <Map center={location?.latlng} />
             </div>
         );
     }
@@ -250,14 +241,14 @@ const RentModal = () => {
                     title="ضيوف"
                     subtitle="كم عدد الضيوف المسموح لهم؟"
                 />
-                <hr/>
+                <hr />
                 <Counter
                     onChange={(value) => setCustomValue('roomCount', value)}
                     value={roomCount}
                     title="غرف"
                     subtitle="كم عدد الغرف التي لديك؟"
                 />
-                <hr/>
+                <hr />
                 <Counter
                     onChange={(value) => setCustomValue('bathroomCount', value)}
                     value={bathroomCount}
@@ -297,10 +288,9 @@ const RentModal = () => {
                     register={register}
                     errors={errors}
                     textDirection="rtl"
-
                     required
                 />
-                <hr/>
+                <hr />
                 <Input
                     id="description"
                     label="اوصف مكانك بشكل مختصر"
@@ -309,9 +299,8 @@ const RentModal = () => {
                     errors={errors}
                     textDirection="rtl"
                     required
-
                 />
-                <hr/>
+                <hr />
                 <Input
                     id="phone"
                     label="رقم الهاتف"
@@ -322,7 +311,7 @@ const RentModal = () => {
                     textDirection="rtl"
                     required
                 />
-                <hr/>
+                <hr />
                 <Input
                     id="paymentMethod"
                     label="طريقة الدفع المفضلة"
@@ -346,7 +335,6 @@ const RentModal = () => {
                 <Input
                     id="price"
                     label="السعر بالريال اليمني"
-                    // formatPrice
                     type="number"
                     disabled={isLoading}
                     register={register}

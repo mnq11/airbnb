@@ -1,11 +1,11 @@
 'use client';
 
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import axios from "axios";
-import React, {useCallback, useState} from "react";
-import {useRouter} from "next/navigation";
+import React, { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import {SafeListing, SafeUser} from "@/app/types";
+import { SafeListing, SafeUser } from "@/app/types";
 
 import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
@@ -16,10 +16,7 @@ interface PropertiesClientProps {
     currentUser?: SafeUser | null,
 }
 
-const PropertiesClient: React.FC<PropertiesClientProps> = ({
-                                                               listings,
-                                                               currentUser
-                                                           }) => {
+const PropertiesClient: React.FC<PropertiesClientProps> = ({ listings, currentUser }) => {
     const router = useRouter();
     const [deletingId, setDeletingId] = useState('');
 
@@ -29,7 +26,7 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
         axios.delete(`/api/listings/${id}`)
             .then((response) => {
                 if (response.status === 200) {
-                    toast.success('حزفت العقار بنجاح');
+                    toast.success('حذفت العقار بنجاح');
                     router.refresh();
                 } else {
                     toast.error(`Error: ${response.status}`);
@@ -40,9 +37,8 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
             })
             .finally(() => {
                 setDeletingId('');
-            })
+            });
     }, [router]);
-
 
     return (
         <Container>
@@ -53,10 +49,10 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
             <div
                 className="
           mt-10
-          grid 
-          grid-cols-1 
-          sm:grid-cols-2 
-          md:grid-cols-3 
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          md:grid-cols-3
           lg:grid-cols-4
           xl:grid-cols-5
           2xl:grid-cols-6
@@ -73,12 +69,11 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
                         actionLabel="حذف الملكية"
                         currentUser={currentUser}
                         imageSrcs={listing.images.map((image: any) => image.url)}
-
                     />
                 ))}
             </div>
         </Container>
     );
-}
+};
 
 export default PropertiesClient;
