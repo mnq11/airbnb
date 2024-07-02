@@ -49,6 +49,10 @@ export async function POST(request: Request) {
     return NextResponse.json(newListing);
   } catch (error) {
     console.error('Error creating listing:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 });
+    }
   }
 }
