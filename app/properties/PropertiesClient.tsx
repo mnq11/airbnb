@@ -59,7 +59,7 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({ listings, currentUs
           gap-8
         "
             >
-                {listings.map((listing: any) => (
+                {listings?.map((listing) => (
                     <ListingCard
                         key={listing.id}
                         data={listing}
@@ -68,7 +68,7 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({ listings, currentUs
                         disabled={deletingId === listing.id}
                         actionLabel="حذف الملكية"
                         currentUser={currentUser}
-                        imageSrcs={listing.images.map((image: any) => image.url)}
+                        imageSrcs={listing.images?.map((image) => image.url) || []}
                     />
                 ))}
             </div>
