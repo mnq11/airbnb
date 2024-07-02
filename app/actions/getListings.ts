@@ -13,9 +13,7 @@ export interface IListingsParams {
   viewsCount?: number;
 }
 
-export default async function getListings(
-    params: IListingsParams
-): Promise<SafeListing[]> {
+export default async function getListings(params: IListingsParams): Promise<SafeListing[]> {
   try {
     const {
       userId,
