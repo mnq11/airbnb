@@ -1,84 +1,70 @@
 // app/api/listings/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import getCurrentUser from '@/app/actions/getCurrentUser';
+import prisma from '@/app/libs/prismadb';
 
-import prisma from "@/app/libs/prismadb";
+interface IParams {
+  listingId?: string;
+}
 
-import getCurrentUser from "@/app/actions/getCurrentUser";
-import {Prisma} from ".prisma/client";
-import ListingCreateInput = Prisma.ListingCreateInput;
-import type { NextApiRequest, NextApiResponse } from 'next';
-
-export async function POST(request: Request) {
+export async function POST(request: Request, { params }: { params: IParams }) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     return NextResponse.error();
   }
 
-  const body = await request.json();
-  const { title, description, images = [], category, roomCount, bathroomCount, guestCount, location, price } = body;
+  const { listingId } = params;
 
+  if (!listingId || typeof listingId !== 'string') {
+    throw new Error('Invalid ID');
+  }
 
-  // console.log( "body", body );
+  let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-  Object.keys(body).forEach((value: any) => {
-    if (!body[value]) {
-      NextResponse.error();
-    }
+  favoriteIds.push(listingId);
+
+  const user = await prisma.user.update({
+    where: { id: currentUser.id },
+    data: { favoriteIds },
   });
 
-  // First, create the listing and its associated images
-  const listing = await prisma.listing.create({
-    data: {
-      title,
-      description,
-      category,
-      roomCount,
-      bathroomCount,
-      guestCount,
-      locationValue: location.value,
-      price: parseInt(price, 10),
-      user: {
-        connect: {
-          id: currentUser.id,
-        },
-      },
-      images: {
-        create: images.map((imageUrl: any) => ({
-          url: imageUrl,
-        })),
-      },
-    } as ListingCreateInput,
-    include: { images: true },
+  // Increment the favoritesCount for the listing
+  await prisma.listing.update({
+    where: { id: listingId },
+    data: { favoritesCount: { increment: 1 } },
   });
 
-
-  return NextResponse.json(listing);
+  return NextResponse.json(user);
 }
 
-const viewCounter = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'PUT') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+export async function DELETE(request: Request, { params }: { params: IParams }) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return NextResponse.error();
   }
 
-  const { listingId } = req.query;
-  if (!listingId) {
-    res.status(400).json({ message: 'Listing ID is required' });
-    return;
+  const { listingId } = params;
+
+  if (!listingId || typeof listingId !== 'string') {
+    throw new Error('Invalid ID');
   }
 
-  try {
-    const updatedListing = await prisma.listing.update({
-      where: { id: listingId as string },
-      data: { viewCounter: { increment: 1 } },
-    });
+  let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-    res.status(200).json(updatedListing);
-  } catch (error) {
-    console.error('Error incrementing view count:', error);
-    res.status(500).json({ message: 'An error occurred while incrementing the view count' });
-  }
-};
+  favoriteIds = favoriteIds.filter((id) => id !== listingId);
 
-export default viewCounter;
+  const user = await prisma.user.update({
+    where: { id: currentUser.id },
+    data: { favoriteIds },
+  });
+
+  // Decrement the favoritesCount for the listing
+  await prisma.listing.update({
+    where: { id: listingId },
+    data: { favoritesCount: { decrement: 1 } },
+  });
+
+  return NextResponse.json(user);
+}
