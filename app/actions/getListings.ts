@@ -39,19 +39,19 @@ export default async function getListings(params: IListingsParams): Promise<Safe
 
     if (roomCount) {
       query.roomCount = {
-        gte: +roomCount
+        gte: +roomCount,
       };
     }
 
     if (guestCount) {
       query.guestCount = {
-        gte: +guestCount
+        gte: +guestCount,
       };
     }
 
     if (bathroomCount) {
       query.bathroomCount = {
-        gte: +bathroomCount
+        gte: +bathroomCount,
       };
     }
 
@@ -66,21 +66,21 @@ export default async function getListings(params: IListingsParams): Promise<Safe
             OR: [
               {
                 endDate: { gte: startDate },
-                startDate: { lte: startDate }
+                startDate: { lte: startDate },
               },
               {
                 startDate: { lte: endDate },
-                endDate: { gte: endDate }
-              }
-            ]
-          }
-        }
+                endDate: { gte: endDate },
+              },
+            ],
+          },
+        },
       };
     }
 
     if (viewsCount) {
       query.viewsCount = {
-        gte: +viewsCount
+        gte: +viewsCount,
       };
     }
 
@@ -94,10 +94,10 @@ export default async function getListings(params: IListingsParams): Promise<Safe
       },
     });
 
-    return listings.map(listing => ({
+    return listings.map((listing) => ({
       ...listing,
       createdAt: listing.createdAt.toISOString(),
-      images: listing.images.map(image => ({ url: image.url })),
+      images: listing.images.map((image) => ({ url: image.url })),
     }));
   } catch (error: any) {
     throw new Error(error);

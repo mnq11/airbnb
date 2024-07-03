@@ -1,17 +1,18 @@
+// app/page.tsx
+
 import React from 'react';
 import Container from '@/app/components/Container';
 import ListingCard from '@/app/components/listings/ListingCard';
 import EmptyState from '@/app/components/EmptyState';
-import ClientOnly from './components/ClientOnly';
-import getListings, { IListingsParams } from '@/app/actions/getListings';
+import ClientOnly from '@/app/components/ClientOnly';
+import { IListingsParams } from '@/app/actions/getListings';
+import getListings from '@/app/actions/getListings';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import { SafeListing } from '@/app/types';
 
-interface HomeProps {
-    searchParams: IListingsParams;
-}
+export const dynamic = 'force-dynamic';
 
-const Home = async ({ searchParams }: HomeProps) => {
+export default async function Home({ searchParams }: { searchParams: IListingsParams }) {
     try {
         const listings: SafeListing[] = await getListings(searchParams);
         const currentUser = await getCurrentUser();
@@ -51,6 +52,4 @@ const Home = async ({ searchParams }: HomeProps) => {
             </ClientOnly>
         );
     }
-};
-
-export default Home;
+}
