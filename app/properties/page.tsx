@@ -17,7 +17,8 @@ const PropertiesPage = async () => {
         );
     }
 
-    const listings: SafeListing[] = await getListings({ userId: currentUser.id });
+    // Adjust here to destructure the response from getListings
+    const { listings } = await getListings({ userId: currentUser.id });
 
     if (!listings || listings.length === 0) {
         return (
@@ -38,6 +39,6 @@ const PropertiesPage = async () => {
             />
         </ClientOnly>
     );
-}
+};
 
 export default PropertiesPage;

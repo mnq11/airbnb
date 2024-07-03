@@ -11,9 +11,11 @@ export interface IListingsParams {
   locationValue?: string;
   category?: string;
   viewsCount?: number;
+  page?: number;
+  limit?: number;
 }
 
-export default async function getListings(params: IListingsParams): Promise<SafeListing[]> {
+export default async function getListings(params: IListingsParams): Promise<{ listings: SafeListing[], total: number }> {
   try {
     const {
       userId,
@@ -25,6 +27,8 @@ export default async function getListings(params: IListingsParams): Promise<Safe
       endDate,
       category,
       viewsCount,
+      page = 1,
+      limit = 10,
     } = params;
 
     let query: any = {};
@@ -84,6 +88,8 @@ export default async function getListings(params: IListingsParams): Promise<Safe
       };
     }
 
+    const total = await prisma.listing.count({ where: query });
+
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
@@ -92,13 +98,18 @@ export default async function getListings(params: IListingsParams): Promise<Safe
       include: {
         images: true,
       },
+      skip: (page - 1) * limit,
+      take: limit,
     });
 
-    return listings.map((listing) => ({
-      ...listing,
-      createdAt: listing.createdAt.toISOString(),
-      images: listing.images.map((image) => ({ url: image.url })),
-    }));
+    return {
+      listings: listings.map((listing) => ({
+        ...listing,
+        createdAt: listing.createdAt.toISOString(),
+        images: listing.images.map((image) => ({ url: image.url })),
+      })),
+      total,
+    };
   } catch (error: any) {
     throw new Error(error);
   }

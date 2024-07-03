@@ -1,58 +1,27 @@
 import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import prisma from '@/app/libs/prismadb';
+import getListings, { IListingsParams } from '@/app/actions/getListings';
 
-export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
-
-  if (!currentUser) {
-    return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
-  }
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const params: IListingsParams = {
+    userId: searchParams.get('userId') || undefined,
+    guestCount: searchParams.get('guestCount') ? Number(searchParams.get('guestCount')) : undefined,
+    roomCount: searchParams.get('roomCount') ? Number(searchParams.get('roomCount')) : undefined,
+    bathroomCount: searchParams.get('bathroomCount') ? Number(searchParams.get('bathroomCount')) : undefined,
+    startDate: searchParams.get('startDate') || undefined,
+    endDate: searchParams.get('endDate') || undefined,
+    locationValue: searchParams.get('locationValue') || undefined,
+    category: searchParams.get('category') || undefined,
+    viewsCount: searchParams.get('viewsCount') ? Number(searchParams.get('viewsCount')) : undefined,
+    page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+    limit: searchParams.get('limit') ? Number(searchParams.get('limit')) : 10,
+  };
 
   try {
-    const data = await request.json();
-
-    const {
-      category,
-      location, // This is the object containing label, value, latlng
-      guestCount,
-      roomCount,
-      bathroomCount,
-      price, // Ensure this is an integer
-      title,
-      description,
-      phone,
-      paymentMethod,
-      imageSrc, // Ensure this is an array of string URLs
-    } = data;
-
-    const locationValue = location.value;
-    const updatedDescription = `${description}\n\nرقم الهاتف: ${phone}\nطريقة الدفع المفضلة: ${paymentMethod}`;
-
-    const newListing = await prisma.listing.create({
-      data: {
-        category,
-        locationValue,
-        guestCount,
-        roomCount,
-        bathroomCount,
-        price: parseInt(price, 10), // Convert the price to an integer
-        title,
-        description: updatedDescription,
-        userId: currentUser.id,
-        images: {
-          create: imageSrc.map((url: string) => ({ url })), // Ensure each URL is mapped correctly
-        },
-      },
-    });
-
-    return NextResponse.json(newListing);
+    const { listings, total } = await getListings(params);
+    return NextResponse.json({ listings, total });
   } catch (error) {
-    console.error('Error creating listing:', error);
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    } else {
-      return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 });
-    }
-  }
+    console.error('Error fetching listings:', error);
+
+    return NextResponse.error();}
 }

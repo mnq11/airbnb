@@ -10,7 +10,7 @@ import 'swiper/swiper.min.css';
 
 SwiperCore.use([Pagination]);
 
-
+//app/components/listings/ListingCard.tsx
 import useCountries from "@/app/hooks/useCountries";
 import {
     SafeListing,
