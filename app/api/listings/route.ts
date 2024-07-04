@@ -1,10 +1,12 @@
 // app/api/listings/route.ts
 import { NextResponse } from 'next/server';
-import getListings, { IListingsParams } from '@/app/actions/getListings';
+import getCurrentUser from '@/app/actions/getCurrentUser';
+import prisma from '@/app/libs/prismadb';
+import getListings from "@/app/actions/getListings";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const params: IListingsParams = {
+  const params = {
     userId: searchParams.get('userId') || undefined,
     guestCount: searchParams.get('guestCount') ? Number(searchParams.get('guestCount')) : undefined,
     roomCount: searchParams.get('roomCount') ? Number(searchParams.get('roomCount')) : undefined,
@@ -24,5 +26,56 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Error fetching listings:', error);
     return NextResponse.json({ error: 'Error fetching listings' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
+  }
+
+  try {
+    const data = await request.json();
+
+    const {
+      category,
+      location,
+      guestCount,
+      roomCount,
+      bathroomCount,
+      price,
+      title,
+      description,
+      phone,
+      paymentMethod,
+      imageSrc,
+    } = data;
+
+    const locationValue = location.value;
+    const updatedDescription = `${description}\n\nرقم الهاتف: ${phone}\nطريقة الدفع المفضلة: ${paymentMethod}`;
+
+    const newListing = await prisma.listing.create({
+      data: {
+        category,
+        locationValue,
+        guestCount,
+        roomCount,
+        bathroomCount,
+        price: parseInt(price, 10),
+        title,
+        description: updatedDescription,
+        userId: currentUser.id,
+        images: {
+          create: imageSrc.map((url: string) => ({ url })),
+        },
+      },
+    });
+
+    return NextResponse.json(newListing);
+  } catch (error) {
+    console.error('Error creating listing:', error);
+    return NextResponse.json({ error: 'An error occurred while creating the listing' }, { status: 500 });
   }
 }
