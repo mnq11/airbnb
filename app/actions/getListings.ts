@@ -28,7 +28,7 @@ export default async function getListings(params: IListingsParams): Promise<{ li
       category,
       viewsCount,
       page = 1,
-      limit = 10,
+      limit = 20,
     } = params;
 
     let query: any = {};

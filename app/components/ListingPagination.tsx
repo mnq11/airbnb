@@ -5,29 +5,48 @@ import Container from '@/app/components/Container';
 import ListingCard from '@/app/components/listings/ListingCard';
 import EmptyState from '@/app/components/EmptyState';
 import { SafeListing, SafeUser } from '@/app/types';
-import Pagination from "@/app/components/listings/Pagination";
+import Pagination from '@/app/components/listings/Pagination';
+import qs from 'query-string';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ListingPaginationProps {
     initialListings: SafeListing[];
     initialPage: number;
     totalPages: number;
     currentUser: SafeUser | null;
+    searchParams: Record<string, any>;
 }
 
-const ListingPagination: React.FC<ListingPaginationProps> = ({ initialListings, initialPage, totalPages, currentUser }) => {
+const ListingPagination: React.FC<ListingPaginationProps> = ({ initialListings, initialPage, totalPages, currentUser, searchParams }) => {
     const [page, setPage] = useState(initialPage);
     const [listings, setListings] = useState(initialListings);
-    const limit = 10;
+    const router = useRouter();
+    const params = useSearchParams();
+    const limit = 20; // Set the limit to 20 as per your example
 
     useEffect(() => {
         const fetchListings = async () => {
-            const response = await fetch(`/api/listings?page=${page}&limit=${limit}`);
+            const query = qs.stringify({ ...searchParams, page, limit });
+            const response = await fetch(`/api/listings?${query}`);
             const data = await response.json();
             setListings(data.listings);
         };
 
         fetchListings();
-    }, [page]);
+    }, [page, searchParams]);
+
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+        const query = qs.stringify({ ...searchParams, page: newPage });
+        router.push(`/?${query}`);
+    };
+
+    useEffect(() => {
+        const currentPage = params?.get('page');
+        if (currentPage) {
+            setPage(Number(currentPage));
+        }
+    }, [params]);
 
     if (listings.length === 0) {
         return <EmptyState showReset />;
@@ -48,7 +67,7 @@ const ListingPagination: React.FC<ListingPaginationProps> = ({ initialListings, 
                     );
                 })}
             </div>
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
         </Container>
     );
 };

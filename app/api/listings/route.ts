@@ -1,3 +1,4 @@
+// app/api/listings/route.ts
 import { NextResponse } from 'next/server';
 import getListings, { IListingsParams } from '@/app/actions/getListings';
 
@@ -22,6 +23,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ listings, total });
   } catch (error) {
     console.error('Error fetching listings:', error);
-
-    return NextResponse.error();}
+    return NextResponse.json({ error: 'Error fetching listings' }, { status: 500 });
+  }
 }
