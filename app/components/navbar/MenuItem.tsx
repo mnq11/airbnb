@@ -1,21 +1,16 @@
-'use client';
+"use client";
 
 interface MenuItemProps {
   onClick: () => void;
   label: string;
   icon: React.ElementType;
-
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({
-  onClick,
-  label,
-    icon:Icon
-}) => {
+const MenuItem: React.FC<MenuItemProps> = ({ onClick, label, icon: Icon }) => {
   return (
-      <div
-          onClick={onClick}
-          className="
+    <div
+      onClick={onClick}
+      className="
         px-4
         py-3
         hover:bg-neutral-100
@@ -23,10 +18,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
         font-semibold
         flex items-center gap-2
       "
-      >
-        <Icon className="text-xl" />
-        {label}
-      </div>
+    >
+      <Icon className="text-xl" />
+      {label}
+    </div>
   );
 };
 

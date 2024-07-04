@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 
@@ -15,12 +15,12 @@ interface EmptyStateProps {
 const EmptyState: React.FC<EmptyStateProps> = ({
   title = "لا يوجد تطابق تام",
   subtitle = "حاول تغيير أو إزالة بعض المرشحات الخاصة بك",
-  showReset
+  showReset,
 }) => {
   const router = useRouter();
 
-  return ( 
-    <div 
+  return (
+    <div
       className="
         h-[60vh]
         flex 
@@ -30,22 +30,18 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         items-center 
       "
     >
-      <Heading
-        center
-        title={title}
-        subtitle={subtitle}
-      />
+      <Heading center title={title} subtitle={subtitle} />
       <div className="w-48 mt-4">
         {showReset && (
           <Button
             outline
             label="إزالة جميع المرشحات"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         )}
       </div>
     </div>
-   );
-}
- 
+  );
+};
+
 export default EmptyState;

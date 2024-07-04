@@ -1,7 +1,7 @@
 // app/components/ClientOnly.tsx
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface ClientOnlyProps {
   children: React.ReactNode;

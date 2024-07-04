@@ -6,39 +6,31 @@ import PropertiesClient from "./PropertiesClient";
 import { SafeListing } from "@/app/types";
 
 const PropertiesPage = async () => {
-    const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
-    if (!currentUser) {
-        return (
-            <EmptyState
-                title="Unauthorized"
-                subtitle="Please login"
-            />
-        );
-    }
+  if (!currentUser) {
+    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  }
 
-    // Adjust here to destructure the response from getListings
-    const { listings } = await getListings({ userId: currentUser.id });
+  // Adjust here to destructure the response from getListings
+  const { listings } = await getListings({ userId: currentUser.id });
 
-    if (!listings || listings.length === 0) {
-        return (
-            <ClientOnly>
-                <EmptyState
-                    title="لا يوجد عقارات"
-                    subtitle="يبدو أنك لم تقم بإضافة أي عقارات"
-                />
-            </ClientOnly>
-        );
-    }
-
+  if (!listings || listings.length === 0) {
     return (
-        <ClientOnly>
-            <PropertiesClient
-                listings={listings}
-                currentUser={currentUser}
-            />
-        </ClientOnly>
+      <ClientOnly>
+        <EmptyState
+          title="لا يوجد عقارات"
+          subtitle="يبدو أنك لم تقم بإضافة أي عقارات"
+        />
+      </ClientOnly>
     );
+  }
+
+  return (
+    <ClientOnly>
+      <PropertiesClient listings={listings} currentUser={currentUser} />
+    </ClientOnly>
+  );
 };
 
 export default PropertiesPage;

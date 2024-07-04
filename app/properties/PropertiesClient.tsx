@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -12,42 +12,46 @@ import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface PropertiesClientProps {
-    listings: SafeListing[],
-    currentUser?: SafeUser | null,
+  listings: SafeListing[];
+  currentUser?: SafeUser | null;
 }
 
-const PropertiesClient: React.FC<PropertiesClientProps> = ({ listings, currentUser }) => {
-    const router = useRouter();
-    const [deletingId, setDeletingId] = useState('');
+const PropertiesClient: React.FC<PropertiesClientProps> = ({
+  listings,
+  currentUser,
+}) => {
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState("");
 
-    const onDelete = useCallback((id: string) => {
-        setDeletingId(id);
+  const onDelete = useCallback(
+    (id: string) => {
+      setDeletingId(id);
 
-        axios.delete(`/api/listings/${id}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    toast.success('حذفت العقار بنجاح');
-                    router.refresh();
-                } else {
-                    toast.error(`Error: ${response.status}`);
-                }
-            })
-            .catch((error) => {
-                toast.error(error?.response?.data?.error || 'An error occurred');
-            })
-            .finally(() => {
-                setDeletingId('');
-            });
-    }, [router]);
+      axios
+        .delete(`/api/listings/${id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            toast.success("حذفت العقار بنجاح");
+            router.refresh();
+          } else {
+            toast.error(`Error: ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error || "An error occurred");
+        })
+        .finally(() => {
+          setDeletingId("");
+        });
+    },
+    [router],
+  );
 
-    return (
-        <Container>
-            <Heading
-                title="العقارات"
-                subtitle="قائمة العقارات الخاصة بك"
-            />
-            <div
-                className="
+  return (
+    <Container>
+      <Heading title="العقارات" subtitle="قائمة العقارات الخاصة بك" />
+      <div
+        className="
           mt-10
           grid
           grid-cols-1
@@ -58,22 +62,22 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({ listings, currentUs
           2xl:grid-cols-6
           gap-8
         "
-            >
-                {listings?.map((listing) => (
-                    <ListingCard
-                        key={listing.id}
-                        data={listing}
-                        actionId={listing.id}
-                        onAction={onDelete}
-                        disabled={deletingId === listing.id}
-                        actionLabel="حذف الملكية"
-                        currentUser={currentUser}
-                        imageSrcs={listing.images?.map((image) => image.url) || []}
-                    />
-                ))}
-            </div>
-        </Container>
-    );
+      >
+        {listings?.map((listing) => (
+          <ListingCard
+            key={listing.id}
+            data={listing}
+            actionId={listing.id}
+            onAction={onDelete}
+            disabled={deletingId === listing.id}
+            actionLabel="حذف الملكية"
+            currentUser={currentUser}
+            imageSrcs={listing.images?.map((image) => image.url) || []}
+          />
+        ))}
+      </div>
+    </Container>
+  );
 };
 
 export default PropertiesClient;

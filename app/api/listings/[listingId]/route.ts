@@ -1,7 +1,7 @@
 //app/api/listings/[listingId]/route.ts
-import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import prisma from '@/app/libs/prismadb';
+import { NextResponse } from "next/server";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import prisma from "@/app/libs/prismadb";
 
 interface IParams {
   listingId: string;
@@ -16,8 +16,8 @@ export async function POST(request: Request, { params }: { params: IParams }) {
 
   const { listingId } = params;
 
-  if (!listingId || typeof listingId !== 'string') {
-    throw new Error('Invalid ID');
+  if (!listingId || typeof listingId !== "string") {
+    throw new Error("Invalid ID");
   }
 
   let favoriteIds = [...(currentUser.favoriteIds || [])];
@@ -38,7 +38,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
   return NextResponse.json(user);
 }
 
-export async function DELETE(request: Request, { params }: { params: IParams }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: IParams },
+) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -47,8 +50,8 @@ export async function DELETE(request: Request, { params }: { params: IParams }) 
 
   const { listingId } = params;
 
-  if (!listingId || typeof listingId !== 'string') {
-    throw new Error('Invalid ID');
+  if (!listingId || typeof listingId !== "string") {
+    throw new Error("Invalid ID");
   }
 
   // Check if the listing exists and belongs to the current user
@@ -72,7 +75,9 @@ export async function DELETE(request: Request, { params }: { params: IParams }) 
       data: { favoritesCount: { decrement: 1 } },
     });
   } else {
-    console.log(`Cannot decrement favoritesCount for listing ${listingId}. Current count is ${listing.favoritesCount}`);
+    console.log(
+      `Cannot decrement favoritesCount for listing ${listingId}. Current count is ${listing.favoritesCount}`,
+    );
   }
 
   // Delete the listing
@@ -80,5 +85,5 @@ export async function DELETE(request: Request, { params }: { params: IParams }) 
     where: { id: listingId },
   });
 
-  return NextResponse.json({ message: 'Listing deleted successfully' });
+  return NextResponse.json({ message: "Listing deleted successfully" });
 }

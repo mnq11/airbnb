@@ -1,12 +1,12 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 html,
 body,
 :root {
   height: 100%;
-  font-family: 'Inter', sans-serif; /* Changed to a more modern font */
+  font-family: "Inter", sans-serif; /* Changed to a more modern font */
 }
 
 .leaflet-control,
@@ -24,7 +24,11 @@ body,
 
 .swiper-button-prev-custom,
 .swiper-button-next-custom {
-  background: linear-gradient(90deg, rgba(237, 56, 88, 0.15), rgba(242, 63, 93, 0.53));
+  background: linear-gradient(
+    90deg,
+    rgba(237, 56, 88, 0.15),
+    rgba(242, 63, 93, 0.53)
+  );
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   display: flex;
@@ -65,7 +69,11 @@ body,
   left: -20%;
   width: 140%;
   height: 140%;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
   opacity: 0.8;
   border-radius: 50%;
   transition: all 0.3s ease-in-out;

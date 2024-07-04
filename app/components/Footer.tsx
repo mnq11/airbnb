@@ -1,7 +1,7 @@
 // File: components/Footer.tsx
-'use client';
-import React from 'react';
-import styled from 'styled-components';
+"use client";
+import React from "react";
+import styled from "styled-components";
 
 const FooterContainer = styled.footer`
   background-color: #ec3e5e;
@@ -37,10 +37,10 @@ const SmallFooterText = styled(FooterText)`
 `;
 
 const Footer = () => (
-    <FooterContainer>
-        <FooterText>© 2023 جولتنا. جميع الحقوق محفوظة.</FooterText>
-        <SmallFooterText>تطبيقنا سيكون متاحًا قريبًا في السوق</SmallFooterText>
-    </FooterContainer>
+  <FooterContainer>
+    <FooterText>© 2023 جولتنا. جميع الحقوق محفوظة.</FooterText>
+    <SmallFooterText>تطبيقنا سيكون متاحًا قريبًا في السوق</SmallFooterText>
+  </FooterContainer>
 );
 
 export default Footer;

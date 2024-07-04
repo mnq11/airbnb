@@ -1,5 +1,5 @@
-import prisma from '@/app/libs/prismadb';
-import { SafeListing } from '@/app/types';
+import prisma from "@/app/libs/prismadb";
+import { SafeListing } from "@/app/types";
 
 export interface IListingsParams {
   userId?: string;
@@ -15,7 +15,9 @@ export interface IListingsParams {
   limit?: number;
 }
 
-export default async function getListings(params: IListingsParams): Promise<{ listings: SafeListing[], total: number }> {
+export default async function getListings(
+  params: IListingsParams,
+): Promise<{ listings: SafeListing[]; total: number }> {
   try {
     const {
       userId,
@@ -28,7 +30,7 @@ export default async function getListings(params: IListingsParams): Promise<{ li
       category,
       viewsCount,
       page = 1,
-      limit = 20,
+      limit = 10,
     } = params;
 
     let query: any = {};
@@ -93,7 +95,7 @@ export default async function getListings(params: IListingsParams): Promise<{ li
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
       include: {
         images: true,

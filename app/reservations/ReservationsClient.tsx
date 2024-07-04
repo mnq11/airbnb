@@ -1,52 +1,52 @@
-'use client';
+"use client";
 
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import axios from "axios";
-import {useCallback, useState} from "react";
-import {useRouter} from "next/navigation";
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import {SafeReservation, SafeUser} from "@/app/types"
-    ;
+import { SafeReservation, SafeUser } from "@/app/types";
 import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface ReservationsClientProps {
-    reservations: SafeReservation[],
-    currentUser?: SafeUser | null,
+  reservations: SafeReservation[];
+  currentUser?: SafeUser | null;
 }
 
 const ReservationsClient: React.FC<ReservationsClientProps> = ({
-                                                                   reservations,
-                                                                   currentUser
-                                                               }) => {
-    const router = useRouter();
-    const [deletingId, setDeletingId] = useState('');
+  reservations,
+  currentUser,
+}) => {
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState("");
 
-    const onCancel = useCallback((id: string) => {
-        setDeletingId(id);
+  const onCancel = useCallback(
+    (id: string) => {
+      setDeletingId(id);
 
-        axios.delete(`/api/reservations/${id}`)
-            .then(() => {
-                toast.success('تم إلغاء الحجز');
-                router.refresh();
-            })
-            .catch(() => {
-                toast.error('هناك خطأ ما.')
-            })
-            .finally(() => {
-                setDeletingId('');
-            })
-    }, [router]);
+      axios
+        .delete(`/api/reservations/${id}`)
+        .then(() => {
+          toast.success("تم إلغاء الحجز");
+          router.refresh();
+        })
+        .catch(() => {
+          toast.error("هناك خطأ ما.");
+        })
+        .finally(() => {
+          setDeletingId("");
+        });
+    },
+    [router],
+  );
 
-    return (
-        <Container>
-            <Heading
-                title="الحجز"
-                subtitle="الحجوزات على الممتلكات الخاصة بك"
-            />
-            <div
-                className="
+  return (
+    <Container>
+      <Heading title="الحجز" subtitle="الحجوزات على الممتلكات الخاصة بك" />
+      <div
+        className="
           mt-10
           grid 
           grid-cols-1 
@@ -57,23 +57,25 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
           2xl:grid-cols-6
           gap-8
         "
-            >
-                {reservations.map((reservation: any) => (
-                    <ListingCard
-                        key={reservation.id}
-                        data={reservation.listing}
-                        reservation={reservation}
-                        actionId={reservation.id}
-                        onAction={onCancel}
-                        disabled={deletingId === reservation.id}
-                        actionLabel="إلغاء حجز الضيف"
-                        currentUser={currentUser}
-                        imageSrcs={reservation.listing.images.map((image: any) => image.url)}
-                    />
-                ))}
-            </div>
-        </Container>
-    );
-}
+      >
+        {reservations.map((reservation: any) => (
+          <ListingCard
+            key={reservation.id}
+            data={reservation.listing}
+            reservation={reservation}
+            actionId={reservation.id}
+            onAction={onCancel}
+            disabled={deletingId === reservation.id}
+            actionLabel="إلغاء حجز الضيف"
+            currentUser={currentUser}
+            imageSrcs={reservation.listing.images.map(
+              (image: any) => image.url,
+            )}
+          />
+        ))}
+      </div>
+    </Container>
+  );
+};
 
 export default ReservationsClient;

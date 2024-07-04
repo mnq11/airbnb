@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useMap } from 'react-leaflet';
-import { LatLngTuple } from 'leaflet';
+import { useEffect } from "react";
+import { useMap } from "react-leaflet";
+import { LatLngTuple } from "leaflet";
 
 interface CenterUpdaterProps {
-    center: LatLngTuple;
+  center: LatLngTuple;
 }
 
 const CenterUpdater: React.FC<CenterUpdaterProps> = ({ center }) => {
-    const map = useMap();
+  const map = useMap();
 
-    useEffect(() => {
-        if (center) {
-            map.flyTo(center, map.getZoom());
-        }
-    }, [center, map]);
+  useEffect(() => {
+    if (center) {
+      map.flyTo(center, map.getZoom());
+    }
+  }, [center, map]);
 
-    return null;
+  return null;
 };
 
 export default CenterUpdater;

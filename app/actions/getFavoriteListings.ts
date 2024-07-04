@@ -13,12 +13,12 @@ export default async function getFavoriteListings() {
     const favorites = await prisma.listing.findMany({
       where: {
         id: {
-          in: [...(currentUser.favoriteIds || [])]
-        }
+          in: [...(currentUser.favoriteIds || [])],
+        },
       },
       include: {
         images: true, // Include the images relation
-      }
+      },
     });
 
     const safeFavorites = favorites.map((favorite) => ({

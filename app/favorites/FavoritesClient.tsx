@@ -5,22 +5,18 @@ import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface FavoritesClientProps {
-  listings: SafeListing[],
-  currentUser?: SafeUser | null,
+  listings: SafeListing[];
+  currentUser?: SafeUser | null;
 }
 
 const FavoritesClient: React.FC<FavoritesClientProps> = ({
   listings,
-  currentUser
+  currentUser,
 }) => {
-
-    return (
+  return (
     <Container>
-      <Heading
-        title="المفضلة"
-        subtitle="قائمة الأماكن التي فضلتها"
-      />
-      <div 
+      <Heading title="المفضلة" subtitle="قائمة الأماكن التي فضلتها" />
+      <div
         className="
           mt-10
           grid 
@@ -34,18 +30,20 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
         "
       >
         {listings.map((listing: any) => (
-
           <ListingCard
             currentUser={currentUser}
             key={listing.id}
             data={listing}
-            imageSrcs={listing.images ? listing.images.map((image: any) => image.url) : []}
-
+            imageSrcs={
+              listing.images
+                ? listing.images.map((image: any) => image.url)
+                : []
+            }
           />
         ))}
       </div>
     </Container>
-   );
-}
- 
+  );
+};
+
 export default FavoritesClient;

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import { PuffLoader } from "react-spinners";
 
 const LoaderContainer = styled.div`
@@ -19,9 +19,9 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({ size = 100, color = "red" }) => {
   return (
-      <LoaderContainer>
-        <PuffLoader size={size} color={color} />
-      </LoaderContainer>
+    <LoaderContainer>
+      <PuffLoader size={size} color={color} />
+    </LoaderContainer>
   );
 };
 
