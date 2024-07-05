@@ -38,7 +38,7 @@ const Footer = () => (
             تحميل التطبيق
         </a>
         <p className="mb-2 text-lg font-semibold relative z-10 animate-fadeInDelay">
-            © 2023 جولتنا. جميع الحقوق محفوظة.
+            © 2024 جولتنا. جميع الحقوق محفوظة.
         </p>
         <p className="mb-6 text-sm md:text-base relative z-10 animate-fadeInDelay2">
             تطبيقنا سيكون متاحًا قريبًا في السوق
