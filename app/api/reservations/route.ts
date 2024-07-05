@@ -1,7 +1,34 @@
-import { NextResponse } from "next/server";
+// File: /app/api/reservations/route.ts
 
-import prisma from "@/app/libs/prismadb";
+import { NextResponse } from "next/server";
+import getReservations from "@/app/actions/getReservations";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import prisma from "@/app/libs/prismadb";
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const authorId = searchParams.get("authorId") || undefined;
+  const userId = searchParams.get("userId") || undefined;
+
+  if (!authorId && !userId) {
+    return NextResponse.json({ error: "Author ID or User ID is required" }, { status: 400 });
+  }
+
+  try {
+    const { reservations, total } = await getReservations({
+      authorId,
+      userId,
+      page,
+      limit,
+    });
+
+    return NextResponse.json({ reservations: reservations || [], total });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();

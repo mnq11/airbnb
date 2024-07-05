@@ -10,76 +10,76 @@ import qs from "query-string";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ListingPaginationProps {
-  initialListings: SafeListing[];
-  initialPage: number;
-  totalPages: number;
-  currentUser: SafeUser | null;
-  searchParams: Record<string, any>;
+    initialListings: SafeListing[];
+    initialPage: number;
+    totalPages: number;
+    currentUser: SafeUser | null;
+    searchParams: Record<string, any>;
 }
 
 const ListingPagination: React.FC<ListingPaginationProps> = ({
-  initialListings,
-  initialPage,
-  totalPages,
-  currentUser,
-  searchParams,
-}) => {
-  const [page, setPage] = useState(initialPage);
-  const [listings, setListings] = useState(initialListings);
-  const router = useRouter();
-  const params = useSearchParams();
-  const limit = 10; // Set the limit to 10 as per your example
+                                                                 initialListings,
+                                                                 initialPage,
+                                                                 totalPages,
+                                                                 currentUser,
+                                                                 searchParams,
+                                                             }) => {
+    const [page, setPage] = useState(initialPage);
+    const [listings, setListings] = useState(initialListings);
+    const router = useRouter();
+    const params = useSearchParams();
+    const limit = 10;
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      const query = qs.stringify({ ...searchParams, page, limit });
-      const response = await fetch(`/api/listings?${query}`);
-      const data = await response.json();
-      setListings(data.listings);
+    useEffect(() => {
+        const fetchListings = async () => {
+            const query = qs.stringify({ ...searchParams, page, limit });
+            const response = await fetch(`/api/listings?${query}`);
+            const data = await response.json();
+            setListings(data.listings);
+        };
+
+        fetchListings();
+    }, [page, searchParams]);
+
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+        const query = qs.stringify({ ...searchParams, page: newPage });
+        router.push(`/?${query}`);
     };
 
-    fetchListings();
-  }, [page, searchParams]);
+    useEffect(() => {
+        const currentPage = params?.get("page");
+        if (currentPage) {
+            setPage(Number(currentPage));
+        }
+    }, [params]);
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-    const query = qs.stringify({ ...searchParams, page: newPage });
-    router.push(`/?${query}`);
-  };
-
-  useEffect(() => {
-    const currentPage = params?.get("page");
-    if (currentPage) {
-      setPage(Number(currentPage));
+    if (listings.length === 0) {
+        return <EmptyState showReset />;
     }
-  }, [params]);
 
-  if (listings.length === 0) {
-    return <EmptyState showReset />;
-  }
-
-  return (
-    <Container>
-      <div className="pt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
-        {listings.map((listing) => {
-          const imageSrcs = listing.images.map((image) => image.url);
-          return (
-            <ListingCard
-              currentUser={currentUser}
-              key={listing.id}
-              data={listing}
-              imageSrcs={imageSrcs}
+    return (
+        <Container>
+            <div className="pt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+                {listings.map((listing) => {
+                    const imageSrcs = listing.images.map((image) => image.url);
+                    return (
+                        <ListingCard
+                            currentUser={currentUser}
+                            key={listing.id}
+                            data={listing}
+                            imageSrcs={imageSrcs}
+                        />
+                    );
+                })}
+            </div>
+            <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
             />
-          );
-        })}
-      </div>
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
-    </Container>
-  );
+        </Container>
+    );
 };
 
 export default ListingPagination;

@@ -16,7 +16,7 @@ export interface IListingsParams {
 }
 
 export default async function getListings(
-  params: IListingsParams,
+    params: IListingsParams,
 ): Promise<{ listings: SafeListing[]; total: number }> {
   try {
     const {
@@ -104,12 +104,14 @@ export default async function getListings(
       take: limit,
     });
 
+    const safeListings: SafeListing[] = listings.map((listing: any) => ({
+      ...listing,
+      createdAt: listing.createdAt.toISOString(),
+      images: listing.images.map((image: any) => ({ url: image.url })),
+    }));
+
     return {
-      listings: listings.map((listing) => ({
-        ...listing,
-        createdAt: listing.createdAt.toISOString(),
-        images: listing.images.map((image) => ({ url: image.url })),
-      })),
+      listings: safeListings,
       total,
     };
   } catch (error: any) {

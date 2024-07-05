@@ -1,8 +1,26 @@
 import prisma from "@/app/libs/prismadb";
-
 import getCurrentUser from "./getCurrentUser";
+import { SafeListing } from "@/app/types"; // Import SafeListing type
 
-export default async function getFavoriteListings() {
+// Define the interface for your favorite object
+interface Favorite {
+  id: string;
+  createdAt: Date;
+  images: Array<{ url: string }>;
+  title: string;
+  description: string;
+  category: string;
+  roomCount: number;
+  bathroomCount: number;
+  guestCount: number;
+  locationValue: string;
+  userId: string | null;
+  price: number;
+  favoritesCount: number;
+  viewCounter: number;
+}
+
+export default async function getFavoriteListings(): Promise<SafeListing[]> {
   try {
     const currentUser = await getCurrentUser();
 
@@ -10,7 +28,7 @@ export default async function getFavoriteListings() {
       return [];
     }
 
-    const favorites = await prisma.listing.findMany({
+    const favorites: Favorite[] = await prisma.listing.findMany({
       where: {
         id: {
           in: [...(currentUser.favoriteIds || [])],
@@ -21,9 +39,12 @@ export default async function getFavoriteListings() {
       },
     });
 
-    const safeFavorites = favorites.map((favorite) => ({
+    const safeFavorites: SafeListing[] = favorites.map((favorite) => ({
       ...favorite,
       createdAt: favorite.createdAt.toString(),
+      images: favorite.images.map((image) => ({
+        url: image.url,
+      })),
     }));
 
     return safeFavorites;
