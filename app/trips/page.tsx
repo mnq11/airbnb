@@ -29,7 +29,7 @@ const TripsPage = async ({ searchParams }: TripsPageProps) => {
     page: searchParams.page || 1,
   });
 
-  const totalPages = Math.ceil(total / 10);
+  const totalPages = Math.ceil(total / 20);
 
   if (!reservations || reservations.length === 0) {
     return (

@@ -28,7 +28,7 @@ const ReservationsPage = async ({ searchParams }: ReservationsPageProps) => {
     authorId: currentUser.id,
     page: searchParams.page || 1,
   });
-  const totalPages = Math.ceil(total / 10);
+  const totalPages = Math.ceil(total / 20);
 
   if (reservations.length === 0) {
     return (

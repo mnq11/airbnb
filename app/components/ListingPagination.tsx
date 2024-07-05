@@ -28,7 +28,7 @@ const ListingPagination: React.FC<ListingPaginationProps> = ({
   const [listings, setListings] = useState(initialListings);
   const router = useRouter();
   const params = useSearchParams();
-  const limit = 10;
+  const limit = 20;
 
   useEffect(() => {
     const fetchListings = async () => {

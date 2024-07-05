@@ -38,7 +38,7 @@ interface Reservation {
 
 export default async function getReservations(params: IParams) {
   try {
-    const { listingId, userId, authorId, page = 1, limit = 10 } = params;
+    const { listingId, userId, authorId, page = 1, limit = 20 } = params;
 
     const query: any = {};
 

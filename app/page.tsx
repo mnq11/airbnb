@@ -12,7 +12,7 @@ export default async function Home({
   searchParams: IListingsParams;
 }) {
   const page = searchParams.page || 1;
-  const limit = 10;
+  const limit = 20;
 
   try {
     const { listings, total } = await getListings({

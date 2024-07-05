@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       ? Number(searchParams.get("viewsCount"))
       : undefined,
     page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
-    limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 10,
+    limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 20,
   };
 
   try {
