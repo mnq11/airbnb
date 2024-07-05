@@ -14,6 +14,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
   FaSignOutAlt,
+  FaFileAlt, // Import the new icon
 } from "react-icons/fa";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -45,23 +46,23 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   }, [loginModal, rentModal, currentUser]);
 
   const handleMenuItemClick = useCallback(
-    async (action: () => void | Promise<void>) => {
-      setIsLoading(true);
-      await action();
-      setIsLoading(false);
-      toggleOpen();
-    },
-    [toggleOpen],
+      async (action: () => void | Promise<void>) => {
+        setIsLoading(true);
+        await action();
+        setIsLoading(false);
+        toggleOpen();
+      },
+      [toggleOpen],
   );
 
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="relative">
-      <div className="flex flex-row items-center gap-3">
-        <div
-          onClick={onRent}
-          className="
+      <div className="relative">
+        <div className="flex flex-row items-center gap-3">
+          <div
+              onClick={onRent}
+              className="
             hidden
             md:block
             text-sm
@@ -73,12 +74,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             transition
             cursor-pointer
           "
-        >
-          أضف عقار
-        </div>
-        <div
-          onClick={toggleOpen}
-          className="
+          >
+            أضف عقار
+          </div>
+          <div
+              onClick={toggleOpen}
+              className="
           p-4
           md:py-1
           md:px-2
@@ -93,16 +94,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           hover:shadow-md
           transition
           "
-        >
-          <AiOutlineMenu />
-          <div className="hidden md:block">
-            <Avatar src={currentUser?.image} />
+          >
+            <AiOutlineMenu />
+            <div className="hidden md:block">
+              <Avatar src={currentUser?.image} />
+            </div>
           </div>
         </div>
-      </div>
-      {isOpen && (
-        <div
-          className="
+        {isOpen && (
+            <div
+                className="
        absolute
       rounded-xl
       shadow-md
@@ -116,88 +117,102 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       top-12
       text-sm
     "
-        >
-          <div className="flex flex-col cursor-pointer">
-            {isLoading ? (
-              <div className="flex justify-center items-center py-4">
-                <ClipLoader color="#000" loading={isLoading} size={30} />
-              </div>
-            ) : (
-              <>
-                {currentUser ? (
-                  <>
-                    <MenuItem
-                      label="الرئيسية"
-                      icon={FaUser}
-                      onClick={() =>
-                        handleMenuItemClick(() => router.push("/"))
-                      }
-                    />
-
-                    <MenuItem
-                      label="رحلات قمت بحجزها"
-                      icon={FaCalendarCheck}
-                      onClick={() =>
-                        handleMenuItemClick(() => router.push("/trips"))
-                      }
-                    />
-                    <MenuItem
-                      label="اماكن مفضلة"
-                      icon={FaHeart}
-                      onClick={() =>
-                        handleMenuItemClick(() => router.push("/favorites"))
-                      }
-                    />
-                    <MenuItem
-                      label="حجوزات"
-                      icon={FaCalendarCheck}
-                      onClick={() =>
-                        handleMenuItemClick(() => router.push("/reservations"))
-                      }
-                    />
-                    <MenuItem
-                      label="العقارات المدرجة"
-                      icon={FaHome}
-                      onClick={() =>
-                        handleMenuItemClick(() => router.push("/properties"))
-                      }
-                    />
-                    <MenuItem
-                      label="أضف عقار"
-                      icon={FaPlus}
-                      onClick={() => handleMenuItemClick(() => onRent())}
-                    />
-                    <hr />
-                    <MenuItem
-                      label="تسجيل خروج"
-                      icon={FaSignOutAlt}
-                      onClick={() => handleMenuItemClick(() => signOut())}
-                    />
-                  </>
+            >
+              <div className="flex flex-col cursor-pointer">
+                {isLoading ? (
+                    <div className="flex justify-center items-center py-4">
+                      <ClipLoader color="#000" loading={isLoading} size={30} />
+                    </div>
                 ) : (
-                  <>
-                    <MenuItem
-                      label=" دخول"
-                      icon={FaSignInAlt}
-                      onClick={() =>
-                        handleMenuItemClick(() => loginModal.onOpen())
-                      }
-                    />
-                    <MenuItem
-                      label="تسجيل"
-                      icon={FaUserPlus}
-                      onClick={() =>
-                        handleMenuItemClick(() => registerModal.onOpen())
-                      }
-                    />
-                  </>
+                    <>
+                      {currentUser ? (
+                          <>
+                            <MenuItem
+                                label="الرئيسية"
+                                icon={FaUser}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/"))
+                                }
+                            />
+                            <MenuItem
+                                label="رحلات قمت بحجزها"
+                                icon={FaCalendarCheck}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/trips"))
+                                }
+                            />
+                            <MenuItem
+                                label="اماكن مفضلة"
+                                icon={FaHeart}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/favorites"))
+                                }
+                            />
+                            <MenuItem
+                                label="حجوزات"
+                                icon={FaCalendarCheck}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/reservations"))
+                                }
+                            />
+                            <MenuItem
+                                label="العقارات المدرجة"
+                                icon={FaHome}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/properties"))
+                                }
+                            />
+                            <MenuItem
+                                label="أضف عقار"
+                                icon={FaPlus}
+                                onClick={() => handleMenuItemClick(() => onRent())}
+                            />
+                            <hr />
+                            <MenuItem
+                                label="سياسة الخصوصية"
+                                icon={FaFileAlt}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/PrivacyPolicy"))
+                                }
+                            />
+                            <MenuItem
+                                label="تسجيل خروج"
+                                icon={FaSignOutAlt}
+                                onClick={() => handleMenuItemClick(() => signOut())}
+                            />
+                          </>
+                      ) : (
+                          <>
+                            <MenuItem
+                                label=" دخول"
+                                icon={FaSignInAlt}
+                                onClick={() =>
+                                    handleMenuItemClick(() => loginModal.onOpen())
+                                }
+                            />
+                            <MenuItem
+                                label="تسجيل"
+                                icon={FaUserPlus}
+                                onClick={() =>
+                                    handleMenuItemClick(() => registerModal.onOpen())
+                                }
+                            />
+                            <MenuItem
+                                label="سياسة الخصوصية"
+                                icon={FaFileAlt}
+                                onClick={() =>
+                                    handleMenuItemClick(() => router.push("/PrivacyPolicy"))
+                                }
+                            />
+                          </>
+                      )}
+                    </>
                 )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+              </div>
+            </div>
+        )}
+      </div>
   );
 };
+
 export default UserMenu;
