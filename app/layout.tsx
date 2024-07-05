@@ -53,6 +53,7 @@ export default async function RootLayout({
           sizes="16x16"
           href="/favicon-16x16.png"
         />
+          <title>جولتنا</title>
       </head>
       <body className={font.className}>
         <ClientOnly>
@@ -63,7 +64,7 @@ export default async function RootLayout({
           <RentModal />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
-        <div className="pb-20 pt-28">{children}</div>
+        <div className="flex-grow pb-20 pt-28">{children}</div>
         <Footer />
       </body>
     </html>
