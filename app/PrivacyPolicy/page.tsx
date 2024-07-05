@@ -3,45 +3,41 @@ import ClientOnly from "@/app/components/ClientOnly";
 
 const PrivacyPolicy = () => {
   const deleteEmail = "mnq_11@yahoo.com";
-  const deleteRequestDuration = "48 hours";
+  const deleteRequestDuration = "48 ساعة";
 
   return (
       <ClientOnly>
-        <div className="max-w-3xl mx-auto p-8 bg-white rounded-lg shadow-md mt-8">
-          <h1 className="text-3xl font-bold mb-6 text-center">Privacy Policy</h1>
+        <div className="max-w-3xl mx-auto p-8 bg-white rounded-lg shadow-md mt-8 text-right">
+          <h1 className="text-3xl font-bold mb-6 text-center">سياسة الخصوصية</h1>
 
-          <h2 className="text-2xl font-semibold mb-4">1. Types of Information</h2>
-          <p className="mb-4">We may collect the following types of personal information:</p>
+          <h2 className="text-2xl font-semibold mb-4">١. أنواع المعلومات</h2>
+          <p className="mb-4">قد نجمع الأنواع التالية من المعلومات الشخصية:</p>
           <ul className="list-disc list-inside mb-6 space-y-2">
-            <li>Email address: We collect your email address for the purpose of communication and account management.</li>
-            <li>Password: We securely store your password to authenticate your account.</li>
-            <li>Posts: If you create posts on our platform, we may collect and store the content of those posts.</li>
+            <li className="rtl">عنوان البريد الإلكتروني: نقوم بجمع عنوان بريدك الإلكتروني لغرض التواصل وإدارة الحساب.</li>
+            <li className="rtl">كلمة المرور: نقوم بتخزين كلمة المرور الخاصة بك بأمان لمصادقة حسابك.</li>
+            <li className="rtl">المنشورات: إذا قمت بإنشاء منشورات على منصتنا، فقد نجمع ونخزن محتوى تلك المنشورات.</li>
           </ul>
 
-          <h2 className="text-2xl font-semibold mb-4">2. Data Usage and Sharing</h2>
-          <p className="mb-4">We use the collected information for the following purposes:</p>
+          <h2 className="text-2xl font-semibold mb-4">٢. استخدام ومشاركة البيانات</h2>
+          <p className="mb-4">نستخدم المعلومات المجمعة للأغراض التالية:</p>
           <ul className="list-disc list-inside mb-6 space-y-2">
-            <li>Email address: We use your email address to send important notifications and updates related to your account.</li>
-            <li>Password: Your password is securely stored and encrypted to protect the integrity of your account.</li>
-            <li>Posts: The content of your posts is stored and displayed publicly on our platform as per your intended usage.</li>
+            <li className="rtl">عنوان البريد الإلكتروني: نستخدم عنوان بريدك الإلكتروني لإرسال الإشعارات والتحديثات المهمة المتعلقة بحسابك.</li>
+            <li className="rtl">كلمة المرور: يتم تخزين كلمة مرورك بشكل آمن ومشفّر لحماية سلامة حسابك.</li>
+            <li className="rtl">المنشورات: يتم تخزين محتوى منشوراتك وعرضها علنًا على منصتنا حسب استخدامك المقصود.</li>
           </ul>
 
-          <h2 className="text-2xl font-semibold mb-4">3. Data Security</h2>
-          <p className="mb-6">
-            We take appropriate measures to ensure the security of your personal information. This includes implementing strict access controls,
-            encryption, and regular security audits.
+          <h2 className="text-2xl font-semibold mb-4">٣. أمن البيانات</h2>
+          <p className="mb-6 rtl">
+            نتخذ التدابير المناسبة لضمان أمان معلوماتك الشخصية. يتضمن ذلك تنفيذ ضوابط صارمة للوصول، والتشفير، والتدقيقات الأمنية الدورية.
           </p>
 
-          <h2 className="text-2xl font-semibold mb-4">4. Data Retention and Deletion</h2>
-          <p className="mb-4">
-            We retain your personal information for as long as necessary to fulfill the purposes outlined in this privacy policy. If you wish to
-            delete your account and associated data, please contact our support team at <a href={`mailto:${deleteEmail}`} className="text-blue-500 underline">{deleteEmail}</a> and your
-            request will be processed within {deleteRequestDuration}.
+          <h2 className="text-2xl font-semibold mb-4">٤. الاحتفاظ بالبيانات والحذف</h2>
+          <p className="mb-4 rtl">
+            نحتفظ بمعلوماتك الشخصية طالما كان ذلك ضروريًا لتحقيق الأغراض الموضحة في سياسة الخصوصية هذه. إذا كنت ترغب في حذف حسابك والبيانات المرتبطة به، يرجى الاتصال بفريق الدعم لدينا على <a href={`mailto:${deleteEmail}`} className="text-blue-500 underline">{deleteEmail}</a> وستتم معالجة طلبك في غضون {deleteRequestDuration}.
           </p>
 
-          <p className="mt-6">
-            Please note that this is a general overview of our privacy policy. For more detailed information and to understand your rights and choices
-            regarding your personal information, please refer to our complete privacy policy available on our website.
+          <p className="mt-6 rtl">
+            يرجى ملاحظة أن هذا نظرة عامة عامة على سياسة الخصوصية الخاصة بنا. للحصول على معلومات أكثر تفصيلًا وفهم حقوقك واختياراتك بشأن معلوماتك الشخصية، يرجى الرجوع إلى سياسة الخصوصية الكاملة المتاحة على موقعنا الإلكتروني.
           </p>
         </div>
       </ClientOnly>
