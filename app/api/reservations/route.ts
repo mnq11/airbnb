@@ -13,7 +13,10 @@ export async function GET(request: Request) {
   const userId = searchParams.get("userId") || undefined;
 
   if (!authorId && !userId) {
-    return NextResponse.json({ error: "Author ID or User ID is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Author ID or User ID is required" },
+      { status: 400 },
+    );
   }
 
   try {

@@ -16,7 +16,7 @@ export interface IListingsParams {
 }
 
 export default async function getListings(
-    params: IListingsParams,
+  params: IListingsParams,
 ): Promise<{ listings: SafeListing[]; total: number }> {
   try {
     const {
