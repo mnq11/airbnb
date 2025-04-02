@@ -492,4 +492,62 @@ graph TD
     style B fill:#f96,stroke:#333,stroke-width:2px
     style H fill:#9bf,stroke:#333,stroke-width:2px
     style M fill:#bbf,stroke:#333,stroke-width:2px
-``` 
+```
+
+### API Middleware Pipeline
+
+```mermaid
+graph TD
+    A[Client Request] --> B[NextRequest]
+    
+    subgraph "Middleware Pipeline"
+        B --> C[Next.js Edge Runtime]
+        C --> D[Global Middleware]
+        D --> E{Path Matching}
+        
+        E -->|Auth Routes| F[NextAuth Handler]
+        E -->|API Routes| G[API Middleware]
+        E -->|Public Routes| H[Skip Auth]
+        
+        F --> I[JWT Verification]
+        I --> J{Valid Token?}
+        J -->|Yes| K[Attach User]
+        J -->|No| L[Unauthorized Response]
+        
+        G --> M[CORS Headers]
+        G --> N[Rate Limiting]
+        G --> O[Request Validation]
+        
+        K --> P[Route Handler]
+        H --> P
+        M --> P
+    end
+    
+    subgraph "API Handlers"
+        P --> Q[API Handler Logic]
+        Q --> R{Success?}
+        R -->|Yes| S[Format Response]
+        R -->|No| T[Error Response]
+        
+        S --> U[Response]
+        T --> U
+    end
+    
+    U --> V[Client]
+    L --> V
+    
+    style A fill:#f96,stroke:#333,stroke-width:2px
+    style D fill:#bbf,stroke:#333,stroke-width:2px
+    style P fill:#9bf,stroke:#333,stroke-width:2px
+    style U fill:#fd9,stroke:#333,stroke-width:2px
+```
+
+This diagram illustrates how API requests flow through the middleware pipeline:
+
+1. Client requests enter the Next.js Edge Runtime
+2. Global middleware processes all incoming requests
+3. Path-specific middleware is applied based on route patterns
+4. Authentication middleware verifies user sessions for protected routes
+5. API middleware applies CORS headers, rate limiting, and request validation
+6. Route handlers process the validated request
+7. Responses are formatted and returned to the client 
