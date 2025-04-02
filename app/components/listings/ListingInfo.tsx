@@ -14,6 +14,21 @@ const Map = dynamic(() => import("../Map"), {
   ssr: false,
 });
 
+/**
+ * Interface for ListingInfo component props
+ * 
+ * @interface ListingInfoProps
+ * @property {SafeUser|null} user - Property owner/host user data
+ * @property {string} description - Detailed description of the property
+ * @property {number} guestCount - Maximum number of guests allowed
+ * @property {number} roomCount - Number of rooms in the property
+ * @property {number} bathroomCount - Number of bathrooms in the property
+ * @property {Object} [category] - Category information for the property
+ * @property {IconType} category.icon - Icon component representing the category
+ * @property {string} category.label - Category name
+ * @property {string} category.description - Detailed description of the category
+ * @property {string} locationValue - Location identifier for country/region lookup
+ */
 interface ListingInfoProps {
   user: SafeUser | null;
   description: string;
@@ -30,6 +45,30 @@ interface ListingInfoProps {
   locationValue: string;
 }
 
+/**
+ * ListingInfo Component
+ * 
+ * Displays detailed information about a property listing, including:
+ * - Host information with avatar
+ * - Property details (guest capacity, room count, bathrooms)
+ * - Category information with description
+ * - Full property description
+ * - Location map
+ * 
+ * This component is used within the ListingClient to show the main
+ * property details section alongside the reservation panel.
+ * 
+ * Features:
+ * - Responsive grid layout that adjusts for mobile/desktop
+ * - Dynamic map loading with location marker
+ * - Arabic number formatting
+ * - Structured property information with icons
+ * - Host information display
+ * 
+ * @component
+ * @param {ListingInfoProps} props - Component props
+ * @returns {JSX.Element} Rendered property information section
+ */
 const ListingInfo: React.FC<ListingInfoProps> = ({
   user,
   description,
