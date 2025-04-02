@@ -156,8 +156,17 @@ const RentModal = () => {
       case STEPS.IMAGES:
         console.log("Validating images:", imageSrc);
         
-        // First check if imageSrc has valid data
-        if (Array.isArray(imageSrc) && imageSrc.length > 0) {
+        // Filter out blob URLs since they're temporary
+        const validImages = Array.isArray(imageSrc) 
+          ? imageSrc.filter(url => !url.startsWith('blob:') && url.includes('cloudinary.com'))
+          : [];
+        
+        // If we have valid Cloudinary URLs, we're good
+        if (validImages.length > 0) {
+          // Update form with only valid images
+          if (validImages.length !== imageSrc?.length) {
+            setCustomValue("imageSrc", validImages);
+          }
           return true;
         }
         
@@ -166,26 +175,21 @@ const RentModal = () => {
           const storedImages = JSON.parse(localStorage.getItem('uploadedImages') || '[]');
           console.log("Retrieved images from localStorage:", storedImages);
           
-          if (Array.isArray(storedImages) && storedImages.length > 0) {
-            // Update the form with localStorage data
-            setCustomValue("imageSrc", storedImages);
+          // Filter out blob URLs from localStorage as well
+          const validStoredImages = Array.isArray(storedImages) 
+            ? storedImages.filter(url => !url.startsWith('blob:') && url.includes('cloudinary.com'))
+            : [];
+            
+          if (validStoredImages.length > 0) {
+            // Update the form with valid localStorage data
+            setCustomValue("imageSrc", validStoredImages);
             return true;
           }
         } catch (e) {
           console.error("Failed to retrieve images from localStorage:", e);
         }
         
-        // Check if any Cloudinary images exist in the document
-        const cloudinaryImages = document.querySelectorAll('[src*="cloudinary.com"]');
-        if (cloudinaryImages.length > 0) {
-          // Extract URLs from the images
-          const urls = Array.from(cloudinaryImages).map(img => (img as HTMLImageElement).src);
-          console.log("Found Cloudinary images in the DOM:", urls);
-          setCustomValue("imageSrc", urls);
-          return true;
-        }
-        
-        toast.error("يرجى تحميل صور توضيحية");
+        toast.error("يرجى تحميل صور توضيحية صالحة");
         return false;
       case STEPS.DESCRIPTION:
         return !!STEPS.DESCRIPTION;
@@ -212,27 +216,50 @@ const RentModal = () => {
 
     setIsLoading(true);
 
+    // Format the description with contact details
     const updatedDescription = `${data.description}\n\nرقم الهاتف: ${data.phone}\nطريقة الدفع المفضلة: ${data.paymentMethod}`;
 
+    // Ensure we only use valid image URLs (not blob URLs)
+    const finalImageSrc = Array.isArray(data.imageSrc) 
+      ? data.imageSrc.filter((url: string) => !url.startsWith('blob:'))
+      : [];
+    
+    // Check if we have enough images
+    if (finalImageSrc.length === 0) {
+      toast.error("يرجى تحميل صور توضيحية صالحة");
+      setIsLoading(false);
+      return;
+    }
+
+    // Prepare final payload
     const payload = {
       ...data,
       description: updatedDescription,
-      imageSrc: data.imageSrc, // Ensure imageSrc is an array of string URLs
-      location: data.location, // Ensure location is included with value
-      price: parseInt(data.price, 10), // Convert price to integer
+      imageSrc: finalImageSrc,
+      location: data.location,
+      price: parseInt(data.price, 10),
     };
 
+    // Submit listing data
     axios
       .post("/api/listings", payload)
       .then(() => {
-        toast.success("تم إنشاء القائمة");
+        toast.success("تم إنشاء العقار بنجاح");
         router.refresh();
         reset();
         setStep(STEPS.CATEGORY);
         rentModal.onClose();
+        
+        // Clean up localStorage
+        try {
+          localStorage.removeItem('uploadedImages');
+        } catch (e) {
+          console.error("Failed to clear localStorage:", e);
+        }
       })
-      .catch(() => {
-        toast.error("هناك خطأ ما");
+      .catch((error) => {
+        console.error("Error creating listing:", error);
+        toast.error("حدث خطأ أثناء إنشاء العقار، يرجى المحاولة مرة أخرى");
       })
       .finally(() => {
         setIsLoading(false);
@@ -295,6 +322,21 @@ const RentModal = () => {
     }
   }, [location]);
 
+  // Initialize modal form with images from localStorage if available
+  useEffect(() => {
+    if (rentModal.isOpen && (!imageSrc || imageSrc.length === 0)) {
+      try {
+        const storedImages = JSON.parse(localStorage.getItem('uploadedImages') || '[]');
+        if (Array.isArray(storedImages) && storedImages.length > 0) {
+          console.log("Found stored images in localStorage, restoring:", storedImages);
+          setCustomValue("imageSrc", storedImages);
+        }
+      } catch (e) {
+        console.error("Failed to retrieve images from localStorage on modal open:", e);
+      }
+    }
+  }, [rentModal.isOpen, imageSrc, setCustomValue]);
+
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
@@ -343,31 +385,40 @@ const RentModal = () => {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="أضف صورة لمكانك"
-          subtitle="أظهر للضيوف كيف يبدو مكانك!"
+          title="أضف صوراً لعقارك"
+          subtitle="أظهر للضيوف جمال المكان وميزاته!"
         />
-        <ImageUpload
-          onChange={(value) => {
-            console.log("ImageUpload onChange called with:", value);
-            // Force immediate update with defensive coding
-            if (Array.isArray(value) && value.length > 0) {
-              setCustomValue("imageSrc", value);
-              // Also store in localStorage as backup
-              try {
-                localStorage.setItem('uploadedImages', JSON.stringify(value));
-              } catch (e) {
-                console.error("Failed to store images in localStorage:", e);
+        
+        <div className="bg-white rounded-lg p-1">
+          <ImageUpload
+            onChange={(value) => {
+              // Only log and update if we have actual images
+              if (Array.isArray(value) && value.length > 0) {
+                console.log("ImageUpload onChange called with:", value);
+                setCustomValue("imageSrc", value);
+                
+                // Store in localStorage as backup
+                try {
+                  localStorage.setItem('uploadedImages', JSON.stringify(value));
+                } catch (e) {
+                  console.error("Failed to store images in localStorage:", e);
+                }
               }
-            }
-            console.log("After setCustomValue, imageSrc is:", watch("imageSrc"));
-          }}
-          value={imageSrc || []}
-        />
-        {Array.isArray(imageSrc) && imageSrc.length > 0 && (
-          <div className="text-green-600 font-semibold">
-            تم تحميل {imageSrc.length} صورة/صور بنجاح
-          </div>
-        )}
+            }}
+            value={imageSrc || []}
+          />
+        </div>
+
+        {/* Image upload instructions */}
+        <div className="bg-blue-50 p-4 rounded-md">
+          <h3 className="text-sm font-medium text-blue-800 mb-2">نصائح لصور أفضل:</h3>
+          <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
+            <li>أضف صوراً واضحة للغرف والمرافق الرئيسية</li>
+            <li>التقط الصور في وضح النهار للحصول على إضاءة أفضل</li>
+            <li>أظهر الميزات الفريدة للمكان (مثل الإطلالة أو المسبح)</li>
+            <li>يُفضّل إضافة 5-10 صور على الأقل</li>
+          </ul>
+        </div>
       </div>
     );
   }
