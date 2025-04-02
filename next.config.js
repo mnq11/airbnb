@@ -1,25 +1,37 @@
+/** @type {import('next').NextConfig} */
+
 const nextConfig = {
+  reactStrictMode: true,
+  skipTrailingSlashRedirect: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        pathname: "/**",
-      },
+    domains: [
+      'res.cloudinary.com',
+      'avatars.githubusercontent.com',
+      'lh3.googleusercontent.com',
     ],
   },
-  reactStrictMode: true,
-  swcMinify: true,
-};
+  // Add security headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+    ]
+  }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

@@ -22,7 +22,7 @@ A full-featured property rental platform built with Next.js, React, TypeScript, 
 2. Install dependencies: `npm install`
 3. Set up environment variables (see [Installation Guide](./docs/INSTALLATION.md))
 4. Run development server: `npm run dev`
-5. Access the application at `http://localhost:3000`
+5. Access the application at `http://localhost:3000` or your machine ip
 
 ## Documentation
 

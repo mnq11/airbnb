@@ -1,18 +1,17 @@
+import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-
-import Navbar from "@/app/components/navbar/Navbar";
-import LoginModal from "@/app/components/modals/LoginModal";
-import RegisterModal from "@/app/components/modals/RegisterModal";
-import SearchModal from "@/app/components/modals/SearchModal";
-import RentModal from "@/app/components/modals/RentModal";
-
-import ToasterProvider from "@/app/providers/ToasterProvider";
-import Footer from "@/app/components/Footer";
-
 import "./globals.css";
 import ClientOnly from "./components/ClientOnly";
+import ModalsProvider from "./providers/ModalsProvider";
+import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/getCurrentUser";
-import React from "react";
+import { reportWebVitals } from "@/app/libs/webVitals";
+import ErrorBoundary from "@/app/components/ErrorBoundary";
+import Navbar from "@/app/components/navbar/Navbar";
+import Footer from "@/app/components/Footer";
+
+// Import the next/script component to add security headers via CSP
+import Script from "next/script";
 
 /**
  * Application Metadata
@@ -20,9 +19,9 @@ import React from "react";
  * Defines metadata for the application that will be used in the HTML head section.
  * This includes the site title and description for SEO purposes.
  */
-export const metadata = {
-  title: "جولتنا",
-  description: "منصة جولتنا للتجوال",
+export const metadata: Metadata = {
+  title: "منصة تأجير العقارات",
+  description: "منصة تأجير العقارات في اليمن",
 };
 
 /**
@@ -34,6 +33,13 @@ export const metadata = {
 const font = Nunito({
   subsets: ["latin"],
 });
+
+/**
+ * Report web vitals to analytics
+ *
+ * This function is automatically called by Next.js
+ */
+export { reportWebVitals };
 
 /**
  * Root Layout Component
@@ -61,7 +67,7 @@ export default async function RootLayout({
   const currentUser = await getCurrentUser();
 
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -86,18 +92,25 @@ export default async function RootLayout({
         <title>جولتنا</title>
       </head>
       <body className={font.className}>
-        {/* Client components wrapped in ClientOnly to prevent hydration issues */}
-        <ClientOnly>
-          <ToasterProvider />
-          <LoginModal />
-          <RegisterModal />
-          <SearchModal />
-          <RentModal />
-          <Navbar currentUser={currentUser} />
-        </ClientOnly>
-        {/* Main content area with padding for header and footer */}
-        <div className="flex-grow pb-20 pt-28">{children}</div>
-        <Footer />
+        {/* Add Content Security Policy */}
+        <Script id="security-headers">
+          {`
+            if (window.parent !== window) {
+              window.parent.postMessage('*', { targetOrigin: '*' });
+            }
+          `}
+        </Script>
+        
+        <ErrorBoundary>
+          <ClientOnly>
+            <ToasterProvider />
+            <ModalsProvider />
+            <Navbar currentUser={currentUser} />
+          </ClientOnly>
+          {/* Main content area with padding for header and footer */}
+          <div className="flex-grow pb-20 pt-28">{children}</div>
+          <Footer />
+        </ErrorBoundary>
       </body>
     </html>
   );
