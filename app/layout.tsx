@@ -14,20 +14,50 @@ import ClientOnly from "./components/ClientOnly";
 import getCurrentUser from "./actions/getCurrentUser";
 import React from "react";
 
+/**
+ * Application Metadata
+ * 
+ * Defines metadata for the application that will be used in the HTML head section.
+ * This includes the site title and description for SEO purposes.
+ */
 export const metadata = {
   title: "جولتنا",
   description: "منصة جولتنا للتجوال",
 };
 
+/**
+ * Font Configuration
+ * 
+ * Configures the Nunito font from Google Fonts for use throughout the application.
+ * The font is loaded with the Latin subset for optimal performance.
+ */
 const font = Nunito({
   subsets: ["latin"],
 });
 
+/**
+ * Root Layout Component
+ * 
+ * The main layout wrapper for the entire application that provides:
+ * - Global styling and font application
+ * - Navigation header with authentication state
+ * - Global modal components (login, register, search, rent)
+ * - Toast notifications
+ * - Footer component
+ * 
+ * This component is a Server Component that fetches the current user on each request.
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Nested page content to be rendered inside the layout
+ * @returns {Promise<JSX.Element>} Rendered layout with global components and nested content
+ */
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch current user information for authentication-aware components
   const currentUser = await getCurrentUser();
 
   return (
@@ -56,6 +86,7 @@ export default async function RootLayout({
           <title>جولتنا</title>
       </head>
       <body className={font.className}>
+        {/* Client components wrapped in ClientOnly to prevent hydration issues */}
         <ClientOnly>
           <ToasterProvider />
           <LoginModal />
@@ -64,6 +95,7 @@ export default async function RootLayout({
           <RentModal />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
+        {/* Main content area with padding for header and footer */}
         <div className="flex-grow pb-20 pt-28">{children}</div>
         <Footer />
       </body>

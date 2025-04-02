@@ -2,6 +2,16 @@
 
 import { IconType } from "react-icons";
 
+/**
+ * Interface for Button component props
+ * @interface ButtonProps
+ * @property {string} label - Text to display inside the button
+ * @property {Function} onClick - Event handler function for button click events
+ * @property {boolean} [disabled] - Optional flag to disable the button
+ * @property {boolean} [outline] - Optional flag to render the button with outline style
+ * @property {boolean} [small] - Optional flag to render the button in small size
+ * @property {IconType} [icon] - Optional React icon component to display with the button
+ */
 interface ButtonProps {
   label: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -11,6 +21,16 @@ interface ButtonProps {
   icon?: IconType;
 }
 
+/**
+ * Reusable Button component
+ * 
+ * A customizable button component that supports different styles (outline/filled),
+ * sizes (small/normal), disabled state, and an optional icon.
+ *
+ * @component
+ * @param {ButtonProps} props - The button properties
+ * @returns {JSX.Element} Rendered Button component
+ */
 const Button: React.FC<ButtonProps> = ({
   label,
   onClick,
