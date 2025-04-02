@@ -3,6 +3,23 @@
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { BiDollar } from "react-icons/bi";
 
+/**
+ * Interface for Input component props
+ * 
+ * This component is designed to work with react-hook-form for form validation
+ * and state management.
+ * 
+ * @interface InputProps
+ * @property {string} id - Unique identifier for the input, used for form registration and error handling
+ * @property {string} label - Label text displayed for the input field
+ * @property {string} [type="text"] - HTML input type attribute (text, email, password, etc.)
+ * @property {boolean} [disabled] - When true, disables the input field
+ * @property {boolean} [formatPrice] - When true, displays a currency symbol and formats the input as a price
+ * @property {boolean} [required] - When true, marks the field as required for form validation
+ * @property {UseFormRegister<FieldValues>} register - react-hook-form register function for field registration
+ * @property {FieldErrors} errors - react-hook-form errors object for displaying validation errors
+ * @property {"ltr"|"rtl"} [textDirection="ltr"] - Text direction for the input (left-to-right or right-to-left)
+ */
 export interface InputProps {
   id: string;
   label: string;
@@ -15,6 +32,25 @@ export interface InputProps {
   textDirection?: "ltr" | "rtl";
 }
 
+/**
+ * Input Component
+ * 
+ * A standardized form input component with floating label, validation styling,
+ * and optional price formatting. This component is designed to be used with
+ * react-hook-form for consistent form handling throughout the application.
+ * 
+ * Features:
+ * - Floating label animation that moves when the field is focused or filled
+ * - Error state styling with red borders and label color
+ * - Optional price formatting with currency symbol
+ * - RTL/LTR text direction support
+ * - Disabled state styling and functionality
+ * - Consistent styling with the application design system
+ * 
+ * @component
+ * @param {InputProps} props - Component props
+ * @returns {JSX.Element} Rendered input field with floating label
+ */
 const Input: React.FC<InputProps> = ({
   id,
   label,
@@ -28,6 +64,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className="w-full relative">
+      {/* Currency symbol for price inputs */}
       {formatPrice && (
         <BiDollar
           size={24}
@@ -39,11 +76,13 @@ const Input: React.FC<InputProps> = ({
           "
         />
       )}
+      
+      {/* Input field */}
       <input
         id={id}
         disabled={disabled}
         {...register(id, { required })}
-        placeholder=" "
+        placeholder=" "  {/* Empty placeholder required for floating label CSS */}
         type={type}
         dir={textDirection}
         className={`
@@ -64,6 +103,8 @@ const Input: React.FC<InputProps> = ({
           ${errors[id] ? "focus:border-rose-500" : "focus:border-black"}
         `}
       />
+      
+      {/* Floating label with animation and error styling */}
       <label
         className={`
           absolute 

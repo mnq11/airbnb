@@ -25,19 +25,54 @@ import { SafeUser } from "@/app/types";
 import MenuItem from "./MenuItem";
 import Avatar from "../Avatar";
 
+/**
+ * Interface for UserMenu component props
+ * 
+ * @interface UserMenuProps
+ * @property {SafeUser|null} [currentUser] - Current authenticated user data or null if not logged in
+ */
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
+/**
+ * UserMenu Component
+ * 
+ * A dropdown menu component in the navbar that provides user authentication 
+ * and navigation options. It adapts its content based on authentication state.
+ * 
+ * Features:
+ * - Responsive design with mobile and desktop layouts
+ * - Dynamic menu content based on authentication state
+ * - Profile avatar display when user is logged in
+ * - Quick access to property listings, trips, favorites, and reservations
+ * - Authentication actions (login, register, sign out)
+ * - Loading indicator during navigation or authentication actions
+ * - "Add Property" shortcut button
+ * - Support for RTL layout and Arabic text
+ * 
+ * @component
+ * @param {UserMenuProps} props - Component props
+ * @returns {JSX.Element} Rendered user menu dropdown
+ */
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const rentModal = useRentModal();
   const [isOpen, setIsOpen] = useState(false);
+  
+  /**
+   * Toggles the dropdown menu open/closed state
+   */
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
+  
+  /**
+   * Handles the "Add Property" button click
+   * Opens login modal if user is not authenticated, otherwise opens rent modal
+   */
   const onRent = useCallback(() => {
     if (!currentUser) {
       return loginModal.onOpen();
@@ -45,6 +80,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     rentModal.onOpen();
   }, [loginModal, rentModal, currentUser]);
 
+  /**
+   * Handles menu item clicks with loading state
+   * Shows loading spinner during navigation or authentication actions
+   * 
+   * @param {() => void | Promise<void>} action - Function to execute when menu item is clicked
+   */
   const handleMenuItemClick = useCallback(
       async (action: () => void | Promise<void>) => {
         setIsLoading(true);
@@ -55,11 +96,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       [toggleOpen],
   );
 
+  // Loading state for menu actions
   const [isLoading, setIsLoading] = useState(false);
 
   return (
       <div className="relative">
+        {/* User menu trigger - Add Property button and avatar/menu toggle */}
         <div className="flex flex-row items-center gap-3">
+          {/* Add Property button - visible only on larger screens */}
           <div
               onClick={onRent}
               className="
@@ -77,6 +121,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           >
             أضف عقار
           </div>
+          
+          {/* Menu toggle button with hamburger icon and avatar */}
           <div
               onClick={toggleOpen}
               className="
@@ -101,6 +147,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             </div>
           </div>
         </div>
+        
+        {/* Dropdown menu - conditionally rendered when isOpen is true */}
         {isOpen && (
             <div
                 className="
@@ -119,12 +167,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     "
             >
               <div className="flex flex-col cursor-pointer">
+                {/* Loading spinner state */}
                 {isLoading ? (
                     <div className="flex justify-center items-center py-4">
                       <ClipLoader color="#000" loading={isLoading} size={30} />
                     </div>
                 ) : (
                     <>
+                      {/* Authenticated user menu options */}
                       {currentUser ? (
                           <>
                             <MenuItem
@@ -183,6 +233,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                           </>
                       ) : (
                           <>
+                            {/* Guest user menu options */}
                             <MenuItem
                                 label=" دخول"
                                 icon={FaSignInAlt}

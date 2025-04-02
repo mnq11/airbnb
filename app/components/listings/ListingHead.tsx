@@ -14,6 +14,19 @@ import Loader from "@/app/components/Loader";
 
 SwiperCore.use([Navigation, Thumbs]);
 
+/**
+ * Interface for ListingHead component props
+ * 
+ * @interface ListingHeadProps
+ * @property {string} title - The title of the property listing
+ * @property {string} locationValue - Location code used to look up country/region information
+ * @property {Array<{url: string}>} images - Array of image objects containing URLs for the listing
+ * @property {string} id - Unique identifier for the listing
+ * @property {SafeUser|null} [currentUser] - Currently authenticated user data or null if not logged in
+ * @property {number} favoritesCount - Number of users who have favorited this listing
+ * @property {number} [viewCounter] - Number of views this listing has received
+ * @property {() => void} onView - Callback function to increment view count when component mounts
+ */
 interface ListingHeadProps {
   title: string;
   locationValue: string;
@@ -25,6 +38,23 @@ interface ListingHeadProps {
   onView: () => void;
 }
 
+/**
+ * ListingHead Component
+ * 
+ * Displays the header section of a property listing detail page, featuring:
+ * - Property title and location
+ * - Image gallery with main carousel and thumbnail strip
+ * - Favorite button with counter
+ * - View counter
+ * - Navigation controls for image browsing
+ * 
+ * This component handles image loading states and automatically
+ * increments the view counter when mounted.
+ * 
+ * @component
+ * @param {ListingHeadProps} props - Component props
+ * @returns {JSX.Element} Rendered listing header with image gallery
+ */
 const ListingHead: React.FC<ListingHeadProps> = ({
   title,
   locationValue,
@@ -40,12 +70,19 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Handles image load completion and removes loading state
+   */
   const handleImageLoad = () => {
     setIsLoading(false);
   };
 
+  // Show loader component when images are loading
   const loader = isLoading ? <Loader /> : null;
 
+  /**
+   * Increment view counter when component mounts
+   */
   useEffect(() => {
     onView();
   }, [onView]);
@@ -53,11 +90,13 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   return (
     <div style={{ position: "relative" }}>
       {loader}
+      {/* Title and location display */}
       <Heading
         title={title}
         subtitle={`${location?.region}, ${location?.label}`}
       />
       <div className="w-full h-[50vh] overflow-hidden rounded-xl relative">
+        {/* Main image carousel */}
         <Swiper
           style={{ height: "80%" }}
           spaceBetween={10}
@@ -68,6 +107,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           thumbs={{ swiper: thumbsSwiper }}
           className="mySwiper2"
         >
+          {/* Custom navigation buttons */}
           <div
             className="swiper-button-prev-custom absolute top-3/4 -translate-y-1/2 left-4 z-10 text-white text-2xl font-bold bg-transparent rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-md transition duration-300 ease-in-out hover:scale-110"
             style={{ width: "40px", height: "40px", marginTop: "120px" }}
@@ -81,6 +121,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             <TiArrowRightOutline style={{ marginTop: "-3px" }} />
           </div>
 
+          {/* Main carousel slides */}
           {images.map((image, index) => (
             <SwiperSlide
               key={index}
@@ -96,6 +137,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   onLoad={handleImageLoad}
                 />
               </div>
+              {/* View counter positioned at bottom left */}
               <div className="absolute bottom-3 left-10">
                 <ViewCounter
                   listingId={id}
@@ -107,6 +149,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           ))}
         </Swiper>
 
+        {/* Thumbnail strip carousel */}
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
@@ -129,6 +172,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             </SwiperSlide>
           ))}
         </Swiper>
+        {/* Heart button for favoriting positioned at top right */}
         <div className="absolute top-5 right-7">
           <HeartButton
             listingId={id}
