@@ -159,3 +159,142 @@ flowchart TD
 - Prisma for type-safe database queries
 - Input validation on API endpoints
 - Owner verification for sensitive operations 
+
+## Detailed Subsystem Diagrams
+
+### Reservation System Workflow
+
+```mermaid
+sequenceDiagram
+    actor Guest as Guest
+    actor Host as Property Owner
+    participant UI as Frontend
+    participant API as Reservation API
+    participant DB as Database
+    participant Notif as Notifications
+    
+    Guest->>UI: Select Dates on Listing
+    UI->>UI: Calculate Total Price
+    Guest->>UI: Submit Reservation
+    UI->>API: POST /api/reservations
+    API->>DB: Create Reservation
+    DB->>API: Reservation Created
+    API->>UI: Success Response
+    UI->>UI: Show Confirmation
+    API->>Notif: Notify Host
+    Notif->>Host: New Reservation Alert
+    
+    Host->>UI: View Reservations
+    UI->>API: GET /api/reservations
+    API->>DB: Query Reservations
+    DB->>API: Reservation Data
+    API->>UI: Display Reservations
+    
+    Host->>UI: Accept/Reject Reservation
+    UI->>API: PATCH /api/reservations/{id}
+    API->>DB: Update Status
+    DB->>API: Status Updated
+    API->>Notif: Notify Guest
+    Notif->>Guest: Reservation Status Update
+```
+
+### Property Listing Subsystem
+
+```mermaid
+graph TD
+    subgraph "Listing Creation"
+        A[RentModal] --> B{Category Selection}
+        B --> C{Location Selection}
+        C --> D{Property Details}
+        D --> E{Images Upload}
+        E --> F{Description}
+        F --> G{Price Setting}
+        G --> H[Submit Listing]
+    end
+    
+    subgraph "Listing Display"
+        I[ListingCard] --> J[Image Carousel]
+        I --> K[Price Display]
+        I --> L[Favorite Button]
+        I --> M[Location]
+        I --> N[Category]
+    end
+    
+    subgraph "Listing Detail"
+        O[ListingClient] --> P[Header]
+        O --> Q[Images]
+        O --> R[Description]
+        O --> S[Amenities]
+        O --> T[Map]
+        O --> U[Reservation Calendar]
+    end
+    
+    H --> X[API: createListing]
+    X --> Y[Prisma: Create]
+    Y --> Z[Database]
+    
+    Z --> AA[API: getListings]
+    AA --> I
+    Z --> AB[API: getListingById]
+    AB --> O
+```
+
+### Authentication System Detail
+
+```mermaid
+flowchart TD
+    A[User] --> B[Login Form]
+    A --> C[Registration Form]
+    A --> D[OAuth Providers]
+    
+    B --> E[NextAuth API]
+    C --> F[Register API]
+    D --> E
+    
+    E --> G{Valid Credentials?}
+    F --> H[Create User]
+    H --> E
+    
+    G -->|Yes| I[JWT Session]
+    G -->|No| J[Error Response]
+    
+    I --> K[Current User Middleware]
+    K --> L[Safe User Object]
+    
+    L --> M[Protected Routes]
+    L --> N[Conditional UI Elements]
+    L --> O[UserMenu Component]
+```
+
+### State Management with Zustand
+
+```mermaid
+graph TD
+    subgraph "Modal Stores"
+        A[useLoginModal] --> B[LoginModal Component]
+        C[useRegisterModal] --> D[RegisterModal Component]
+        E[useRentModal] --> F[RentModal Component]
+        G[useSearchModal] --> H[SearchModal Component]
+    end
+    
+    subgraph "Component Interactions"
+        I[UserMenu] --> A
+        I --> C
+        I --> E
+        J[Navbar] --> G
+        K[EmptyState] --> A
+        L[Category Selection] --> G
+    end
+    
+    subgraph "Data Flow"
+        M[State Changes] --> N[UI Updates]
+        O[User Actions] --> P[Store Methods]
+        P --> M
+    end
+    
+    B --> Q[Auth API]
+    D --> Q
+    F --> R[Listings API]
+    H --> S[Search Parameters]
+    S --> T[Filtered Results]
+``` 
