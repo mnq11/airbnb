@@ -297,4 +297,199 @@ graph TD
     F --> R[Listings API]
     H --> S[Search Parameters]
     S --> T[Filtered Results]
+```
+
+### Search & Filtering System
+
+```mermaid
+graph TD
+    subgraph "User Interface"
+        A[Search Bar] --> B[SearchModal]
+        C[Filter Buttons] --> B
+        D[Map View Toggle] --> E[Map Component]
+    end
+    
+    subgraph "Search Logic"
+        B --> F[Search Parameters]
+        F --> G[useSearchParams Hook]
+        G --> H[URL Query Parameters]
+        H --> I[getListings API]
+    end
+    
+    subgraph "Filtering Components"
+        F --> J[Location Input]
+        F --> K[Date Range Picker]
+        F --> L[Guest Counter]
+        F --> M[Category Filter]
+        F --> N[Price Range]
+        F --> O[Room/Bathroom Count]
+    end
+    
+    subgraph "Results Display"
+        I --> P[ListingGrid]
+        I --> E
+        P --> Q[ListingCard Components]
+        E --> R[Map Markers]
+        R --> Q
+    end
+    
+    style A fill:#f96,stroke:#333,stroke-width:2px
+    style P fill:#9bf,stroke:#333,stroke-width:2px
+```
+
+### Favorites System
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as User Interface
+    participant Heart as FavoriteButton
+    participant API as Favorites API
+    participant DB as Database
+    participant List as FavoritesClient
+    
+    User->>UI: View Listing
+    UI->>Heart: Render Heart Icon
+    User->>Heart: Click Heart Icon
+    
+    alt User Not Logged In
+        Heart->>UI: Show Login Modal
+    else User Logged In
+        Heart->>API: POST /api/favorites/{listingId}
+        API->>DB: Update User Favorites
+        DB->>API: Success Response
+        API->>Heart: Update Heart State
+        Heart->>UI: Visual Feedback
+    end
+    
+    User->>UI: Navigate to Favorites Page
+    UI->>API: GET /api/favorites
+    API->>DB: Fetch User Favorites
+    DB->>API: Favorites Data
+    API->>List: Render Favorite Listings
+    List->>UI: Display Grid of Favorites
+    
+    User->>Heart: Click Heart on Favorite
+    Heart->>API: DELETE /api/favorites/{listingId}
+    API->>DB: Remove from Favorites
+    DB->>API: Success Response
+    API->>List: Update UI
+    List->>UI: Remove Card with Animation
+```
+
+### User Profile & Properties Management
+
+```mermaid
+graph TD
+    subgraph "User Menu"
+        A[UserMenu Component] --> B[Profile Option]
+        A --> C[My Properties]
+        A --> D[My Trips]
+        A --> E[My Favorites]
+        A --> F[My Reservations]
+    end
+    
+    subgraph "Properties Management"
+        C --> G[PropertiesPage]
+        G --> H[PropertiesClient]
+        H --> I[Listing Grid]
+        I --> J[ListingCard]
+        J --> K[Delete Button]
+        K --> L[API: deleteListing]
+        L --> M[DB: Remove Listing]
+        
+        A --> N[Add Property Button]
+        N --> O[RentModal]
+        O --> P[Create Listing Flow]
+    end
+    
+    subgraph "Authentication & Profile"
+        A --> Q[Login/Register]
+        Q --> R[NextAuth]
+        R --> S[User Session]
+        S --> T[currentUser]
+        T --> A
+    end
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#9bf,stroke:#333,stroke-width:2px
+    style T fill:#fd9,stroke:#333,stroke-width:2px
+```
+
+### Trip Management System
+
+```mermaid
+graph TD
+    subgraph "Trip Pages & Components"
+        A[TripsPage] --> B[TripsClient]
+        B --> C[Trips List]
+        C --> D[ListingCard]
+        D --> E[Trip Info Overlay]
+        E --> F[Date Range]
+        E --> G[Total Price]
+        E --> H[Status Badge]
+        D --> I[Cancel Button]
+    end
+    
+    subgraph "Data Flow"
+        A --> J[getTrips Action]
+        J --> K[Prisma: Find Reservations]
+        K --> L[Filter by userId]
+        L --> B
+        
+        I --> M[API: cancelReservation]
+        M --> N[DB: Update Status]
+        N --> O[Optimistic UI Update]
+        O --> C
+    end
+    
+    subgraph "Status Management"
+        P[Reservation Status] --> Q{Status Types}
+        Q -->|Pending| R[Yellow Badge]
+        Q -->|Confirmed| S[Green Badge]
+        Q -->|Cancelled| T[Red Badge]
+        Q -->|Completed| U[Blue Badge]
+    end
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style K fill:#bbf,stroke:#333,stroke-width:2px
+    style P fill:#fd9,stroke:#333,stroke-width:2px
+```
+
+### Image Upload & Management System
+
+```mermaid
+graph TD
+    subgraph "Image Upload UI"
+        A[ImageUpload Component] --> B[Dropzone]
+        B --> C[Preview Grid]
+        C --> D[Delete Button]
+    end
+    
+    subgraph "Upload Logic"
+        B --> E[File Selection]
+        E --> F[Validation]
+        F --> G[TempURL Generation]
+        G --> H[Cloudinary Upload]
+        H --> I[Image URL]
+        I --> C
+    end
+    
+    subgraph "Integration"
+        J[RentModal] --> A
+        I --> K[Listing Form Data]
+        K --> L[API: createListing]
+        L --> M[DB: Store URLs]
+    end
+    
+    subgraph "Image Display"
+        N[ListingCard] --> O[Image Carousel]
+        P[ListingClient] --> Q[Image Grid]
+        M --> N
+        M --> P
+    end
+    
+    style B fill:#f96,stroke:#333,stroke-width:2px
+    style H fill:#9bf,stroke:#333,stroke-width:2px
+    style M fill:#bbf,stroke:#333,stroke-width:2px
 ``` 
