@@ -44,7 +44,15 @@ const RegisterModal = () => {
         loginModal.onOpen();
       })
       .catch((error) => {
-        toast.error(error);
+        if (axios.isAxiosError(error) && error.response) {
+          // Handle specific error responses from the server
+          const errorMessage = error.response.data || "حدث خطأ أثناء التسجيل";
+          toast.error(errorMessage);
+        } else {
+          // Handle unexpected errors
+          console.error("[REGISTER_ERROR]", error);
+          toast.error("حدث خطأ أثناء التسجيل");
+        }
       })
       .finally(() => {
         setIsLoading(false);
