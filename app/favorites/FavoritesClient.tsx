@@ -4,11 +4,35 @@ import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
+/**
+ * Interface for FavoritesClient component props
+ * 
+ * @interface FavoritesClientProps
+ * @property {SafeListing[]} listings - Array of favorited property listings
+ * @property {SafeUser|null} [currentUser] - Current authenticated user data or null if not logged in
+ */
 interface FavoritesClientProps {
   listings: SafeListing[];
   currentUser?: SafeUser | null;
 }
 
+/**
+ * FavoritesClient Component
+ * 
+ * Client component that displays a grid of property listings that the user
+ * has marked as favorites. This component renders the favorites page content
+ * with a responsive grid layout.
+ * 
+ * Features:
+ * - Responsive grid layout that adjusts based on screen size
+ * - Display of favorited property listings as cards
+ * - Passing user context to listing cards for interaction
+ * - Localized heading in Arabic
+ * 
+ * @component
+ * @param {FavoritesClientProps} props - Component props
+ * @returns {JSX.Element} Rendered grid of favorited listings
+ */
 const FavoritesClient: React.FC<FavoritesClientProps> = ({
   listings,
   currentUser,

@@ -14,7 +14,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
   FaSignOutAlt,
-  FaFileAlt, // Import the new icon
+  FaFileAlt, 
 } from "react-icons/fa";
 
 import useLoginModal from "@/app/hooks/useLoginModal";

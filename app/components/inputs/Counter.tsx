@@ -2,6 +2,16 @@
 import { useCallback } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
+/**
+ * Interface for Counter component props
+ * 
+ * @interface CounterProps
+ * @property {string} title - Label displayed above the counter
+ * @property {string} subtitle - Secondary text displayed below the title
+ * @property {number} value - Current counter value
+ * @property {(value: number) => void} onChange - Callback function when value changes
+ * @property {number} [min=0] - Minimum allowed value for the counter
+ */
 interface CounterProps {
   title: string;
   subtitle: string;
@@ -10,6 +20,27 @@ interface CounterProps {
   min?: number; // Add a min prop to specify the minimum value
 }
 
+/**
+ * Counter Component
+ * 
+ * A numeric input component with increment/decrement buttons used in forms
+ * for selecting numeric values like guest count, room count, etc.
+ * 
+ * Features:
+ * - Plus/minus buttons for incrementing and decrementing values
+ * - Minimum value enforcement (prevents going below specified minimum)
+ * - Title and descriptive subtitle display
+ * - Consistent styling with other form inputs
+ * - Responsive click targets with hover effects
+ * 
+ * Used in:
+ * - RentModal for selecting property attributes
+ * - SearchModal for filtering properties by capacity
+ * 
+ * @component
+ * @param {CounterProps} props - Component props
+ * @returns {JSX.Element} Rendered counter input with buttons
+ */
 const Counter: React.FC<CounterProps> = ({
   title,
   subtitle,
@@ -17,10 +48,16 @@ const Counter: React.FC<CounterProps> = ({
   onChange,
   min = 0, // Set the default minimum value to 0
 }) => {
+  /**
+   * Increases the counter value by 1
+   */
   const onAdd = useCallback(() => {
     onChange(value + 1);
   }, [onChange, value]);
 
+  /**
+   * Decreases the counter value by 1 if above minimum
+   */
   const onReduce = useCallback(() => {
     if (value > min) {
       // Update the logic to check if value is greater than the minimum value

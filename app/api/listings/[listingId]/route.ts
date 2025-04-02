@@ -1,12 +1,37 @@
-//app/api/listings/[listingId]/route.ts
+/**
+ * API route for managing specific listings by ID
+ * 
+ * This route handles favoriting and deleting individual listings.
+ * Only the owner of a listing can delete it.
+ * 
+ * @module api/listings/[listingId]
+ */
+
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
 
+/**
+ * Route parameters interface
+ * 
+ * @interface IParams
+ * @property {string} listingId - ID of the listing to manage
+ */
 interface IParams {
   listingId: string;
 }
 
+/**
+ * Add the current listing to user's favorites
+ * 
+ * @async
+ * @function POST
+ * @param {Request} request - The incoming request object
+ * @param {Object} params - The route parameters object
+ * @param {IParams} params.params - The parsed route parameters
+ * @returns {Promise<NextResponse>} JSON response with updated user data
+ * @throws {Error} When listingId is invalid
+ */
 export async function POST(request: Request, { params }: { params: IParams }) {
   const currentUser = await getCurrentUser();
 
@@ -38,6 +63,20 @@ export async function POST(request: Request, { params }: { params: IParams }) {
   return NextResponse.json(user);
 }
 
+/**
+ * Delete a listing (owner only)
+ * 
+ * This endpoint first validates ownership, then decrements favorites count
+ * if needed, and finally deletes the listing entirely.
+ * 
+ * @async
+ * @function DELETE
+ * @param {Request} request - The incoming request object
+ * @param {Object} params - The route parameters object
+ * @param {IParams} params.params - The parsed route parameters
+ * @returns {Promise<NextResponse>} JSON response with success message
+ * @throws {Error} When listingId is invalid or user lacks permission
+ */
 export async function DELETE(
   request: Request,
   { params }: { params: IParams },

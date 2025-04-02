@@ -1,10 +1,28 @@
-// File: /app/api/reservations/route.ts
+/**
+ * API route for managing property reservations
+ * 
+ * This route handles fetching reservations with pagination and filtering,
+ * as well as creating new reservations for property listings.
+ * 
+ * @module api/reservations
+ */
 
 import { NextResponse } from "next/server";
 import getReservations from "@/app/actions/getReservations";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
 
+/**
+ * Fetch reservations with filtering and pagination
+ * 
+ * Can filter by author (property owner) or user (guest who made the reservation).
+ * Supports pagination with configurable page size.
+ * 
+ * @async
+ * @function GET
+ * @param {Request} request - The incoming request object with search parameters
+ * @returns {Promise<NextResponse>} JSON response with reservations and total count
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -33,6 +51,17 @@ export async function GET(request: Request) {
   }
 }
 
+/**
+ * Create a new reservation
+ * 
+ * Creates a reservation for a specific listing with start date, end date,
+ * and total price calculated for the stay.
+ * 
+ * @async
+ * @function POST
+ * @param {Request} request - The incoming request with reservation data in body
+ * @returns {Promise<NextResponse>} JSON response with the created reservation
+ */
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 

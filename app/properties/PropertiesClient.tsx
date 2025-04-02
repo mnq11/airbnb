@@ -11,6 +11,16 @@ import ListingCard from "@/app/components/listings/ListingCard";
 import Pagination from "@/app/components/listings/Pagination";
 import EmptyState from "@/app/components/EmptyState";
 
+/**
+ * Interface for PropertiesClient component props
+ * 
+ * @interface PropertiesClientProps
+ * @property {SafeListing[]} initialListings - Array of property listings owned by the current user
+ * @property {number} initialPage - Starting page number for pagination
+ * @property {number} totalPages - Total number of pages available for pagination
+ * @property {SafeUser|null} currentUser - Current authenticated user data or null if not logged in
+ * @property {Record<string, any>} searchParams - URL search parameters for filtering
+ */
 interface PropertiesClientProps {
   initialListings: SafeListing[];
   initialPage: number;
@@ -19,6 +29,23 @@ interface PropertiesClientProps {
   searchParams: Record<string, any>;
 }
 
+/**
+ * PropertiesClient Component
+ * 
+ * Client component that displays properties owned by the current user with
+ * pagination and deletion functionality.
+ * 
+ * Features:
+ * - Responsive grid layout for property cards
+ * - Property deletion with confirmation and loading state
+ * - Pagination with server-side data fetching
+ * - Arabic localization for headings and actions
+ * - URL-based state management for sharing and navigation
+ * 
+ * @component
+ * @param {PropertiesClientProps} props - Component props
+ * @returns {JSX.Element} Rendered grid of user's property listings with pagination
+ */
 const PropertiesClient: React.FC<PropertiesClientProps> = ({
   initialListings,
   initialPage,
@@ -31,6 +58,9 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
   const [page, setPage] = useState(initialPage);
   const [deletingId, setDeletingId] = useState("");
 
+  /**
+   * Fetch listings when page or search parameters change
+   */
   useEffect(() => {
     const fetchListings = async () => {
       const queryParams = new URLSearchParams({
@@ -45,6 +75,11 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
     fetchListings();
   }, [page, searchParams, currentUser?.id]);
 
+  /**
+   * Handles property deletion
+   * 
+   * @param {string} id - ID of the property to delete
+   */
   const onDelete = useCallback(
     (id: string) => {
       setDeletingId(id);
@@ -69,6 +104,12 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
     [router],
   );
 
+  /**
+   * Handles page change in pagination
+   * Updates URL and fetches new page data
+   * 
+   * @param {number} newPage - New page number to display
+   */
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     const query = new URLSearchParams({

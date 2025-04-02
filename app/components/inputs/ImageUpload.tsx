@@ -9,14 +9,42 @@ declare global {
 
 const uploadPreset = "ufsgae4f";
 
+/**
+ * Interface for ImageUpload component props
+ * 
+ * @interface ImageUploadProps
+ * @property {(value: string[]) => void} onChange - Callback function when images are added or removed
+ * @property {string[]} value - Array of image URLs that have been uploaded
+ */
 interface ImageUploadProps {
   onChange: (value: string[]) => void;
   value: string[];
 }
 
+/**
+ * ImageUpload Component
+ * 
+ * A component that allows users to upload and manage images using Cloudinary.
+ * This component is used in property listing forms to add property photos.
+ * 
+ * Features:
+ * - Integration with Cloudinary widget for image uploads
+ * - Preview of uploaded images with delete capability
+ * - Multiple image upload support
+ * - State management for tracking uploaded images
+ * - Arabic localization for button text
+ * 
+ * @component
+ * @param {ImageUploadProps} props - Component props
+ * @returns {JSX.Element} Rendered image upload component with previews
+ */
 const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
   const [images, setImages] = useState(value || []);
 
+  /**
+   * Handles successful image upload from Cloudinary
+   * Adds the new image URL to the existing images array
+   */
   const handleUpload = useCallback(
     (result: any) => {
       if (result.event === "success") {
@@ -28,6 +56,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
     [onChange, images],
   );
 
+  /**
+   * Removes an image at the specified index
+   * Updates both local state and parent component
+   */
   const handleDelete = (indexToDelete: number) => {
     const updatedImages = images.filter(
       (_img, index) => index !== indexToDelete,

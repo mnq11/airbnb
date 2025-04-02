@@ -1,3 +1,21 @@
+/**
+ * SearchModal Component
+ * 
+ * Client component that displays a multi-step modal form for filtering property listings.
+ * Allows users to search for properties based on location, dates, and guest/room requirements.
+ * 
+ * Features:
+ * - Multi-step wizard interface
+ * - Location selection with map integration
+ * - Date range picker for check-in/check-out
+ * - Guest, room, and bathroom counter inputs
+ * - URL-based state management for persisting filters
+ * - Arabic localization for all form fields and labels
+ * - Loading state during search submission
+ * 
+ * @component
+ * @returns {JSX.Element} Rendered modal form for searching property listings
+ */
 "use client";
 import Loader from "@/app/components/Loader";
 
@@ -20,6 +38,11 @@ import CountrySelect, {
 import Heading from "../Heading";
 import { LatLngTuple } from "leaflet";
 
+/**
+ * Enum defining the steps in the search filtering process
+ * 
+ * @enum {number}
+ */
 enum STEPS {
   LOCATION = 0,
   DATE = 1,
@@ -47,12 +70,18 @@ const SearchModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const loader = isLoading ? <Loader /> : null;
 
+  /**
+   * Updates map when location changes
+   */
   useEffect(() => {
     if (location?.latlng) {
       // Add any code necessary to update the map's center
     }
   }, [location]);
 
+  /**
+   * Dynamically imports the Map component with client-side rendering only
+   */
   const Map = useMemo(
     () =>
       dynamic(() => import("../Map"), {
@@ -61,14 +90,24 @@ const SearchModal = () => {
     [],
   );
 
+  /**
+   * Navigates to the previous step in the form
+   */
   const onBack = useCallback(() => {
     setStep((value) => value - 1);
   }, []);
 
+  /**
+   * Navigates to the next step in the form
+   */
   const onNext = useCallback(() => {
     setStep((value) => value + 1);
   }, []);
 
+  /**
+   * Handles form submission
+   * Either moves to next step or applies search filters and redirects
+   */
   const onSubmit = useCallback(async () => {
     if (step !== STEPS.INFO) {
       return onNext();
@@ -123,6 +162,9 @@ const SearchModal = () => {
     params,
   ]);
 
+  /**
+   * Determines the label for the primary action button based on current step
+   */
   const actionLabel = useMemo(() => {
     if (step === STEPS.INFO) {
       return "بحث";
@@ -131,6 +173,9 @@ const SearchModal = () => {
     return "التالي";
   }, [step]);
 
+  /**
+   * Determines the label for the secondary action button based on current step
+   */
   const secondaryActionLabel = useMemo(() => {
     if (step === STEPS.LOCATION) {
       return undefined;

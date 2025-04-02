@@ -6,6 +6,14 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import getReservations from "@/app/actions/getReservations";
 import TripsClient from "./TripsClient";
 
+/**
+ * Interface for TripsPage component props
+ * 
+ * @interface TripsPageProps
+ * @property {Object} searchParams - URL search parameters
+ * @property {number} [searchParams.page] - Current page number for pagination
+ * @property {any} [searchParams[key]] - Any other search parameters
+ */
 interface TripsPageProps {
   searchParams: {
     page?: number;
@@ -13,13 +21,31 @@ interface TripsPageProps {
   };
 }
 
+/**
+ * TripsPage Component
+ * 
+ * Server component that fetches and displays a user's booking history (trips).
+ * Requires authentication - redirects to login page if user is not logged in.
+ * 
+ * Features:
+ * - Server-side data fetching for trip reservations
+ * - Authentication validation with redirect
+ * - Client-side rendering with ClientOnly wrapper
+ * - Empty state handling for users with no trips
+ * 
+ * @component
+ * @returns {Promise<JSX.Element>} Rendered trips page with booking history or empty state
+ */
 const TripsPage = async ({ searchParams }: TripsPageProps) => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     return (
       <ClientOnly>
-        <EmptyState title="Unauthorized" subtitle="Please login" />
+        <EmptyState
+          title="غير مصرح"
+          subtitle="الرجاء تسجيل الدخول"
+        />
       </ClientOnly>
     );
   }
@@ -35,8 +61,8 @@ const TripsPage = async ({ searchParams }: TripsPageProps) => {
     return (
       <ClientOnly>
         <EmptyState
-          title="لا يوجد رحلات محجوزة "
-          subtitle="يبدو انه لا توجد رحلات محجوزة"
+          title="لا يوجد رحلات"
+          subtitle="يبدو أنك لم تحجز أي رحلات بعد"
         />
       </ClientOnly>
     );

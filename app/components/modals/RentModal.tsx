@@ -1,3 +1,20 @@
+/**
+ * RentModal Component
+ * 
+ * Client component that displays a multi-step modal form for creating new property listings.
+ * Guides users through the complete listing creation process with validation at each step.
+ * 
+ * Features:
+ * - Multi-step wizard interface
+ * - Form validation with react-hook-form
+ * - Image upload functionality
+ * - Location selection with map integration
+ * - Dynamic pricing and details input
+ * - Arabic localization for all form fields and labels
+ * 
+ * @component
+ * @returns {JSX.Element} Rendered modal form for creating property listings
+ */
 "use client";
 
 import axios from "axios";
@@ -19,6 +36,11 @@ import Input from "../inputs/Input";
 import Heading from "../Heading";
 import CountrySelect from "@/app/components/inputs/CountrySelect";
 
+/**
+ * Enum defining the steps in the listing creation process
+ * 
+ * @enum {number}
+ */
 enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -66,6 +88,9 @@ const RentModal = () => {
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
 
+  /**
+   * Dynamically imports the Map component with SSR enabled
+   */
   const Map = useMemo(
     () =>
       dynamic(() => import("../Map"), {
@@ -74,6 +99,12 @@ const RentModal = () => {
     [],
   );
 
+  /**
+   * Sets form field values with proper validation flags
+   * 
+   * @param {string} id - Form field identifier
+   * @param {any} value - New value to set for the field
+   */
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldDirty: true,
@@ -82,14 +113,26 @@ const RentModal = () => {
     });
   };
 
+  /**
+   * Navigates to the previous step in the form
+   */
   const onBack = () => {
     setStep((value) => value - 1);
   };
 
+  /**
+   * Navigates to the next step in the form
+   */
   const onNext = () => {
     setStep((value) => value + 1);
   };
 
+  /**
+   * Validates the current step before allowing progression
+   * Shows toast errors for validation failures
+   * 
+   * @returns {boolean} Whether the current step is valid
+   */
   const isStepValid = () => {
     switch (step) {
       case STEPS.CATEGORY:
@@ -125,6 +168,12 @@ const RentModal = () => {
     }
   };
 
+  /**
+   * Handles form submission
+   * Validates current step and either progresses to next step or submits data
+   * 
+   * @param {FieldValues} data - Form data values
+   */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (!isStepValid()) {
       return;
@@ -162,6 +211,9 @@ const RentModal = () => {
       });
   };
 
+  /**
+   * Determines the label for the primary action button based on current step
+   */
   const actionLabel = useMemo(() => {
     if (step === STEPS.PRICE) {
       return "انشأ";
@@ -169,6 +221,9 @@ const RentModal = () => {
     return "التالي";
   }, [step]);
 
+  /**
+   * Determines the label for the secondary action button based on current step
+   */
   const secondaryActionLabel = useMemo(() => {
     if (step === STEPS.CATEGORY) {
       return undefined;
@@ -203,6 +258,9 @@ const RentModal = () => {
     </div>
   );
 
+  /**
+   * Updates map center when location changes
+   */
   useEffect(() => {
     if (location && location.latlng) {
       setMapCenter(location.latlng);

@@ -1,7 +1,30 @@
+/**
+ * PrivacyPolicy Component
+ * 
+ * Server component that displays the privacy policy page for the application.
+ * Outlines data collection, usage, security, and deletion policies for users.
+ * 
+ * Features:
+ * - Responsive layout with proper spacing and text alignment (RTL)
+ * - Structured sections with headings for different policy areas
+ * - Contact information for data deletion requests
+ * - Dynamic email address and response time variables
+ * 
+ * @component
+ * @returns {JSX.Element} Rendered privacy policy page
+ */
+
 import ClientOnly from "@/app/components/ClientOnly";
 
 const PrivacyPolicy = () => {
+  /**
+   * Email address for data deletion requests
+   */
   const deleteEmail = "mnq_11@yahoo.com";
+  
+  /**
+   * Expected time frame for processing deletion requests
+   */
   const deleteRequestDuration = "48 ساعة";
 
   return (

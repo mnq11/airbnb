@@ -1,3 +1,21 @@
+/**
+ * ListingClient Component
+ * 
+ * Client component that renders a detailed view of a property listing, including
+ * images, information, pricing, and reservation functionality. Handles view counting,
+ * reservation creation, and date selection.
+ * 
+ * Features:
+ * - Interactive date range selection for reservations
+ * - Dynamic price calculation based on selected dates
+ * - Reservation submission with authentication check
+ * - View counter tracking
+ * - Responsive layout with grid structure
+ * - Automatic view increment on component render
+ * 
+ * @component
+ */
+
 "use client";
 
 import axios from "axios";
@@ -16,12 +34,24 @@ import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
 
+/**
+ * Initial date range for reservation calendar
+ * Sets both start and end dates to the current date
+ */
 const initialDateRange = {
   startDate: new Date(),
   endDate: new Date(),
   key: "selection",
 };
 
+/**
+ * Props interface for the ListingClient component
+ * 
+ * @interface ListingClientProps
+ * @property {SafeReservation[]} [reservations] - Array of existing reservations for the listing
+ * @property {SafeListing & {user: SafeUser | null}} listing - The listing data with its owner
+ * @property {SafeUser | null} [currentUser] - The currently authenticated user if any
+ */
 interface ListingClientProps {
   reservations?: SafeReservation[];
   listing: SafeListing & {
@@ -30,6 +60,12 @@ interface ListingClientProps {
   currentUser?: SafeUser | null;
 }
 
+/**
+ * Client component for displaying detailed listing information and reservation functionality
+ * 
+ * @param {ListingClientProps} props - Component properties
+ * @returns {JSX.Element} Rendered listing detail page with reservation form
+ */
 const ListingClient: React.FC<ListingClientProps> = ({
   listing,
   reservations = [],
@@ -38,6 +74,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const loginModal = useLoginModal();
   const router = useRouter();
 
+  /**
+   * Calculates dates that are already reserved and should be disabled in the calendar
+   */
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
@@ -55,6 +94,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
     return dates;
   }, [reservations]);
 
+  /**
+   * Finds the category object matching the listing's category
+   */
   const category = useMemo(() => {
     return categories.find((items) => items.label === listing.category);
   }, [listing.category]);
@@ -63,6 +105,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [totalPrice, setTotalPrice] = useState(listing.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
+  /**
+   * Handles reservation creation
+   * Checks authentication, validates owner status, and submits reservation data
+   */
   const onCreateReservation = useCallback(() => {
     if (!currentUser) {
       return loginModal.onOpen();
@@ -109,6 +155,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
     dateRange.endDate,
   ]);
 
+  /**
+   * Calculates total price based on selected date range
+   * Updates whenever date range or listing price changes
+   */
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
       const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
@@ -121,6 +171,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
     }
   }, [dateRange, listing.price]);
 
+  /**
+   * Increments the view counter for this listing
+   * Called when the component renders
+   */
   const onView = useCallback(async () => {
     try {
       await axios.post(`/api/views/${listing.id}`);

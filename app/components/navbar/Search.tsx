@@ -1,3 +1,18 @@
+/**
+ * Search Component
+ * 
+ * Client component that displays a search bar in the navigation area, allowing users
+ * to search for properties with filters for location, dates, and guest count.
+ * 
+ * Features:
+ * - Interactive search button that opens the search modal
+ * - Displays current search parameters from URL
+ * - Responsive design that adjusts display based on screen size
+ * - Localized to Arabic
+ * 
+ * @component
+ * @returns {JSX.Element} Rendered search bar with current search parameters
+ */
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -18,6 +33,10 @@ const Search = () => {
   const endDate = params?.get("endDate");
   const guestCount = params?.get("guestCount");
 
+  /**
+   * Formats location display based on URL parameters
+   * Returns location label or default "أي مكان" text
+   */
   const locationLabel = useMemo(() => {
     if (locationValue) {
       return getByValue(locationValue as string)?.label;
@@ -26,6 +45,10 @@ const Search = () => {
     return "أي مكان";
   }, [locationValue, getByValue]);
 
+  /**
+   * Calculates and formats trip duration based on start and end dates
+   * Handles Arabic pluralization rules for days
+   */
   const durationLabel = useMemo(() => {
     if (startDate && endDate) {
       const start = new Date(startDate as string);
@@ -50,6 +73,9 @@ const Search = () => {
     return "اي اسبوع";
   }, [startDate, endDate]);
 
+  /**
+   * Formats guest count display based on URL parameters
+   */
   const guestLabel = useMemo(() => {
     if (guestCount) {
       return `${guestCount} ضيف`;
