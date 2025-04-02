@@ -4,7 +4,7 @@ import { IconType } from "react-icons";
 
 /**
  * Interface for CategoryBox form input component props
- * 
+ *
  * @interface CategoryBoxProps
  * @property {IconType} icon - React icon component to display for the category
  * @property {string} label - Text label for the category
@@ -20,17 +20,17 @@ interface CategoryBoxProps {
 
 /**
  * CategoryBox Component
- * 
+ *
  * A form input component used in the RentModal for property category selection.
  * Displays a selectable box with an icon and label that changes appearance when selected.
  * Used for categorizing property listings (e.g., Beach, Windmills, Modern, etc.).
- * 
+ *
  * Features:
  * - Visual indication of selected state with color changes
  * - Icon and text pairing for better UX
  * - Click handler that passes the category label to parent component
  * - Consistent styling with other form components
- * 
+ *
  * @component
  * @param {CategoryBoxProps} props - Component props
  * @returns {JSX.Element} Rendered category input box

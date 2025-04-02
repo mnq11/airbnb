@@ -18,7 +18,7 @@ import Button from "../Button";
 
 /**
  * LoginModal Component
- * 
+ *
  * A modal dialog component for user authentication that provides:
  * - Email and password login functionality
  * - Google OAuth authentication
@@ -26,15 +26,15 @@ import Button from "../Button";
  * - Form validation with error handling
  * - Loading state management during authentication
  * - Success/error notifications
- * 
+ *
  * This component uses:
  * - NextAuth.js for authentication
  * - react-hook-form for form handling and validation
  * - Modal component for consistent UI
  * - Custom hooks for state management (useLoginModal, useRegisterModal)
- * 
+ *
  * The component supports RTL layout and Arabic text for localization.
- * 
+ *
  * @component
  * @returns {JSX.Element} Rendered login modal dialog
  */
@@ -58,10 +58,10 @@ const LoginModal = () => {
 
   /**
    * Handle form submission for email/password login
-   * 
+   *
    * Uses NextAuth.js signIn method with credentials provider
    * Shows success/error notifications and navigates accordingly
-   * 
+   *
    * @param {FieldValues} data - Form data containing email and password
    */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -87,7 +87,7 @@ const LoginModal = () => {
 
   /**
    * Toggle between login and registration modals
-   * 
+   *
    * Closes the login modal and opens the registration modal
    * Used for the "Create account" link in the footer
    */
@@ -137,7 +137,7 @@ const LoginModal = () => {
       {/*  icon={AiFillGithub}*/}
       {/*  onClick={() => signIn('github')}*/}
       {/*/>*/}
-      
+
       {/* Registration link section */}
       <div
         className="

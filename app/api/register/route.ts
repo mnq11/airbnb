@@ -1,9 +1,9 @@
 /**
  * API route for user registration
- * 
+ *
  * Handles creating new user accounts with email, name, and secure password storage.
  * Performs validation and prevents duplicate email registrations.
- * 
+ *
  * @module api/register
  */
 
@@ -14,10 +14,10 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Register a new user
- * 
+ *
  * Creates a new user account with hashed password. Validates required fields
  * and prevents registration with an email that's already in use.
- * 
+ *
  * @async
  * @function POST
  * @param {Request} request - The incoming request with registration data in the body
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     });
 
     if (existingUser) {

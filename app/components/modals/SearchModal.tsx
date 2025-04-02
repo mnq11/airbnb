@@ -1,9 +1,9 @@
 /**
  * SearchModal Component
- * 
+ *
  * Client component that displays a multi-step modal form for filtering property listings.
  * Allows users to search for properties based on location, dates, and guest/room requirements.
- * 
+ *
  * Features:
  * - Multi-step wizard interface
  * - Location selection with map integration
@@ -12,7 +12,7 @@
  * - URL-based state management for persisting filters
  * - Arabic localization for all form fields and labels
  * - Loading state during search submission
- * 
+ *
  * @component
  * @returns {JSX.Element} Rendered modal form for searching property listings
  */
@@ -40,7 +40,7 @@ import { LatLngTuple } from "leaflet";
 
 /**
  * Enum defining the steps in the search filtering process
- * 
+ *
  * @enum {number}
  */
 enum STEPS {

@@ -7,7 +7,7 @@ import { IconType } from "react-icons";
 
 /**
  * Interface for CategoryBox component props
- * 
+ *
  * @interface CategoryBoxProps
  * @property {IconType} icon - React icon component to display for the category
  * @property {string} label - Text label for the category, also used as filter value
@@ -21,11 +21,11 @@ interface CategoryBoxProps {
 
 /**
  * CategoryBox Component
- * 
+ *
  * A clickable category filter component used in the navbar to allow users to filter
  * property listings by category type. This component handles both the visual representation
  * of categories and the URL query parameter logic for filtering.
- * 
+ *
  * Features:
  * - Click handling with query string parameter updates
  * - Visual styling for selected/unselected states
@@ -33,7 +33,7 @@ interface CategoryBoxProps {
  * - Automatic URL navigation when clicked
  * - Preserves other existing query parameters while toggling category
  * - Resets to page 1 when changing category filters
- * 
+ *
  * @component
  * @param {CategoryBoxProps} props - Component props
  * @returns {JSX.Element} Rendered category filter button

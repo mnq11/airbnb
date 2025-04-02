@@ -1,16 +1,16 @@
 /**
  * ReservationsClient Component
- * 
+ *
  * Client component for displaying and managing property reservations for a host user.
  * Provides functionality to view reservations with pagination and cancel reservations.
- * 
+ *
  * Features:
  * - Paginated list of reservation cards
  * - Reservation cancellation with confirmation
  * - Dynamic data fetching for different pages
  * - Responsive grid layout for different screen sizes
  * - Empty state handling when no reservations exist
- * 
+ *
  * @component
  */
 "use client";
@@ -28,7 +28,7 @@ import EmptyState from "@/app/components/EmptyState";
 
 /**
  * Props interface for the ReservationsClient component
- * 
+ *
  * @interface ReservationsClientProps
  * @property {SafeReservation[]} initialReservations - Initial reservations data from server
  * @property {number} initialPage - Initial page number for pagination
@@ -46,7 +46,7 @@ interface ReservationsClientProps {
 
 /**
  * Client component for displaying and managing property reservations
- * 
+ *
  * @param {ReservationsClientProps} props - Component properties
  * @returns {JSX.Element} Rendered reservations page with listing cards and pagination
  */
@@ -81,7 +81,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
 
   /**
    * Handles reservation cancellation
-   * 
+   *
    * @param {string} id - ID of the reservation to cancel
    */
   const onCancel = useCallback(
@@ -106,7 +106,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
 
   /**
    * Handles page navigation for pagination
-   * 
+   *
    * @param {number} newPage - The page number to navigate to
    */
   const handlePageChange = (newPage: number) => {

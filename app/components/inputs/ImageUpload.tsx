@@ -11,7 +11,7 @@ const uploadPreset = "ufsgae4f";
 
 /**
  * Interface for ImageUpload component props
- * 
+ *
  * @interface ImageUploadProps
  * @property {(value: string[]) => void} onChange - Callback function when images are added or removed
  * @property {string[]} value - Array of image URLs that have been uploaded
@@ -23,17 +23,17 @@ interface ImageUploadProps {
 
 /**
  * ImageUpload Component
- * 
+ *
  * A component that allows users to upload and manage images using Cloudinary.
  * This component is used in property listing forms to add property photos.
- * 
+ *
  * Features:
  * - Integration with Cloudinary widget for image uploads
  * - Preview of uploaded images with delete capability
  * - Multiple image upload support
  * - State management for tracking uploaded images
  * - Arabic localization for button text
- * 
+ *
  * @component
  * @param {ImageUploadProps} props - Component props
  * @returns {JSX.Element} Rendered image upload component with previews

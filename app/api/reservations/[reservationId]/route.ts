@@ -1,10 +1,10 @@
 /**
  * API route for managing individual reservations
- * 
+ *
  * This route handles operations on specific reservations identified by ID,
  * currently supporting deletion by either the guest who made the reservation
  * or the owner of the property.
- * 
+ *
  * @module api/reservations/[reservationId]
  */
 
@@ -14,7 +14,7 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Route parameters interface
- * 
+ *
  * @interface IParams
  * @property {string} [reservationId] - ID of the reservation to manage
  */
@@ -24,10 +24,10 @@ interface IParams {
 
 /**
  * Delete a reservation
- * 
+ *
  * Allows cancellation of a reservation by either the user who made it
  * or the owner of the property being reserved.
- * 
+ *
  * @async
  * @function DELETE
  * @param {Request} request - The incoming request object

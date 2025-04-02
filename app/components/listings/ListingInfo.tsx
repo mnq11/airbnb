@@ -16,7 +16,7 @@ const Map = dynamic(() => import("../Map"), {
 
 /**
  * Interface for ListingInfo component props
- * 
+ *
  * @interface ListingInfoProps
  * @property {SafeUser|null} user - Property owner/host user data
  * @property {string} description - Detailed description of the property
@@ -47,24 +47,24 @@ interface ListingInfoProps {
 
 /**
  * ListingInfo Component
- * 
+ *
  * Displays detailed information about a property listing, including:
  * - Host information with avatar
  * - Property details (guest capacity, room count, bathrooms)
  * - Category information with description
  * - Full property description
  * - Location map
- * 
+ *
  * This component is used within the ListingClient to show the main
  * property details section alongside the reservation panel.
- * 
+ *
  * Features:
  * - Responsive grid layout that adjusts for mobile/desktop
  * - Dynamic map loading with location marker
  * - Arabic number formatting
  * - Structured property information with icons
  * - Host information display
- * 
+ *
  * @component
  * @param {ListingInfoProps} props - Component props
  * @returns {JSX.Element} Rendered property information section

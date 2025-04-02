@@ -7,7 +7,7 @@ import Button from "../Button";
 
 /**
  * Interface for Modal component props
- * 
+ *
  * @interface ModalProps
  * @property {boolean} [isOpen] - Controls whether the modal is visible
  * @property {() => void} onClose - Function to call when modal is closed
@@ -35,10 +35,10 @@ interface ModalProps {
 
 /**
  * Modal Component
- * 
+ *
  * A reusable and customizable modal dialog component that serves as the foundation
  * for all modal dialogs in the application. Features include:
- * 
+ *
  * - Animated entrance/exit with smooth transitions
  * - Customizable header, body, and footer sections
  * - Primary and optional secondary action buttons
@@ -46,11 +46,11 @@ interface ModalProps {
  * - Responsive design that adapts to different screen sizes
  * - Focus management and accessibility considerations
  * - Disabling capability during loading/processing states
- * 
+ *
  * This component is extended by specialized modal types such as LoginModal,
  * RegisterModal, RentModal, and SearchModal to create consistent UX throughout
  * the application.
- * 
+ *
  * @component
  * @param {ModalProps} props - Component props
  * @returns {JSX.Element|null} Rendered modal or null if not open
@@ -209,10 +209,10 @@ const Modal: React.FC<ModalProps> = ({
                 </button>
                 <div className="text-lg font-semibold">{title}</div>
               </div>
-              
+
               {/* Modal body */}
               <div className="relative p-6 flex-auto">{body}</div>
-              
+
               {/* Modal footer with action buttons and optional footer content */}
               <div className="flex flex-col gap-2 p-6">
                 <div
@@ -233,7 +233,7 @@ const Modal: React.FC<ModalProps> = ({
                       outline
                     />
                   )}
-                  
+
                   {/* Primary action button */}
                   <Button
                     disabled={disabled}

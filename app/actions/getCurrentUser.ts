@@ -4,10 +4,10 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Retrieves the current active session from NextAuth
- * 
+ *
  * This function is a wrapper around getServerSession that uses the application's
  * authentication options to retrieve the current session context.
- * 
+ *
  * @async
  * @function getSession
  * @returns {Promise<Session|null>} The current session or null if no active session exists
@@ -18,10 +18,10 @@ export async function getSession() {
 
 /**
  * Retrieves the currently authenticated user from the database
- * 
+ *
  * This server action fetches the current user's data based on their session email.
  * It performs safe error handling and serializes date fields for client-side use.
- * 
+ *
  * @async
  * @function getCurrentUser
  * @returns {Promise<SafeUser|null>} The current user with serialized dates or null if no authenticated user

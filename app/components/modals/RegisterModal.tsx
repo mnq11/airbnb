@@ -18,7 +18,7 @@ import Button from "../Button";
 
 /**
  * RegisterModal Component
- * 
+ *
  * A modal dialog component for user registration that provides:
  * - Email, name, and password registration form
  * - Google OAuth sign-up option
@@ -26,17 +26,17 @@ import Button from "../Button";
  * - Toggle to login modal for existing users
  * - Loading state management during registration
  * - Success/error notifications
- * 
+ *
  * This component uses:
  * - axios for API requests to the registration endpoint
  * - react-hook-form for form handling and validation
  * - NextAuth.js for OAuth authentication
  * - Modal component for consistent UI
  * - Custom hooks for state management (useRegisterModal, useLoginModal)
- * 
+ *
  * The component supports RTL layout and Arabic text for localization.
  * After successful registration, it automatically redirects to the login modal.
- * 
+ *
  * @component
  * @returns {JSX.Element} Rendered registration modal dialog
  */
@@ -60,11 +60,11 @@ const RegisterModal = () => {
 
   /**
    * Handle form submission for user registration
-   * 
+   *
    * Makes an axios POST request to the /api/register endpoint
    * Shows success/error notifications and navigates accordingly
    * On success, closes registration modal and opens login modal
-   * 
+   *
    * @param {FieldValues} data - Form data containing name, email and password
    */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -95,7 +95,7 @@ const RegisterModal = () => {
 
   /**
    * Toggle between registration and login modals
-   * 
+   *
    * Closes the registration modal and opens the login modal
    * Used for the "Login" link in the footer
    */
@@ -156,7 +156,7 @@ const RegisterModal = () => {
       {/*  icon={AiFillGithub}*/}
       {/*  onClick={() => signIn('github')}*/}
       {/*/>*/}
-      
+
       {/* Login link section */}
       <div
         className="

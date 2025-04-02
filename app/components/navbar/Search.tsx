@@ -1,15 +1,15 @@
 /**
  * Search Component
- * 
+ *
  * Client component that displays a search bar in the navigation area, allowing users
  * to search for properties with filters for location, dates, and guest count.
- * 
+ *
  * Features:
  * - Interactive search button that opens the search modal
  * - Displays current search parameters from URL
  * - Responsive design that adjusts display based on screen size
  * - Localized to Arabic
- * 
+ *
  * @component
  * @returns {JSX.Element} Rendered search bar with current search parameters
  */

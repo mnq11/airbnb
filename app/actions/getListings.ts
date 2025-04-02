@@ -3,10 +3,10 @@ import { SafeListing } from "@/app/types";
 
 /**
  * Interface for listing search parameters
- * 
+ *
  * Defines all possible filter parameters that can be applied when searching for property listings.
  * All parameters are optional to allow for flexible querying.
- * 
+ *
  * @interface IListingsParams
  * @property {string} [userId] - Filter listings by owner/creator ID
  * @property {number} [guestCount] - Minimum number of guests the property should accommodate
@@ -36,7 +36,7 @@ export interface IListingsParams {
 
 /**
  * Fetches property listings with filtering, pagination and availability checking
- * 
+ *
  * This server action retrieves property listings from the database based on the provided
  * filter parameters. It supports complex queries including:
  * - Filtering by property attributes (rooms, guests, bathrooms)
@@ -45,11 +45,11 @@ export interface IListingsParams {
  * - Availability date range checking (excludes properties with reservations in the date range)
  * - Pagination support
  * - Popularity filtering by view count
- * 
+ *
  * The function also handles data transformation by:
  * - Converting dates to ISO strings for client-side use
  * - Formatting images into the expected client-side structure
- * 
+ *
  * @async
  * @function getListings
  * @param {IListingsParams} params - Search and filter parameters
@@ -91,21 +91,21 @@ export default async function getListings(
     // Filter by minimum room count
     if (roomCount) {
       query.roomCount = {
-        gte: +roomCount,  // Convert to number and find listings with >= roomCount
+        gte: +roomCount, // Convert to number and find listings with >= roomCount
       };
     }
 
     // Filter by minimum guest capacity
     if (guestCount) {
       query.guestCount = {
-        gte: +guestCount,  // Convert to number and find listings with >= guestCount
+        gte: +guestCount, // Convert to number and find listings with >= guestCount
       };
     }
 
     // Filter by minimum bathroom count
     if (bathroomCount) {
       query.bathroomCount = {
-        gte: +bathroomCount,  // Convert to number and find listings with >= bathroomCount
+        gte: +bathroomCount, // Convert to number and find listings with >= bathroomCount
       };
     }
 
@@ -138,7 +138,7 @@ export default async function getListings(
     // Filter by minimum view count (popularity)
     if (viewsCount) {
       query.viewsCount = {
-        gte: +viewsCount,  // Convert to number and find listings with >= viewsCount
+        gte: +viewsCount, // Convert to number and find listings with >= viewsCount
       };
     }
 
@@ -149,13 +149,13 @@ export default async function getListings(
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
-        createdAt: "desc",  // Sort by newest first
+        createdAt: "desc", // Sort by newest first
       },
       include: {
-        images: true,  // Include the listing images
+        images: true, // Include the listing images
       },
-      skip: (page - 1) * limit,  // Pagination: skip previous pages
-      take: limit,  // Pagination: take only the requested number of items
+      skip: (page - 1) * limit, // Pagination: skip previous pages
+      take: limit, // Pagination: take only the requested number of items
     });
 
     // Transform database listings to safe listings format for client use

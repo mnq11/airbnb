@@ -4,7 +4,7 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Interface for getReservations parameters
- * 
+ *
  * @interface IParams
  * @property {string} [listingId] - Filter reservations by specific property listing ID
  * @property {string} [userId] - Filter reservations by user who made the booking
@@ -22,7 +22,7 @@ interface IParams {
 
 /**
  * Interface for reservation data returned from the database
- * 
+ *
  * @interface Reservation
  * @property {string} id - Unique identifier for the reservation
  * @property {Date} createdAt - When the reservation was created
@@ -75,15 +75,15 @@ interface Reservation {
 
 /**
  * Retrieves reservations with filtering and pagination support
- * 
+ *
  * This function fetches reservation data from the database with various filtering options:
  * - By listing ID (for a specific property's reservations)
  * - By user ID (for trips booked by a specific user)
  * - By author ID (for reservations on properties owned by a specific user)
- * 
+ *
  * The function also supports pagination and includes detailed property information
  * with each reservation. Date fields are converted to ISO strings for client use.
- * 
+ *
  * @async
  * @function getReservations
  * @param {IParams} params - Filter and pagination parameters

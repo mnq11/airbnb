@@ -1,9 +1,9 @@
 /**
  * API route for managing property reservations
- * 
+ *
  * This route handles fetching reservations with pagination and filtering,
  * as well as creating new reservations for property listings.
- * 
+ *
  * @module api/reservations
  */
 
@@ -14,10 +14,10 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Fetch reservations with filtering and pagination
- * 
+ *
  * Can filter by author (property owner) or user (guest who made the reservation).
  * Supports pagination with configurable page size.
- * 
+ *
  * @async
  * @function GET
  * @param {Request} request - The incoming request object with search parameters
@@ -53,10 +53,10 @@ export async function GET(request: Request) {
 
 /**
  * Create a new reservation
- * 
+ *
  * Creates a reservation for a specific listing with start date, end date,
  * and total price calculated for the stay.
- * 
+ *
  * @async
  * @function POST
  * @param {Request} request - The incoming request with reservation data in body

@@ -1,10 +1,10 @@
 /**
  * Type definitions for the application
- * 
- * This module contains safe versions of database types that are properly 
+ *
+ * This module contains safe versions of database types that are properly
  * serialized for use in the client-side code. It handles date serialization
  * and includes only the necessary fields for each model.
- * 
+ *
  * @module types
  */
 
@@ -12,10 +12,10 @@ import { Reservation, Listing, User } from "@prisma/client";
 
 /**
  * Safe version of Reservation for client-side use
- * 
+ *
  * Converts dates to strings and includes necessary listing data
  * with proper typing for the nested listing object.
- * 
+ *
  * @typedef {Object} SafeReservation
  */
 export type SafeReservation = Omit<
@@ -44,9 +44,9 @@ export type SafeReservation = Omit<
 
 /**
  * Safe version of User for client-side use
- * 
+ *
  * Converts dates to strings and properly handles nullable fields.
- * 
+ *
  * @typedef {Object} SafeUser
  */
 export type SafeUser = Omit<
@@ -60,10 +60,10 @@ export type SafeUser = Omit<
 
 /**
  * Safe version of Listing for client-side use
- * 
+ *
  * Converts dates to strings and includes image URLs
  * in an appropriate format for rendering.
- * 
+ *
  * @typedef {Object} SafeListing
  */
 export type SafeListing = Omit<Listing, "createdAt"> & {

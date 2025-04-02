@@ -1,9 +1,9 @@
 /**
  * API route for tracking listing view counts
- * 
+ *
  * This route handles incrementing the view counter for property listings
  * each time they are viewed by a user.
- * 
+ *
  * @module api/views/[listingId]
  */
 
@@ -12,7 +12,7 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Route parameters interface
- * 
+ *
  * @interface IParams
  * @property {string} [listingId] - ID of the listing to increment views for
  */
@@ -22,10 +22,10 @@ interface IParams {
 
 /**
  * Increment view count for a listing
- * 
+ *
  * Updates the viewCounter field on a listing by adding 1 each time
  * the listing is viewed.
- * 
+ *
  * @async
  * @function POST
  * @param {Request} request - The incoming request object

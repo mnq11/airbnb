@@ -14,7 +14,7 @@ import Pagination from "@/app/components/listings/Pagination";
 
 /**
  * Interface for TripsClient component props
- * 
+ *
  * @interface TripsClientProps
  * @property {SafeReservation[]} reservations - Array of reservation data for trips booked by the user
  * @property {SafeUser|null} [currentUser] - Current authenticated user data or null if not logged in
@@ -30,18 +30,18 @@ interface TripsClientProps {
 
 /**
  * TripsClient Component
- * 
+ *
  * Client component that displays a user's booked trips with pagination and cancellation functionality.
  * This component renders the trips page content with a responsive grid layout and
  * handles reservation cancellation and page navigation.
- * 
+ *
  * Features:
  * - Responsive grid layout for trip cards
  * - Reservation cancellation with loading state
  * - Pagination with server-side data fetching
  * - Arabic localization for headings and actions
  * - Displays detailed trip information via ListingCard components
- * 
+ *
  * @component
  * @param {TripsClientProps} props - Component props
  * @returns {JSX.Element} Rendered grid of trip bookings with pagination
@@ -59,7 +59,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
 
   /**
    * Handles reservation cancellation
-   * 
+   *
    * @param {string} id - ID of the reservation to cancel
    */
   const onCancel = useCallback(
@@ -85,7 +85,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
   /**
    * Handles page change in pagination
    * Fetches new reservation data for the selected page
-   * 
+   *
    * @param {number} newPage - New page number to display
    */
   const handlePageChange = async (newPage: number) => {

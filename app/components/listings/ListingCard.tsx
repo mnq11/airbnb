@@ -21,7 +21,7 @@ import ViewCounter from "@/app/components/ViewCounter";
 
 /**
  * Interface for ListingCard component props
- * 
+ *
  * @interface ListingCardProps
  * @property {SafeListing} data - Property listing data from the database (serialized for client)
  * @property {SafeReservation} [reservation] - Reservation data if this card displays a booking
@@ -49,14 +49,14 @@ interface ListingCardProps {
 
 /**
  * ListingCard Component
- * 
+ *
  * A responsive property listing card component used throughout the application to display
  * property information in a consistent and visually appealing format. This component appears on:
  * - Search results pages
  * - Favorites pages
  * - Reservations/trips pages
  * - User property listings
- * 
+ *
  * Features:
  * - Image carousel with pagination using Swiper
  * - Favorite button with counter
@@ -66,7 +66,7 @@ interface ListingCardProps {
  * - Reservation date display (when applicable)
  * - Optional action button (e.g., for cancellation)
  * - RTL text alignment for Arabic language support
- * 
+ *
  * @component
  * @param {ListingCardProps} props - Component props
  * @returns {JSX.Element} Rendered listing card with images and property details
@@ -178,7 +178,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               favoritesCount={data.favoritesCount}
             />
           </div>
-          
+
           {/* View counter in bottom-left corner */}
           <div className="absolute bottom-3 left-3">
             <ViewCounter
@@ -188,17 +188,17 @@ const ListingCard: React.FC<ListingCardProps> = ({
             />
           </div>
         </div>
-        
+
         {/* Location information (right-aligned for RTL) */}
         <div className="font-semibold text-lg text-right">
           {location?.region}, {location?.label}
         </div>
-        
+
         {/* Category or reservation date (right-aligned for RTL) */}
         <div className="font-light text-neutral-500 text-right">
           {reservationDate || data.category}
         </div>
-        
+
         {/* Price display with currency formatting (right-aligned for RTL) */}
         <div className="flex flex-row items-center gap-1 justify-end">
           <div className="flex flex-row items-center gap-1 justify-end">
@@ -206,7 +206,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
           {!reservation && <div className="font-light">/ اليوم</div>}
         </div>
-        
+
         {/* Optional action button (e.g., cancel reservation) */}
         {onAction && actionLabel && (
           <Button

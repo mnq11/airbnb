@@ -8,16 +8,16 @@ import FavoritesClient from "./FavoritesClient";
 
 /**
  * FavoritesPage Component
- * 
+ *
  * Server component that fetches and displays a user's favorited property listings.
  * Requires authentication - redirects to empty state if user is not logged in.
- * 
+ *
  * Features:
  * - Server-side data fetching for favorite listings
  * - Authentication state validation
  * - Client-side rendering with ClientOnly wrapper
  * - Empty state display when no favorites exist
- * 
+ *
  * @component
  * @returns {Promise<JSX.Element>} Rendered favorites page with user's saved listings
  */
@@ -38,10 +38,7 @@ export default async function FavoritesPage() {
 
   return (
     <ClientOnly>
-      <FavoritesClient
-        listings={favorites}
-        currentUser={currentUser}
-      />
+      <FavoritesClient listings={favorites} currentUser={currentUser} />
     </ClientOnly>
   );
 }

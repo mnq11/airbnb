@@ -18,18 +18,22 @@ Vercel is the easiest deployment option for Next.js applications.
 #### Steps:
 
 1. **Create a Vercel Account**
+
    - Sign up at [vercel.com](https://vercel.com)
 
 2. **Install Vercel CLI (Optional)**
+
    ```bash
    npm install -g vercel
    ```
 
 3. **Connect Repository**
+
    - Import your GitHub/GitLab/Bitbucket repository in the Vercel dashboard
    - Or use the CLI: `vercel`
 
 4. **Configure Environment Variables**
+
    - Add all required environment variables in the Vercel project settings:
      - `MONGODATABASE_URL`
      - `NEXTAUTH_SECRET`
@@ -37,6 +41,7 @@ Vercel is the easiest deployment option for Next.js applications.
      - OAuth provider credentials
 
 5. **Deploy**
+
    - Automatic deployment will start when you push to the main branch
    - Or manually deploy using the dashboard or CLI: `vercel --prod`
 
@@ -56,23 +61,27 @@ Vercel is the easiest deployment option for Next.js applications.
 #### Steps:
 
 1. **Clone Repository**
+
    ```bash
    git clone https://github.com/yourusername/property-rental-platform.git
    cd property-rental-platform
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install --production
    ```
 
 3. **Build the Application**
+
    ```bash
    npm run build
    ```
 
 4. **Set Environment Variables**
    Create a `.env` file with all required variables:
+
    ```
    MONGODATABASE_URL=mongodb+srv://...
    NEXTAUTH_SECRET=your-secret
@@ -84,16 +93,18 @@ Vercel is the easiest deployment option for Next.js applications.
    ```
 
 5. **Start with PM2**
+
    ```bash
    pm2 start npm --name "rental-platform" -- start
    ```
 
 6. **Configure Nginx**
+
    ```nginx
    server {
      listen 80;
      server_name yourdomain.com;
-     
+
      location / {
        proxy_pass http://localhost:3000;
        proxy_http_version 1.1;
@@ -145,4 +156,4 @@ Vercel is the easiest deployment option for Next.js applications.
 - **Image Upload Problems**: Verify image storage configuration
 - **OAuth Login Failures**: Check callback URLs in provider settings
 
-For additional help, refer to the project's GitHub issues or contact the maintainers. 
+For additional help, refer to the project's GitHub issues or contact the maintainers.

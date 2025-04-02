@@ -11,7 +11,7 @@ import styles from "@/app/components/Map.module.css";
 
 /**
  * Configure Leaflet default marker icons
- * 
+ *
  * This fixes the common issue with Leaflet markers not displaying correctly in Next.js
  * by explicitly setting the icon URLs.
  */
@@ -25,7 +25,7 @@ L.Icon.Default.mergeOptions({
 
 /**
  * Interface for Map component props
- * 
+ *
  * @interface MapProps
  * @property {L.LatLngTuple} [center] - Optional center coordinates for the map
  *                                      If not provided, defaults to Yemen coordinates
@@ -36,7 +36,7 @@ interface MapProps {
 
 /**
  * Interface for MapUpdater component props
- * 
+ *
  * @interface MapUpdaterProps
  * @property {LatLngTuple} [center] - Optional center coordinates to fly to
  * @property {number} [duration] - Animation duration in seconds (default: 1)
@@ -56,11 +56,11 @@ const yemenCoordinates: LatLngTuple = [15.369445, 44.191456];
 
 /**
  * MapUpdater Component
- * 
+ *
  * A utility component that uses the useMap hook from react-leaflet to
  * programmatically control the map view. It animates the map to the
  * specified center coordinates when they change.
- * 
+ *
  * @component
  * @param {MapUpdaterProps} props - Component props
  * @returns {null} This component doesn't render anything visible
@@ -79,19 +79,19 @@ const MapUpdater: React.FC<MapUpdaterProps> = ({ center, duration = 1 }) => {
 
 /**
  * Map Component
- * 
+ *
  * A reusable map component built with react-leaflet that:
  * - Displays an interactive OpenStreetMap
  * - Shows a marker at the specified location (if provided)
  * - Provides smooth animation when coordinates change
  * - Has consistent styling with custom borders and shadows
  * - Supports responsive layout
- * 
+ *
  * Used throughout the application to:
  * - Display property locations on listing detail pages
  * - Show search results on a map
  * - Allow location selection when creating listings
- * 
+ *
  * @component
  * @param {MapProps} props - Component props
  * @returns {JSX.Element} Rendered map with optional marker
@@ -110,10 +110,10 @@ const Map: React.FC<MapProps> = ({ center }) => {
       >
         {/* OpenStreetMap tile layer */}
         <TileLayer url={url} attribution={attribution} />
-        
+
         {/* Only show marker if center coordinates are provided */}
         {center && <Marker position={center} />}
-        
+
         {/* MapUpdater component for smooth animations when center changes */}
         <MapUpdater center={center || yemenCoordinates} />
       </MapContainer>

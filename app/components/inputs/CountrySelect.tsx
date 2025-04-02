@@ -6,7 +6,7 @@ import { LatLngTuple } from "leaflet";
 
 /**
  * Type definition for region/area selection value
- * 
+ *
  * @typedef {Object} RegionSelectValue
  * @property {string} label - Display name of the region/area
  * @property {string} value - Unique identifier for the region/area
@@ -20,7 +20,7 @@ export type RegionSelectValue = {
 
 /**
  * Interface for CountrySelect component props
- * 
+ *
  * @interface CountrySelectProps
  * @property {RegionSelectValue} [value] - Currently selected region/area
  * @property {(value: RegionSelectValue) => void} onChange - Callback function when selection changes
@@ -71,12 +71,12 @@ const regions: RegionSelectValue[] = Array.from(
 
 /**
  * CountrySelect Component
- * 
+ *
  * A hierarchical location selector specifically designed for Yemen locations.
  * Implements a two-level selection process:
  * 1. First dropdown for selecting a region (e.g., صنعاء, عدن)
  * 2. Second dropdown for selecting a specific area within that region
- * 
+ *
  * Features:
  * - Cascading dropdowns with parent-child relationship
  * - Auto-selection when only one area exists in a region
@@ -84,9 +84,9 @@ const regions: RegionSelectValue[] = Array.from(
  * - RTL support with centered text for Arabic
  * - Custom styling consistent with application design
  * - Clearable selections
- * 
+ *
  * Used primarily in the property listing creation form to select property location.
- * 
+ *
  * @component
  * @param {CountrySelectProps} props - Component props
  * @returns {JSX.Element} Rendered hierarchical location selector
@@ -100,13 +100,13 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   /**
    * Handle change in the parent region dropdown
    * Filters areas based on selected region and updates child dropdown options
-   * 
+   *
    * @param {string|null} value - Selected region value or null if cleared
    */
   const handleRegionChange = (value: string | null) => {
     setSelectedRegion(value);
     onChange({ label: "", value: "" }); // Reset selected area when changing region
-    
+
     if (value) {
       // Filter areas to only show those in the selected region
       const newFilteredAreas = yemenAreas.filter(

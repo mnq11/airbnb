@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic";
 
 /**
  * Home Page Component - Main entry point of the application
- * 
+ *
  * This component serves as the landing page and displays paginated property listings.
  * It handles fetching listings data with search parameters and pagination support.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {IListingsParams} props.searchParams - URL search parameters for filtering listings
@@ -37,7 +37,7 @@ export default async function Home({
       page,
       limit,
     });
-    
+
     // Fetch current user information for favoriting functionality
     const currentUser = await getCurrentUser();
 

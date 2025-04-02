@@ -5,7 +5,7 @@ import React from "react";
 
 /**
  * Interface for HeartButton component props
- * 
+ *
  * @interface HeartButtonProps
  * @property {string} listingId - Unique identifier for the property listing
  * @property {SafeUser|null} [currentUser] - Current authenticated user data or null if not logged in
@@ -19,19 +19,19 @@ interface HeartButtonProps {
 
 /**
  * HeartButton Component
- * 
+ *
  * An interactive button that allows users to favorite/unfavorite property listings.
  * Displays both the favorite status and the total count of favorites for a listing.
- * 
+ *
  * Features:
  * - Visual indication of favorite status (filled heart when favorited)
  * - Display of total favorites count
  * - Toggle functionality to add/remove favorites
  * - Proper authentication handling (redirects to login if user not authenticated)
  * - Optimistic UI updates for better user experience
- * 
+ *
  * Uses the useFavorite custom hook to handle the favorite state and API interactions.
- * 
+ *
  * @component
  * @param {HeartButtonProps} props - Component props
  * @returns {JSX.Element} Rendered heart button with favorite status and count

@@ -4,9 +4,9 @@ import { SafeListing } from "@/app/types"; // Import SafeListing type
 
 /**
  * Interface representing a property listing favorited by a user
- * 
+ *
  * Contains all listing data plus favorite-specific metadata
- * 
+ *
  * @interface Favorite
  * @property {string} id - Unique identifier for the listing
  * @property {Date} createdAt - Date when the listing was created
@@ -42,11 +42,11 @@ interface Favorite {
 
 /**
  * Gets all property listings favorited by the current user
- * 
+ *
  * Fetches listings that match the IDs stored in the user's favoriteIds array.
  * Transforms database listings into safe objects for client-side use by
  * stringifying dates and formatting nested objects.
- * 
+ *
  * @async
  * @function getFavoriteListings
  * @returns {Promise<SafeListing[]>} Promise resolving to an array of favorited listings

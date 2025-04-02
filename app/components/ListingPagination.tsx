@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 /**
  * Interface for ListingPagination component props
- * 
+ *
  * @interface ListingPaginationProps
  * @property {SafeListing[]} initialListings - Initial array of listings to display
  * @property {number} initialPage - Starting page number for pagination
@@ -29,7 +29,7 @@ interface ListingPaginationProps {
 
 /**
  * ListingPagination Component
- * 
+ *
  * A client component that handles the display and pagination of property listings.
  * This component is responsible for:
  * - Rendering a grid of listing cards
@@ -37,11 +37,11 @@ interface ListingPaginationProps {
  * - Fetching new listing data when page changes
  * - Updating the URL with the current page and search parameters
  * - Displaying an empty state when no listings are found
- * 
+ *
  * The component maintains pagination state and fetches new data from the API
  * when the page changes, providing a smooth browsing experience without full
  * page reloads.
- * 
+ *
  * @component
  * @param {ListingPaginationProps} props - Component props
  * @returns {JSX.Element} Rendered grid of listings with pagination controls or empty state
@@ -78,7 +78,7 @@ const ListingPagination: React.FC<ListingPaginationProps> = ({
   /**
    * Handler for page change events from the pagination component
    * Updates page state and pushes new URL with updated query parameters
-   * 
+   *
    * @param {number} newPage - The new page number to navigate to
    */
   const handlePageChange = (newPage: number) => {

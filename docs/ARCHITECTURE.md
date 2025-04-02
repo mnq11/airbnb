@@ -21,7 +21,7 @@ graph TD
         B --> C3[Input Components]
         B --> C4[Navbar Components]
         B --> C5[Modal Components]
-        
+
         D[State Management] --> E1[Custom Hooks]
         E1 --> E2[useLoginModal]
         E1 --> E3[useRegisterModal]
@@ -29,11 +29,11 @@ graph TD
         E1 --> E5[useSearchModal]
         E1 --> E6[useFavorite]
         E1 --> E7[useCountries]
-        
+
         F[Providers] --> F1[ModalsProvider]
         F --> F2[ToasterProvider]
     end
-    
+
     subgraph "Server Layer"
         G[Next.js App Router] --> H1[Page Components]
         H1 --> H2[Home Page]
@@ -42,40 +42,40 @@ graph TD
         H1 --> H5[Reservations Pages]
         H1 --> H6[Favorites Pages]
         H1 --> H7[Properties Pages]
-        
+
         I[Server Components] --> I1[Error Handling]
         I --> I2[Loading States]
-        
+
         J[API Routes] --> J1[/api/listings]
         J --> J2[/api/reservations]
         J --> J3[/api/favorites]
         J --> J4[/api/views]
         J --> J5[/api/register]
-        
+
         K[Server Actions] --> K1[getCurrentUser]
         K --> K2[getListings]
         K --> K3[getListingById]
         K --> K4[getFavoriteListings]
         K --> K5[getReservations]
-        
+
         L[Authentication] --> L1[NextAuth.js]
         L1 --> L2[OAuth Providers]
         L1 --> L3[Credentials Auth]
     end
-    
+
     subgraph "Data Layer"
         M[Type Definitions] --> M1[app/types]
-        
+
         N[Prisma ORM] --> N1[schema.prisma]
         N1 --> O[MongoDB]
-        
+
         O --> P1[Users]
         O --> P2[Accounts]
         O --> P3[Listings]
         O --> P4[ListingImages]
         O --> P5[Reservations]
     end
-    
+
     %% Connections between layers
     C1 <--> E1
     C2 <--> E1
@@ -84,12 +84,12 @@ graph TD
     J <--> N
     K <--> N
     F1 --> C5
-    
+
     %% Styling
     classDef primary fill:#f9f,stroke:#333,stroke-width:2px
     classDef secondary fill:#bbf,stroke:#333,stroke-width:2px
     classDef tertiary fill:#bfb,stroke:#333,stroke-width:2px
-    
+
     class A,G,O primary
     class B,D,F,I,J,K,L,N secondary
     class C1,C2,C3,C4,C5,E1,H1,M tertiary
@@ -174,7 +174,7 @@ sequenceDiagram
     participant UI as Frontend
     participant Auth as AuthAPI
     participant DB as Database
-    
+
     User->>UI: Click Login
     UI->>UI: Open Login Modal
     User->>UI: Enter Credentials
@@ -214,24 +214,27 @@ flowchart TD
 - JWT session management
 - Prisma for type-safe database queries
 - Input validation on API endpoints
-- Owner verification for sensitive operations 
+- Owner verification for sensitive operations
 
 ## Architecture Diagram Update Notes
 
 The Logical Architecture Diagram has been updated to accurately reflect the current codebase structure with the following improvements:
 
 1. **Enhanced Client Layer**
+
    - Added detailed component breakdown (UI, Listing, Input, Navbar, Modal components)
    - Specified custom hooks used for state management (useLoginModal, useRegisterModal, etc.)
    - Added providers section showing ModalsProvider and ToasterProvider
 
 2. **Expanded Server Layer**
+
    - Detailed page components and their organization
    - Added comprehensive API routes structure
    - Included Server Actions with specific action names
    - Enhanced authentication representation with OAuth and credentials providers
 
 3. **Improved Data Layer**
+
    - Added type definitions reference
    - Expanded database collections structure
    - Clarified relationship between Prisma schema and MongoDB
@@ -255,7 +258,7 @@ sequenceDiagram
     participant API as Reservation API
     participant DB as Database
     participant Notif as Notifications
-    
+
     Guest->>UI: Select Dates on Listing
     UI->>UI: Calculate Total Price
     Guest->>UI: Submit Reservation
@@ -266,13 +269,13 @@ sequenceDiagram
     UI->>UI: Show Confirmation
     API->>Notif: Notify Host
     Notif->>Host: New Reservation Alert
-    
+
     Host->>UI: View Reservations
     UI->>API: GET /api/reservations
     API->>DB: Query Reservations
     DB->>API: Reservation Data
     API->>UI: Display Reservations
-    
+
     Host->>UI: Accept/Reject Reservation
     UI->>API: PATCH /api/reservations/{id}
     API->>DB: Update Status
@@ -294,7 +297,7 @@ graph TD
         F --> G{Price Setting}
         G --> H[Submit Listing]
     end
-    
+
     subgraph "Listing Display"
         I[ListingCard] --> J[Image Carousel]
         I --> K[Price Display]
@@ -302,7 +305,7 @@ graph TD
         I --> M[Location]
         I --> N[Category]
     end
-    
+
     subgraph "Listing Detail"
         O[ListingClient] --> P[Header]
         O --> Q[Images]
@@ -311,11 +314,11 @@ graph TD
         O --> T[Map]
         O --> U[Reservation Calendar]
     end
-    
+
     H --> X[API: createListing]
     X --> Y[Prisma: Create]
     Y --> Z[Database]
-    
+
     Z --> AA[API: getListings]
     AA --> I
     Z --> AB[API: getListingById]
@@ -329,21 +332,21 @@ flowchart TD
     A[User] --> B[Login Form]
     A --> C[Registration Form]
     A --> D[OAuth Providers]
-    
+
     B --> E[NextAuth API]
     C --> F[Register API]
     D --> E
-    
+
     E --> G{Valid Credentials?}
     F --> H[Create User]
     H --> E
-    
+
     G -->|Yes| I[JWT Session]
     G -->|No| J[Error Response]
-    
+
     I --> K[Current User Middleware]
     K --> L[Safe User Object]
-    
+
     L --> M[Protected Routes]
     L --> N[Conditional UI Elements]
     L --> O[UserMenu Component]
@@ -359,7 +362,7 @@ graph TD
         E[useRentModal] --> F[RentModal Component]
         G[useSearchModal] --> H[SearchModal Component]
     end
-    
+
     subgraph "Component Interactions"
         I[UserMenu] --> A
         I --> C
@@ -368,13 +371,13 @@ graph TD
         K[EmptyState] --> A
         L[Category Selection] --> G
     end
-    
+
     subgraph "Data Flow"
         M[State Changes] --> N[UI Updates]
         O[User Actions] --> P[Store Methods]
         P --> M
     end
-    
+
     B --> Q[Auth API]
     D --> Q
     F --> R[Listings API]
@@ -391,14 +394,14 @@ graph TD
         C[Filter Buttons] --> B
         D[Map View Toggle] --> E[Map Component]
     end
-    
+
     subgraph "Search Logic"
         B --> F[Search Parameters]
         F --> G[useSearchParams Hook]
         G --> H[URL Query Parameters]
         H --> I[getListings API]
     end
-    
+
     subgraph "Filtering Components"
         F --> J[Location Input]
         F --> K[Date Range Picker]
@@ -407,7 +410,7 @@ graph TD
         F --> N[Price Range]
         F --> O[Room/Bathroom Count]
     end
-    
+
     subgraph "Results Display"
         I --> P[ListingGrid]
         I --> E
@@ -415,7 +418,7 @@ graph TD
         E --> R[Map Markers]
         R --> Q
     end
-    
+
     style A fill:#f96,stroke:#333,stroke-width:2px
     style P fill:#9bf,stroke:#333,stroke-width:2px
 ```
@@ -430,11 +433,11 @@ sequenceDiagram
     participant API as Favorites API
     participant DB as Database
     participant List as FavoritesClient
-    
+
     User->>UI: View Listing
     UI->>Heart: Render Heart Icon
     User->>Heart: Click Heart Icon
-    
+
     alt User Not Logged In
         Heart->>UI: Show Login Modal
     else User Logged In
@@ -444,14 +447,14 @@ sequenceDiagram
         API->>Heart: Update Heart State
         Heart->>UI: Visual Feedback
     end
-    
+
     User->>UI: Navigate to Favorites Page
     UI->>API: GET /api/favorites
     API->>DB: Fetch User Favorites
     DB->>API: Favorites Data
     API->>List: Render Favorite Listings
     List->>UI: Display Grid of Favorites
-    
+
     User->>Heart: Click Heart on Favorite
     Heart->>API: DELETE /api/favorites/{listingId}
     API->>DB: Remove from Favorites
@@ -471,7 +474,7 @@ graph TD
         A --> E[My Favorites]
         A --> F[My Reservations]
     end
-    
+
     subgraph "Properties Management"
         C --> G[PropertiesPage]
         G --> H[PropertiesClient]
@@ -480,12 +483,12 @@ graph TD
         J --> K[Delete Button]
         K --> L[API: deleteListing]
         L --> M[DB: Remove Listing]
-        
+
         A --> N[Add Property Button]
         N --> O[RentModal]
         O --> P[Create Listing Flow]
     end
-    
+
     subgraph "Authentication & Profile"
         A --> Q[Login/Register]
         Q --> R[NextAuth]
@@ -493,7 +496,7 @@ graph TD
         S --> T[currentUser]
         T --> A
     end
-    
+
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style C fill:#9bf,stroke:#333,stroke-width:2px
     style T fill:#fd9,stroke:#333,stroke-width:2px
@@ -513,19 +516,19 @@ graph TD
         E --> H[Status Badge]
         D --> I[Cancel Button]
     end
-    
+
     subgraph "Data Flow"
         A --> J[getTrips Action]
         J --> K[Prisma: Find Reservations]
         K --> L[Filter by userId]
         L --> B
-        
+
         I --> M[API: cancelReservation]
         M --> N[DB: Update Status]
         N --> O[Optimistic UI Update]
         O --> C
     end
-    
+
     subgraph "Status Management"
         P[Reservation Status] --> Q{Status Types}
         Q -->|Pending| R[Yellow Badge]
@@ -533,7 +536,7 @@ graph TD
         Q -->|Cancelled| T[Red Badge]
         Q -->|Completed| U[Blue Badge]
     end
-    
+
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style K fill:#bbf,stroke:#333,stroke-width:2px
     style P fill:#fd9,stroke:#333,stroke-width:2px
@@ -548,7 +551,7 @@ graph TD
         B --> C[Preview Grid]
         C --> D[Delete Button]
     end
-    
+
     subgraph "Upload Logic"
         B --> E[File Selection]
         E --> F[Validation]
@@ -557,21 +560,21 @@ graph TD
         H --> I[Image URL]
         I --> C
     end
-    
+
     subgraph "Integration"
         J[RentModal] --> A
         I --> K[Listing Form Data]
         K --> L[API: createListing]
         L --> M[DB: Store URLs]
     end
-    
+
     subgraph "Image Display"
         N[ListingCard] --> O[Image Carousel]
         P[ListingClient] --> Q[Image Grid]
         M --> N
         M --> P
     end
-    
+
     style B fill:#f96,stroke:#333,stroke-width:2px
     style H fill:#9bf,stroke:#333,stroke-width:2px
     style M fill:#bbf,stroke:#333,stroke-width:2px
@@ -582,43 +585,43 @@ graph TD
 ```mermaid
 graph TD
     A[Client Request] --> B[NextRequest]
-    
+
     subgraph "Middleware Pipeline"
         B --> C[Next.js Edge Runtime]
         C --> D[Global Middleware]
         D --> E{Path Matching}
-        
+
         E -->|Auth Routes| F[NextAuth Handler]
         E -->|API Routes| G[API Middleware]
         E -->|Public Routes| H[Skip Auth]
-        
+
         F --> I[JWT Verification]
         I --> J{Valid Token?}
         J -->|Yes| K[Attach User]
         J -->|No| L[Unauthorized Response]
-        
+
         G --> M[CORS Headers]
         G --> N[Rate Limiting]
         G --> O[Request Validation]
-        
+
         K --> P[Route Handler]
         H --> P
         M --> P
     end
-    
+
     subgraph "API Handlers"
         P --> Q[API Handler Logic]
         Q --> R{Success?}
         R -->|Yes| S[Format Response]
         R -->|No| T[Error Response]
-        
+
         S --> U[Response]
         T --> U
     end
-    
+
     U --> V[Client]
     L --> V
-    
+
     style A fill:#f96,stroke:#333,stroke-width:2px
     style D fill:#bbf,stroke:#333,stroke-width:2px
     style P fill:#9bf,stroke:#333,stroke-width:2px
@@ -633,4 +636,4 @@ This diagram illustrates how API requests flow through the middleware pipeline:
 4. Authentication middleware verifies user sessions for protected routes
 5. API middleware applies CORS headers, rate limiting, and request validation
 6. Route handlers process the validated request
-7. Responses are formatted and returned to the client 
+7. Responses are formatted and returned to the client

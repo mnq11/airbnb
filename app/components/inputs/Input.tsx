@@ -5,10 +5,10 @@ import { BiDollar } from "react-icons/bi";
 
 /**
  * Interface for Input component props
- * 
+ *
  * This component is designed to work with react-hook-form for form validation
  * and state management.
- * 
+ *
  * @interface InputProps
  * @property {string} id - Unique identifier for the input, used for form registration and error handling
  * @property {string} label - Label text displayed for the input field
@@ -34,11 +34,11 @@ export interface InputProps {
 
 /**
  * Input Component
- * 
+ *
  * A standardized form input component with floating label, validation styling,
  * and optional price formatting. This component is designed to be used with
  * react-hook-form for consistent form handling throughout the application.
- * 
+ *
  * Features:
  * - Floating label animation that moves when the field is focused or filled
  * - Error state styling with red borders and label color
@@ -46,7 +46,7 @@ export interface InputProps {
  * - RTL/LTR text direction support
  * - Disabled state styling and functionality
  * - Consistent styling with the application design system
- * 
+ *
  * @component
  * @param {InputProps} props - Component props
  * @returns {JSX.Element} Rendered input field with floating label
@@ -76,13 +76,13 @@ const Input: React.FC<InputProps> = ({
           "
         />
       )}
-      
+
       {/* Input field */}
       <input
         id={id}
         disabled={disabled}
         {...register(id, { required })}
-        placeholder=" "  {/* Empty placeholder required for floating label CSS */}
+        placeholder=" " /* Empty placeholder required for floating label CSS */
         type={type}
         dir={textDirection}
         className={`
@@ -103,7 +103,7 @@ const Input: React.FC<InputProps> = ({
           ${errors[id] ? "focus:border-rose-500" : "focus:border-black"}
         `}
       />
-      
+
       {/* Floating label with animation and error styling */}
       <label
         className={`

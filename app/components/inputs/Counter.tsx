@@ -4,7 +4,7 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 /**
  * Interface for Counter component props
- * 
+ *
  * @interface CounterProps
  * @property {string} title - Label displayed above the counter
  * @property {string} subtitle - Secondary text displayed below the title
@@ -22,21 +22,21 @@ interface CounterProps {
 
 /**
  * Counter Component
- * 
+ *
  * A numeric input component with increment/decrement buttons used in forms
  * for selecting numeric values like guest count, room count, etc.
- * 
+ *
  * Features:
  * - Plus/minus buttons for incrementing and decrementing values
  * - Minimum value enforcement (prevents going below specified minimum)
  * - Title and descriptive subtitle display
  * - Consistent styling with other form inputs
  * - Responsive click targets with hover effects
- * 
+ *
  * Used in:
  * - RentModal for selecting property attributes
  * - SearchModal for filtering properties by capacity
- * 
+ *
  * @component
  * @param {CounterProps} props - Component props
  * @returns {JSX.Element} Rendered counter input with buttons

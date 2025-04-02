@@ -1,9 +1,9 @@
 /**
  * RentModal Component
- * 
+ *
  * Client component that displays a multi-step modal form for creating new property listings.
  * Guides users through the complete listing creation process with validation at each step.
- * 
+ *
  * Features:
  * - Multi-step wizard interface
  * - Form validation with react-hook-form
@@ -11,7 +11,7 @@
  * - Location selection with map integration
  * - Dynamic pricing and details input
  * - Arabic localization for all form fields and labels
- * 
+ *
  * @component
  * @returns {JSX.Element} Rendered modal form for creating property listings
  */
@@ -38,7 +38,7 @@ import CountrySelect from "@/app/components/inputs/CountrySelect";
 
 /**
  * Enum defining the steps in the listing creation process
- * 
+ *
  * @enum {number}
  */
 enum STEPS {
@@ -101,7 +101,7 @@ const RentModal = () => {
 
   /**
    * Sets form field values with proper validation flags
-   * 
+   *
    * @param {string} id - Form field identifier
    * @param {any} value - New value to set for the field
    */
@@ -130,7 +130,7 @@ const RentModal = () => {
   /**
    * Validates the current step before allowing progression
    * Shows toast errors for validation failures
-   * 
+   *
    * @returns {boolean} Whether the current step is valid
    */
   const isStepValid = () => {
@@ -171,7 +171,7 @@ const RentModal = () => {
   /**
    * Handles form submission
    * Validates current step and either progresses to next step or submits data
-   * 
+   *
    * @param {FieldValues} data - Form data values
    */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {

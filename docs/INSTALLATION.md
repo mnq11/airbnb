@@ -26,19 +26,21 @@ GITHUB_ID="your-github-client-id"
 GITHUB_SECRET="your-github-client-secret"
 
 # OAuth - Google
-GOOGLE_CLIENT_ID="your-google-client-id" 
+GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 ```
 
 ## Installation Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/yourusername/property-rental-platform.git
    cd property-rental-platform
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    # or
@@ -46,11 +48,13 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
    ```
 
 3. Generate Prisma client:
+
    ```bash
    npx prisma generate
    ```
 
 4. Run the development server:
+
    ```bash
    npm run dev
    # or
@@ -83,6 +87,7 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 ### Common Issues
 
 - **Prisma Client Error**: If you encounter issues with Prisma, try running:
+
   ```bash
   npx prisma db push
   npx prisma generate
@@ -92,4 +97,4 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 - **NextAuth Errors**: Make sure NEXTAUTH_SECRET is set and NEXTAUTH_URL matches your local environment.
 
-For additional help, please open an issue on GitHub. 
+For additional help, please open an issue on GitHub.

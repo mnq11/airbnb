@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 /**
  * Interface for Pagination component props
- * 
+ *
  * @interface PaginationProps
  * @property {number} page - Current active page number (1-based index)
  * @property {number} totalPages - Total number of pages available
@@ -16,11 +16,11 @@ interface PaginationProps {
 
 /**
  * Pagination Component
- * 
+ *
  * A reusable pagination component that provides navigation controls for
  * multi-page listing results. The component displays page numbers and
  * next/previous buttons with appropriate styling.
- * 
+ *
  * Features:
  * - Next/previous navigation buttons
  * - Numbered page indicators that highlight the current page
@@ -29,10 +29,10 @@ interface PaginationProps {
  * - Arabic text for navigation labels
  * - Responsive design with shadow effects
  * - Automatic page selection notification via callback
- * 
+ *
  * This component is used in the ListingPagination to handle
  * navigation between pages of property listings.
- * 
+ *
  * @component
  * @param {PaginationProps} props - Component props
  * @returns {JSX.Element} Rendered pagination controls

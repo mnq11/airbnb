@@ -1,10 +1,10 @@
 /**
  * ListingClient Component
- * 
+ *
  * Client component that renders a detailed view of a property listing, including
  * images, information, pricing, and reservation functionality. Handles view counting,
  * reservation creation, and date selection.
- * 
+ *
  * Features:
  * - Interactive date range selection for reservations
  * - Dynamic price calculation based on selected dates
@@ -12,7 +12,7 @@
  * - View counter tracking
  * - Responsive layout with grid structure
  * - Automatic view increment on component render
- * 
+ *
  * @component
  */
 
@@ -46,7 +46,7 @@ const initialDateRange = {
 
 /**
  * Props interface for the ListingClient component
- * 
+ *
  * @interface ListingClientProps
  * @property {SafeReservation[]} [reservations] - Array of existing reservations for the listing
  * @property {SafeListing & {user: SafeUser | null}} listing - The listing data with its owner
@@ -62,7 +62,7 @@ interface ListingClientProps {
 
 /**
  * Client component for displaying detailed listing information and reservation functionality
- * 
+ *
  * @param {ListingClientProps} props - Component properties
  * @returns {JSX.Element} Rendered listing detail page with reservation form
  */

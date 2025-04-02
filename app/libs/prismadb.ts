@@ -1,11 +1,11 @@
 /**
  * Prisma client singleton configuration
- * 
+ *
  * This module configures and exports a singleton instance of PrismaClient
  * to prevent multiple instances during development hot reloading.
  * In production, it creates a single instance, while in development it
  * attaches the instance to the global object to maintain connection across reloads.
- * 
+ *
  * @module libs/prismadb
  */
 

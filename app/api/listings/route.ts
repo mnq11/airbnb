@@ -1,9 +1,9 @@
 /**
  * API route for managing property listings
- * 
+ *
  * This route handles fetching listings with various filters and
  * creating new property listings with associated metadata and images.
- * 
+ *
  * @module api/listings
  */
 
@@ -14,10 +14,10 @@ import getListings from "@/app/actions/getListings";
 
 /**
  * Fetch listings with optional filtering
- * 
- * Supports filtering by user, guest count, room count, bathroom count, 
+ *
+ * Supports filtering by user, guest count, room count, bathroom count,
  * date range, location, category, and view count. Also supports pagination.
- * 
+ *
  * @async
  * @function GET
  * @param {Request} request - The incoming request object with search parameters
@@ -61,10 +61,10 @@ export async function GET(request: Request) {
 
 /**
  * Create a new property listing
- * 
+ *
  * Creates a new listing with all associated metadata and images.
  * Requires authenticated user and properly formatted listing data.
- * 
+ *
  * @async
  * @function POST
  * @param {Request} request - The incoming request with listing data in body

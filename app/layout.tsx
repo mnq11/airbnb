@@ -16,7 +16,7 @@ import React from "react";
 
 /**
  * Application Metadata
- * 
+ *
  * Defines metadata for the application that will be used in the HTML head section.
  * This includes the site title and description for SEO purposes.
  */
@@ -27,7 +27,7 @@ export const metadata = {
 
 /**
  * Font Configuration
- * 
+ *
  * Configures the Nunito font from Google Fonts for use throughout the application.
  * The font is loaded with the Latin subset for optimal performance.
  */
@@ -37,16 +37,16 @@ const font = Nunito({
 
 /**
  * Root Layout Component
- * 
+ *
  * The main layout wrapper for the entire application that provides:
  * - Global styling and font application
  * - Navigation header with authentication state
  * - Global modal components (login, register, search, rent)
  * - Toast notifications
  * - Footer component
- * 
+ *
  * This component is a Server Component that fetches the current user on each request.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Nested page content to be rendered inside the layout
@@ -83,7 +83,7 @@ export default async function RootLayout({
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-          <title>جولتنا</title>
+        <title>جولتنا</title>
       </head>
       <body className={font.className}>
         {/* Client components wrapped in ClientOnly to prevent hydration issues */}

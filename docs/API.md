@@ -11,6 +11,7 @@ POST /api/register
 ```
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -20,6 +21,7 @@ POST /api/register
 ```
 
 **Response:**
+
 ```json
 {
   "id": "user-id",
@@ -49,6 +51,7 @@ GET /api/listings
 ```
 
 **Query Parameters:**
+
 - `userId` - Filter by owner
 - `guestCount` - Minimum guest capacity
 - `roomCount` - Minimum room count
@@ -61,6 +64,7 @@ GET /api/listings
 - `limit` - Items per page (default: 10)
 
 **Response:**
+
 ```json
 {
   "listings": [
@@ -75,7 +79,9 @@ GET /api/listings
       "locationValue": "location-id",
       "price": 5000,
       "createdAt": "2023-01-01T00:00:00.000Z",
-      "user": { /* user data */ },
+      "user": {
+        /* user data */
+      },
       "images": [{ "url": "image-url" }],
       "favoritesCount": 5,
       "viewCounter": 120
@@ -92,6 +98,7 @@ POST /api/listings
 ```
 
 **Request Body:**
+
 ```json
 {
   "category": "شاليهات",
@@ -109,11 +116,12 @@ POST /api/listings
 ```
 
 **Response:**
+
 ```json
 {
   "id": "listing-id",
   "title": "Property Title",
-  "description": "Property description",
+  "description": "Property description"
   /* ... other listing fields ... */
 }
 ```
@@ -125,6 +133,7 @@ DELETE /api/listings/:listingId
 ```
 
 **Response:**
+
 ```json
 {
   "message": "Listing deleted successfully"
@@ -158,12 +167,14 @@ GET /api/reservations
 ```
 
 **Query Parameters:**
+
 - `authorId` - Filter by property owner
 - `userId` - Filter by guest
 - `page` - Page number
 - `limit` - Items per page
 
 **Response:**
+
 ```json
 {
   "reservations": [
@@ -173,7 +184,9 @@ GET /api/reservations
       "endDate": "2023-01-15T00:00:00.000Z",
       "totalPrice": 25000,
       "createdAt": "2023-01-01T00:00:00.000Z",
-      "listing": { /* listing data */ }
+      "listing": {
+        /* listing data */
+      }
     }
   ],
   "total": 5
@@ -187,6 +200,7 @@ POST /api/reservations
 ```
 
 **Request Body:**
+
 ```json
 {
   "listingId": "listing-id",
@@ -214,4 +228,4 @@ DELETE /api/reservations/:reservationId
 POST /api/views/:listingId
 ```
 
-**Response:** Updated listing object with incremented view counter 
+**Response:** Updated listing object with incremented view counter

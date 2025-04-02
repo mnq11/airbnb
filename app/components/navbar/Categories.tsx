@@ -1,15 +1,15 @@
 /**
  * Categories Component
- * 
+ *
  * Client component that displays a horizontally scrollable list of property categories
  * for filtering listings on the main page. Only visible on the homepage.
- * 
+ *
  * Features:
  * - Horizontal scrolling for many categories
  * - URL-based state management for active category
  * - Arabic localization for category labels
  * - Responsive layout with centered display
- * 
+ *
  * @component
  * @returns {JSX.Element|null} Rendered category filters or null if not on the homepage
  */
@@ -38,7 +38,7 @@ import { TbHomeStar } from "react-icons/tb";
 
 /**
  * Array of available property categories with their metadata
- * 
+ *
  * @type {Array<{label: string, icon: IconType, description: string}>}
  */
 export const categories = [

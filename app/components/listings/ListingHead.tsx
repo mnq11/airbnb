@@ -16,7 +16,7 @@ SwiperCore.use([Navigation, Thumbs]);
 
 /**
  * Interface for ListingHead component props
- * 
+ *
  * @interface ListingHeadProps
  * @property {string} title - The title of the property listing
  * @property {string} locationValue - Location code used to look up country/region information
@@ -40,17 +40,17 @@ interface ListingHeadProps {
 
 /**
  * ListingHead Component
- * 
+ *
  * Displays the header section of a property listing detail page, featuring:
  * - Property title and location
  * - Image gallery with main carousel and thumbnail strip
  * - Favorite button with counter
  * - View counter
  * - Navigation controls for image browsing
- * 
+ *
  * This component handles image loading states and automatically
  * increments the view counter when mounted.
- * 
+ *
  * @component
  * @param {ListingHeadProps} props - Component props
  * @returns {JSX.Element} Rendered listing header with image gallery

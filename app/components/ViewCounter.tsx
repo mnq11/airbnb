@@ -4,7 +4,7 @@ import { BsEye } from "react-icons/bs";
 
 /**
  * Interface for ViewCounter component props
- * 
+ *
  * @interface ViewCounterProps
  * @property {string} listingId - Unique identifier for the property listing
  * @property {SafeUser|null} [currentUser] - Current authenticated user data or null if not logged in
@@ -18,18 +18,18 @@ interface ViewCounterProps {
 
 /**
  * ViewCounter Component
- * 
+ *
  * A component that displays the number of views a property listing has received.
  * Features a visual indicator with an eye icon and formatted view count.
- * 
+ *
  * The component:
  * - Displays the view count with Arabic numeral formatting
  * - Shows a red eye icon for listings with views and a gray icon for zero views
  * - Has a semi-transparent background for better visibility on various backgrounds
  * - Prevents text selection and pointer events for better UX
- * 
+ *
  * Used in listing cards and detail pages to indicate listing popularity.
- * 
+ *
  * @component
  * @param {ViewCounterProps} props - Component props
  * @returns {JSX.Element} Rendered view counter with formatted count and icon

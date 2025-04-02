@@ -1,9 +1,9 @@
 /**
  * API route for managing favorite listings
- * 
+ *
  * This route handles adding and removing listings from a user's favorites list.
  * It also maintains a favorites counter on each listing to track popularity.
- * 
+ *
  * @module api/favorites
  */
 
@@ -14,7 +14,7 @@ import prisma from "@/app/libs/prismadb";
 
 /**
  * Route parameters interface
- * 
+ *
  * @interface IParams
  * @property {string} [listingId] - ID of the listing to favorite/unfavorite
  */
@@ -24,7 +24,7 @@ interface IParams {
 
 /**
  * Add a listing to the current user's favorites
- * 
+ *
  * @async
  * @function POST
  * @param {Request} request - The incoming request object
@@ -76,7 +76,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
 
 /**
  * Remove a listing from the current user's favorites
- * 
+ *
  * @async
  * @function DELETE
  * @param {Request} request - The incoming request object

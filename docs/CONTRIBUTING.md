@@ -113,4 +113,4 @@ Contributors will be acknowledged in the project's README.md and/or CONTRIBUTORS
 
 If you have any questions about contributing, feel free to open an issue marked as a question or contact the maintainers directly.
 
-Thank you for contributing to the Yemen Property Rental Platform! 
+Thank you for contributing to the Yemen Property Rental Platform!

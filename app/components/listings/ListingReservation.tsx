@@ -7,7 +7,7 @@ import Calendar from "../inputs/Calendar";
 
 /**
  * Interface for ListingReservation component props
- * 
+ *
  * @interface ListingReservationProps
  * @property {number} price - Per-night price of the property
  * @property {Range} dateRange - Currently selected date range (startDate and endDate)
@@ -29,23 +29,23 @@ interface ListingReservationProps {
 
 /**
  * ListingReservation Component
- * 
+ *
  * Displays the reservation panel for a property listing, allowing users to:
  * - Select check-in and check-out dates
  * - See the nightly rate
  * - View the total price for their stay
  * - Submit a booking request
- * 
+ *
  * This component is displayed in the sidebar of the listing detail page
  * and handles all the booking-related functionality.
- * 
+ *
  * Features:
  * - Date range selection calendar
  * - Automatic price calculation based on selected dates
  * - Arabic number formatting and RTL text support
  * - Disabled dates for unavailable booking periods
  * - Loading state during booking submission
- * 
+ *
  * @component
  * @param {ListingReservationProps} props - Component props
  * @returns {JSX.Element} Rendered reservation panel
