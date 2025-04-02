@@ -154,11 +154,39 @@ const RentModal = () => {
         }
         return !!STEPS.INFO;
       case STEPS.IMAGES:
-        if (imageSrc.length === 0) {
-          toast.error("يرجى تحميل صور توضيحية");
-          return false;
+        console.log("Validating images:", imageSrc);
+        
+        // First check if imageSrc has valid data
+        if (Array.isArray(imageSrc) && imageSrc.length > 0) {
+          return true;
         }
-        return !!imageSrc;
+        
+        // Try to retrieve images from localStorage as fallback
+        try {
+          const storedImages = JSON.parse(localStorage.getItem('uploadedImages') || '[]');
+          console.log("Retrieved images from localStorage:", storedImages);
+          
+          if (Array.isArray(storedImages) && storedImages.length > 0) {
+            // Update the form with localStorage data
+            setCustomValue("imageSrc", storedImages);
+            return true;
+          }
+        } catch (e) {
+          console.error("Failed to retrieve images from localStorage:", e);
+        }
+        
+        // Check if any Cloudinary images exist in the document
+        const cloudinaryImages = document.querySelectorAll('[src*="cloudinary.com"]');
+        if (cloudinaryImages.length > 0) {
+          // Extract URLs from the images
+          const urls = Array.from(cloudinaryImages).map(img => (img as HTMLImageElement).src);
+          console.log("Found Cloudinary images in the DOM:", urls);
+          setCustomValue("imageSrc", urls);
+          return true;
+        }
+        
+        toast.error("يرجى تحميل صور توضيحية");
+        return false;
       case STEPS.DESCRIPTION:
         return !!STEPS.DESCRIPTION;
       case STEPS.PRICE:
@@ -319,9 +347,27 @@ const RentModal = () => {
           subtitle="أظهر للضيوف كيف يبدو مكانك!"
         />
         <ImageUpload
-          onChange={(value) => setCustomValue("imageSrc", value)}
-          value={imageSrc}
+          onChange={(value) => {
+            console.log("ImageUpload onChange called with:", value);
+            // Force immediate update with defensive coding
+            if (Array.isArray(value) && value.length > 0) {
+              setCustomValue("imageSrc", value);
+              // Also store in localStorage as backup
+              try {
+                localStorage.setItem('uploadedImages', JSON.stringify(value));
+              } catch (e) {
+                console.error("Failed to store images in localStorage:", e);
+              }
+            }
+            console.log("After setCustomValue, imageSrc is:", watch("imageSrc"));
+          }}
+          value={imageSrc || []}
         />
+        {Array.isArray(imageSrc) && imageSrc.length > 0 && (
+          <div className="text-green-600 font-semibold">
+            تم تحميل {imageSrc.length} صورة/صور بنجاح
+          </div>
+        )}
       </div>
     );
   }

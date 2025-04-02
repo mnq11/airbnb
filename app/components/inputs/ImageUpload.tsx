@@ -2,7 +2,7 @@
 
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 import toast from "react-hot-toast";
 
@@ -55,6 +55,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Check localStorage for images on initial render if value is empty
+  useEffect(() => {
+    if (value.length === 0) {
+      try {
+        const storedImages = JSON.parse(localStorage.getItem('uploadedImages') || '[]');
+        if (storedImages.length > 0) {
+          console.log("Retrieved images from localStorage on mount:", storedImages);
+          onChange(storedImages);
+        }
+      } catch (e) {
+        console.error("Failed to retrieve images from localStorage:", e);
+      }
+    }
+  }, [value, onChange]);
 
   /**
    * Handle successful image upload
@@ -67,14 +83,49 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       setIsUploading(false);
       setError(null);
       
-      // Ensure we have a valid secure_url from the upload result
-      if (result?.info?.secure_url) {
-        onChange([...value, result.info.secure_url]);
-        toast.success("تم رفع الصورة بنجاح");
-      } else {
-        setError("فشل تحميل الصورة. يرجى المحاولة مرة أخرى.");
-        toast.error("فشل تحميل الصورة");
-        console.error("Upload result missing secure_url:", result);
+      console.log("Upload result:", result);
+      
+      try {
+        let imageUrl = null;
+        
+        // Try to extract image URL from various Cloudinary response formats
+        if (result?.event === "success" && result?.info?.secure_url) {
+          imageUrl = result.info.secure_url;
+        } else if (result?.info?.secure_url) {
+          imageUrl = result.info.secure_url;
+        } else if (result?.secure_url) {
+          imageUrl = result.secure_url;
+        } else if (typeof result === 'string' && result.includes('cloudinary.com')) {
+          imageUrl = result;
+        }
+        
+        if (imageUrl) {
+          // Ensure value is always an array
+          const safeValue = Array.isArray(value) ? value : [];
+          const newImages = [...safeValue, imageUrl];
+          
+          console.log("Updating images:", newImages);
+          
+          // Update both component state and localStorage
+          onChange(newImages);
+          
+          // Store in localStorage for backup
+          try {
+            localStorage.setItem('uploadedImages', JSON.stringify(newImages));
+          } catch (e) {
+            console.warn("Could not store image in localStorage", e);
+          }
+          
+          toast.success("تم رفع الصورة بنجاح");
+        } else {
+          setError("فشل تحميل الصورة. يرجى المحاولة مرة أخرى.");
+          toast.error("فشل تحميل الصورة");
+          console.error("Upload result missing secure_url:", result);
+        }
+      } catch (error) {
+        console.error("Error in handleUpload:", error);
+        setError("حدث خطأ أثناء معالجة تحميل الصورة");
+        toast.error("فشل معالجة الصورة");
       }
     },
     [onChange, value]
@@ -105,12 +156,64 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     [onChange, value]
   );
 
+  /**
+   * Handles direct file uploads via standard file input
+   * Used as fallback when Cloudinary widget fails
+   */
+  const handleDirectFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUploading(true);
+    
+    if (!event.target.files || event.target.files.length === 0) {
+      setIsUploading(false);
+      return;
+    }
+    
+    const files = Array.from(event.target.files);
+    
+    // Create image URLs from uploaded files
+    const imageUrls = files.map(file => URL.createObjectURL(file));
+    
+    // Update the form state
+    const safeValue = Array.isArray(value) ? value : [];
+    const newImages = [...safeValue, ...imageUrls];
+    
+    console.log("Direct upload images:", newImages);
+    onChange(newImages);
+    
+    // Store in localStorage
+    try {
+      localStorage.setItem('uploadedImages', JSON.stringify(newImages));
+    } catch (e) {
+      console.warn("Could not store direct upload images in localStorage", e);
+    }
+    
+    setIsUploading(false);
+    toast.success("تم رفع الصورة بنجاح");
+  };
+
   return (
     <div>
       <div className="mb-4">
         {error && (
           <div className="p-2 mb-2 text-sm text-red-600 bg-red-100 rounded-md">
             {error}
+          </div>
+        )}
+        
+        {/* Hidden file input for direct uploads */}
+        <input 
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          accept="image/*"
+          multiple
+          onChange={handleDirectFileUpload}
+        />
+        
+        {/* Display warning about third-party cookies if needed */}
+        {typeof window !== 'undefined' && window.navigator.cookieEnabled === false && (
+          <div className="p-2 mb-2 text-sm text-amber-600 bg-amber-100 rounded-md">
+            الملاحظة: تأكد من تمكين ملفات تعريف الارتباط للطرف الثالث في متصفحك لتحميل الصور
           </div>
         )}
         
@@ -154,13 +257,24 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           folder: "rental_platform",
           clientAllowedFormats: ["png", "jpeg", "jpg"],
           sources: ["local", "url", "camera"],
+          multiple: true
         }}
         onError={handleUploadError}
       >
         {({ open }: { open: () => void }) => {
           return (
             <div
-              onClick={() => !disabled && !isUploading && open()}
+              onClick={() => {
+                if (disabled || isUploading) return;
+                try {
+                  // Attempt to open Cloudinary widget first
+                  open();
+                } catch (e) {
+                  console.error("Failed to open Cloudinary widget:", e);
+                  // Fallback to direct file input
+                  fileInputRef.current?.click();
+                }
+              }}
               className={`
                 relative
                 cursor-pointer
@@ -186,6 +300,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <div className="text-sm text-center text-neutral-500">
                 {value.length > 0 ? `تم رفع ${value.length} صور` : "اسحب وأفلت الصور هنا أو انقر للاختيار"}
               </div>
+              
+              {/* Add direct upload button fallback */}
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
+                className="mt-2 text-xs text-blue-600 hover:underline"
+              >
+                إذا كان لديك مشكلة في تحميل الصور، انقر هنا للتحميل المباشر
+              </button>
             </div>
           );
         }}
