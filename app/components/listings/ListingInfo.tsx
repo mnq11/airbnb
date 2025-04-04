@@ -82,44 +82,35 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
 
   const coordinates = getByValue(locationValue)?.latlng;
 
+  // Helper function for number formatting
+  const formatNumberAr = (num: number) => num.toLocaleString("ar-EG");
+
   return (
     <div className="col-span-4 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <div
-          className="
-            text-xl 
-            font-semibold 
-            flex 
-            flex-row 
-            items-center
-            gap-2
-          "
-        >
-          <div>المستضيف {user?.name} </div>
+        <div className="text-xl font-semibold flex flex-row items-center justify-end gap-2 text-right">
+          <span>المستضيف {user?.name}</span>
           <Avatar src={user?.image} />
         </div>
-        <div
-          className="
-              flex
-        flex-col
-        items-start
-        gap-4
-        font-light
-        text-neutral-500
-          "
-        >
-          <div>
-            <IoMdPerson /> سعة الضيوف : {guestCount.toLocaleString("ar-EG")}
-          </div>
-          <div>
-            <IoMdBed /> عدد الغرف : {roomCount.toLocaleString("ar-EG")}
-          </div>
-          <div>
-            <IoMdWater /> عدد الحمامات : {bathroomCount.toLocaleString("ar-EG")}
-          </div>
+      </div>
+
+      <div className="flex flex-row items-center gap-6 font-light text-neutral-700 justify-end text-right">
+        <div className="flex flex-row items-center gap-2">
+          <span>{formatNumberAr(guestCount)} ضيوف</span>
+          <IoMdPerson size={20} className="text-neutral-500" />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <span>{formatNumberAr(roomCount)} غرف</span>
+          <IoMdBed size={20} className="text-neutral-500" />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <span>{formatNumberAr(bathroomCount)} حمامات</span>
+          <IoMdWater size={20} className="text-neutral-500" />
         </div>
       </div>
+
       <hr />
+
       {category && (
         <ListingCategory
           icon={category.icon}
@@ -127,13 +118,18 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           description={category?.description}
         />
       )}
+
       <hr />
-      <div className="text-lg font-light text-neutral-500 whitespace-pre-line">
+
+      <div className="text-lg font-light text-neutral-600 whitespace-pre-line text-right leading-relaxed">
         {description}
       </div>
 
       <hr />
-      <Map center={coordinates as LatLngTuple | undefined} />
+
+      <div className="h-[35vh] rounded-lg overflow-hidden">
+        <Map center={coordinates as LatLngTuple | undefined} />
+      </div>
     </div>
   );
 };
