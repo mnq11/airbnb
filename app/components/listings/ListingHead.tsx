@@ -11,6 +11,7 @@ import HeartButton from "../HeartButton";
 import ViewCounter from "@/app/components/ViewCounter";
 import { TiArrowLeftOutline, TiArrowRightOutline } from "react-icons/ti";
 import Loader from "@/app/components/Loader";
+import { ShareButton } from "@/components/listing/ShareButton";
 
 SwiperCore.use([Navigation, Thumbs]);
 
@@ -96,6 +97,11 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         subtitle={`${location?.region}, ${location?.label}`}
       />
       <div className="w-full h-[50vh] overflow-hidden rounded-xl relative">
+        {/* Share button positioned at top left */}
+        <div className="absolute top-5 left-5 z-10">
+          <ShareButton />
+        </div>
+
         {/* Main image carousel */}
         <Swiper
           style={{ height: "80%" }}
