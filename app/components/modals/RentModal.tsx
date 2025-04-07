@@ -23,6 +23,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
+import Select from 'react-select';
 
 import useRentModal from "@/app/hooks/useRentModal";
 import Modal from "./Modal";
@@ -49,6 +50,15 @@ enum STEPS {
   DESCRIPTION = 4,
   PRICE = 5,
 }
+
+// Define Payment Options
+const paymentMethodOptions = [
+  { value: 'cash', label: 'كاش' },
+  { value: 'bank_transfer', label: 'تحويل مالي' },
+  { value: 'on_arrival', label: 'دفع عند الوصول' },
+  { value: 'deposit', label: 'دفع عربون مقدم' },
+  { value: 'full_prepayment', label: 'دفع مقدم' },
+];
 
 const RentModal = () => {
   const router = useRouter();
@@ -87,6 +97,11 @@ const RentModal = () => {
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
+  const title = watch("title");
+  const description = watch("description");
+  const phone = watch("phone");
+  const paymentMethodValue = watch("paymentMethod");
+  const price = watch("price");
 
   /**
    * Dynamically imports the Map component with SSR enabled
@@ -140,48 +155,41 @@ const RentModal = () => {
           toast.error("يرجى اختيار الفئة");
           return false;
         }
-        return !!category;
+        return true;
       case STEPS.LOCATION:
-        if (!location || location.label === "" || location.value === "") {
+        if (!location || !location.value || !location.label) {
           toast.error("يرجى تحديد المنطقة والموقع");
           return false;
         }
-        return !!location;
+        return true;
       case STEPS.INFO:
-        if (guestCount + roomCount + bathroomCount <= 0) {
-          toast.error("يرجى تحديد عدد الضيوف والغرف والحمامات او احداها");
+        if (guestCount <= 0 && roomCount <= 0 && bathroomCount <= 0) {
+          toast.error("يرجى تحديد عدد الضيوف أو الغرف أو الحمامات (واحد على الأقل)");
           return false;
         }
-        return !!STEPS.INFO;
+        return true;
       case STEPS.IMAGES:
         console.log("Validating images:", imageSrc);
         
         // Filter out blob URLs since they're temporary
         const validImages = Array.isArray(imageSrc) 
-          ? imageSrc.filter(url => !url.startsWith('blob:') && url.includes('cloudinary.com'))
+          ? imageSrc.filter(url => typeof url === 'string' && !url.startsWith('blob:') && url.includes('cloudinary.com'))
           : [];
         
-        // If we have valid Cloudinary URLs, we're good
         if (validImages.length > 0) {
-          // Update form with only valid images
           if (validImages.length !== imageSrc?.length) {
             setCustomValue("imageSrc", validImages);
           }
           return true;
         }
         
-        // Try to retrieve images from localStorage as fallback
         try {
           const storedImages = JSON.parse(localStorage.getItem('uploadedImages') || '[]');
-          console.log("Retrieved images from localStorage:", storedImages);
-          
-          // Filter out blob URLs from localStorage as well
           const validStoredImages = Array.isArray(storedImages) 
-            ? storedImages.filter(url => !url.startsWith('blob:') && url.includes('cloudinary.com'))
+            ? storedImages.filter(url => typeof url === 'string' && !url.startsWith('blob:') && url.includes('cloudinary.com'))
             : [];
             
           if (validStoredImages.length > 0) {
-            // Update the form with valid localStorage data
             setCustomValue("imageSrc", validStoredImages);
             return true;
           }
@@ -189,12 +197,36 @@ const RentModal = () => {
           console.error("Failed to retrieve images from localStorage:", e);
         }
         
-        toast.error("يرجى تحميل صور توضيحية صالحة");
+        toast.error("يرجى تحميل صور توضيحية صالحة (صورة واحدة على الأقل)");
         return false;
       case STEPS.DESCRIPTION:
-        return !!STEPS.DESCRIPTION;
+        if (!title) {
+          toast.error("يرجى إدخال عنوان للعقار");
+          return false;
+        }
+        if (!description) {
+          toast.error("يرجى إدخال وصف للعقار");
+          return false;
+        }
+        if (!phone) {
+          toast.error("يرجى إدخال رقم الهاتف");
+          return false;
+        }
+        if (!paymentMethodValue) {
+          toast.error("يرجى اختيار طريقة الدفع المفضلة");
+          return false;
+        }
+        return true;
       case STEPS.PRICE:
-        return !errors.price;
+        const priceValue = parseFloat(price);
+        if (isNaN(priceValue) || priceValue <= 0) {
+            toast.error("يرجى إدخال سعر صحيح أكبر من صفر");
+            return false;
+        }
+        if (errors.price) {
+            return false;
+        }
+        return true;
       default:
         return false;
     }
@@ -216,17 +248,14 @@ const RentModal = () => {
 
     setIsLoading(true);
 
-    // Format the description with contact details
-    const updatedDescription = `${data.description}\n\nرقم الهاتف: ${data.phone}\nطريقة الدفع المفضلة: ${data.paymentMethod}`;
-
     // Ensure we only use valid image URLs (not blob URLs)
-    const finalImageSrc = Array.isArray(data.imageSrc) 
+    const finalImageSrc = Array.isArray(data.imageSrc)
       ? data.imageSrc.filter((url: string) => !url.startsWith('blob:'))
       : [];
-    
+
     // Check if we have enough images
     if (finalImageSrc.length === 0) {
-      toast.error("يرجى تحميل صور توضيحية صالحة");
+      toast.error("حدث خطأ في الصور، يرجى الرجوع وإعادة التحميل");
       setIsLoading(false);
       return;
     }
@@ -234,10 +263,12 @@ const RentModal = () => {
     // Prepare final payload
     const payload = {
       ...data,
-      description: updatedDescription,
+      description: data.description, 
       imageSrc: finalImageSrc,
       location: data.location,
       price: parseInt(data.price, 10),
+      phoneNumber: data.phone,
+      preferredPayment: data.paymentMethod,
     };
 
     // Submit listing data
@@ -248,18 +279,17 @@ const RentModal = () => {
         router.refresh();
         reset();
         setStep(STEPS.CATEGORY);
-        rentModal.onClose();
-        
-        // Clean up localStorage
+        // Clear stored images on successful submission
         try {
           localStorage.removeItem('uploadedImages');
+          console.log("Cleared stored images from localStorage.");
         } catch (e) {
-          console.error("Failed to clear localStorage:", e);
+          console.error("Failed to clear stored images from localStorage:", e);
         }
+        rentModal.onClose();
       })
-      .catch((error) => {
-        console.error("Error creating listing:", error);
-        toast.error("حدث خطأ أثناء إنشاء العقار، يرجى المحاولة مرة أخرى");
+      .catch(() => {
+        toast.error("حدث خطأ ما");
       })
       .finally(() => {
         setIsLoading(false);
@@ -428,7 +458,7 @@ const RentModal = () => {
       <div className="flex flex-col gap-8">
         <Heading
           title="كيف تصف مكانك؟"
-          subtitle="اخبر الضيوف عن مكانك و طريقة التواصل معك و طريقة الدفع المفضلة"
+          subtitle="اخبر الضيوف عن مكانك وما يميزه"
         />
         <Input
           id="title"
@@ -452,7 +482,7 @@ const RentModal = () => {
         <hr />
         <Input
           id="phone"
-          label="رقم الهاتف"
+          label="رقم الهاتف للتواصل"
           type="tel"
           disabled={isLoading}
           register={register}
@@ -461,15 +491,41 @@ const RentModal = () => {
           required
         />
         <hr />
-        <Input
-          id="paymentMethod"
-          label="طريقة الدفع المفضلة"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          textDirection="rtl"
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 text-right mb-1">
+            طريقة الدفع المفضلة
+          </label>
+          <Select
+            placeholder="اختر طريقة الدفع..." 
+            isClearable
+            options={paymentMethodOptions}
+            value={paymentMethodOptions.find(option => option.value === paymentMethodValue) || null}
+            onChange={(option) => setCustomValue('paymentMethod', option ? option.value : "")}
+            formatOptionLabel={(option: any) => (
+              <div className="flex flex-row items-center gap-3 text-right">
+                <div>{option.label}</div>
+              </div>
+            )}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 6,
+              colors: {
+                ...theme.colors,
+                primary: 'black',
+                primary25: '#ffe4e6',
+              },
+            })}
+            styles={{
+              input: (provided) => ({ ...provided, direction: 'rtl' }),
+              option: (provided) => ({ ...provided, direction: 'rtl', textAlign: 'right' }),
+              singleValue: (provided) => ({ ...provided, direction: 'rtl', textAlign: 'right' }),
+              placeholder: (provided) => ({ ...provided, direction: 'rtl', textAlign: 'right' }),
+            }}
+            isDisabled={isLoading}
+            instanceId="payment-method-select"
+            required
+          />
+        </div>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-/**
+ /**
  * API route for managing property listings
  *
  * This route handles fetching listings with various filters and

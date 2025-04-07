@@ -40,15 +40,23 @@ const CategoryView: React.FC<CategoryViewProps> = ({
   description,
 }) => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-row items-center gap-4">
-        <Icon size={40} className="text-neutral-600" />
-        <div className="flex flex-col">
-          <div className="text-lg font-semibold">{label}</div>
-          <div className="text-neutral-500 font-light">{description}</div>
+    // Optional: Add padding/background for visual grouping if needed within ListingInfo
+    // <div className="p-4 bg-neutral-50 rounded-lg">
+    <div className="flex flex-row items-start gap-4 text-right"> {/* Align items start, text-right */} 
+      {/* Icon Styling */}
+      <Icon size={36} className="text-rose-500 flex-shrink-0 mt-1" /> {/* Use theme color, adjust size/margin */} 
+      
+      {/* Text Content Styling */}
+      <div className="flex flex-col">
+        <div className="text-lg font-semibold text-neutral-800"> {/* Darker text for better contrast */} 
+          {label}
+        </div>
+        <div className="text-neutral-600 font-light"> {/* Slightly darker description */} 
+          {description}
         </div>
       </div>
     </div>
+    // </div>
   );
 };
 

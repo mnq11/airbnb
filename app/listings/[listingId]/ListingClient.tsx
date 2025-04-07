@@ -24,6 +24,7 @@ import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
+import { motion } from 'framer-motion';
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
@@ -185,7 +186,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   return (
     <Container>
-      <div className="max-w-screen-lg mx-auto">
+      <motion.div
+        className="max-w-screen-lg mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex flex-col gap-6">
           <ListingHead
             title={listing.title}
@@ -220,7 +226,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Container>
   );
 };

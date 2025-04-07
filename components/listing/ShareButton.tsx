@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { ShareIcon, ClipboardIcon, CheckIcon, QrCodeIcon } from '@heroicons/react/24/outline';
 import { QRCodeDisplay } from './QRCodeDisplay';
+import { motion } from 'framer-motion';
 
 export function ShareButton() {
     const pathname = usePathname();
@@ -59,11 +60,13 @@ export function ShareButton() {
 
     return (
         <div className="relative inline-block">
-            <button
+            <motion.button
                 onClick={handleShare}
                 className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors duration-150 ease-in-out"
                 aria-label={copied ? "Link Copied" : "Share this listing"}
                 title={canShare ? "Share via system dialog" : "Copy link / Show QR Code"}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
             >
                 {copied ? (
                     <>
@@ -80,11 +83,16 @@ export function ShareButton() {
                         Share
                     </>
                 )}
-            </button>
+            </motion.button>
             {showQrCode && fullUrl && (
-                <div className="absolute left-0 mt-2 z-20">
+                <motion.div 
+                    className="absolute left-0 mt-2 z-20"
+                    initial={{ opacity: 0, scale: 0.9 }} 
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                >
                     <QRCodeDisplay url={fullUrl} size={140} />
-                </div>
+                </motion.div>
             )}
         </div>
     );
