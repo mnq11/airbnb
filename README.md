@@ -1,86 +1,52 @@
-# Full Stack Joltna Clone with Next.js 13 App Router: React, Tailwind, Prisma, MongoDB, NextAuth 2023
+# Yemen Property Rental Platform
 
-![Copy of Fullstack Twitter Clone (8)](https://user-images.githubusercontent.com/23248726/229031522-64a49ad0-66f7-4ea8-94a8-f64a0bb56736.png)
+![Platform Logo](/public/images/logo.png)
 
+## Overview
 
-This is a repository for a Full Stack Joltna Clone with Next.js 13 App Router: React, Tailwind, Prisma, MongoDB, NextAuth.
+A full-featured property rental platform built with Next.js, React, TypeScript, and MongoDB. This application enables users to list properties, make reservations, and manage their rental experiences.
 
-[VIDEO TUTORIAL](https://youtu.be/c_-b_isI4vg)
+### Key Features
 
-Features:
+- User authentication with email/password and OAuth providers
+- Property listing creation and management
+- Advanced search with filters for location, dates, and guest counts
+- Reservation system with calendar integration
+- Favorites tracking system
+- View counter for listing popularity
+- Responsive design with Arabic localization
 
-- Tailwind design
-- Tailwind animations and effects
-- Full responsiveness
-- Credential authentication
-- Google authentication
-- Github authentication
-- Image upload using Cloudinary CDN
-- Client form validation and handling using react-hook-form
-- Server error handling using react-toast
-- Calendars with react-date-range
-- Page loading state
-- Page empty state
-- Booking / Reservation system
-- Guest reservation cancellation
-- Owner reservation cancellation
-- Creation and deletion of properties
-- Pricing calculation
-- Advanced search algorithm by category, date range, map location, number of guests, rooms and bathrooms
-    - For example we will filter out properties that have a reservation in your desired date range to travel
-- Favorites system
-- Shareable URL filters
-    - Lets say you select a category, location and date range, you will be able to share URL with a logged out friend in another browser and they will see the same results
-- How to write POST and DELETE routes in route handlers (app/api)
-- How to fetch data in server react components by directly accessing database (WITHOUT API! like Magic!)
-- How to handle files like error.tsx and loading.tsx which are new Next 13 templating files to unify loading and error handling
-- How to handle relations between Server and Child components!
+## Quick Start
 
-### Prerequisites
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables (see [Installation Guide](./docs/INSTALLATION.md))
+4. Run development server: `npm run dev`
+5. Access the application at `http://localhost:3000` or your machine ip
 
-**Node version 14.x**
+## Documentation
 
-### Cloning the repository
+- [Installation Guide](./docs/INSTALLATION.md)
+- [Architecture Overview](./docs/ARCHITECTURE.md)
+- [API Documentation](./docs/API.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Contributing Guidelines](./docs/CONTRIBUTING.md)
 
-```shell
-https://github.com/mnq11/airbnb.git
-```
+## Tech Stack
 
-### Install packages
+- **Frontend**: Next.js 13+ (App Router), React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: MongoDB with Prisma ORM
+- **Authentication**: NextAuth.js
+- **Maps**: Leaflet
+- **Forms**: React Hook Form
 
-```shell
-npm i
-```
+## Screenshots
 
-### Setup .env file
+![Homepage](/docs/images/homepage.png)
+![Listing Detail](/docs/images/listing-detail.png)
+![Search Modal](/docs/images/search-modal.png)
 
+## License
 
-```js
-DATABASE_URL=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GITHUB_ID=
-GITHUB_SECRET=
-NEXTAUTH_SECRET=''
-```
-
-### Setup Prisma
-
-```shell
-npx prisma db push
-
-```
-
-### Start the app
-
-```shell
-npm run dev
-```
-
-## Available commands
-
-Running commands with npm `npm run [command]`
-
-| command         | description                              |
-| :-------------- | :--------------------------------------- |
-| `dev`           | Starts a development instance of the app |
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,87 +1,128 @@
-// app/api/listings/route.ts
+ /**
+ * API route for managing property listings
+ *
+ * This route handles fetching listings with various filters and
+ * creating new property listings with associated metadata and images.
+ *
+ * @module api/listings
+ */
+
 import { NextResponse } from "next/server";
-
-import prisma from "@/app/libs/prismadb";
-
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import {Prisma} from ".prisma/client";
-import ListingCreateInput = Prisma.ListingCreateInput;
-import {NextApiRequest, NextApiResponse} from "next";
+import prisma from "@/app/libs/prismadb";
+import getListings from "@/app/actions/getListings";
 
+/**
+ * Fetch listings with optional filtering
+ *
+ * Supports filtering by user, guest count, room count, bathroom count,
+ * date range, location, category, and view count. Also supports pagination.
+ *
+ * @async
+ * @function GET
+ * @param {Request} request - The incoming request object with search parameters
+ * @returns {Promise<NextResponse>} JSON response with listings and total count
+ */
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const params = {
+    userId: searchParams.get("userId") || undefined,
+    guestCount: searchParams.get("guestCount")
+      ? Number(searchParams.get("guestCount"))
+      : undefined,
+    roomCount: searchParams.get("roomCount")
+      ? Number(searchParams.get("roomCount"))
+      : undefined,
+    bathroomCount: searchParams.get("bathroomCount")
+      ? Number(searchParams.get("bathroomCount"))
+      : undefined,
+    startDate: searchParams.get("startDate") || undefined,
+    endDate: searchParams.get("endDate") || undefined,
+    locationValue: searchParams.get("locationValue") || undefined,
+    category: searchParams.get("category") || undefined,
+    viewsCount: searchParams.get("viewsCount")
+      ? Number(searchParams.get("viewsCount"))
+      : undefined,
+    page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
+    limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 10,
+  };
+
+  try {
+    const { listings, total } = await getListings(params);
+    return NextResponse.json({ listings, total });
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    return NextResponse.json(
+      { error: "Error fetching listings" },
+      { status: 500 },
+    );
+  }
+}
+
+/**
+ * Create a new property listing
+ *
+ * Creates a new listing with all associated metadata and images.
+ * Requires authenticated user and properly formatted listing data.
+ *
+ * @async
+ * @function POST
+ * @param {Request} request - The incoming request with listing data in body
+ * @returns {Promise<NextResponse>} JSON response with the created listing
+ */
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.error();
-  }
-
-  const body = await request.json();
-  const { title, description, images = [], category, roomCount, bathroomCount, guestCount, location, price } = body;
-
-
-  // console.log( "body", body );
-
-  Object.keys(body).forEach((value: any) => {
-    if (!body[value]) {
-      NextResponse.error();
-    }
-  });
-
-  // First, create the listing and its associated images
-  const listing = await prisma.listing.create({
-    data: {
-      title,
-      description,
-      category,
-      roomCount,
-      bathroomCount,
-      guestCount,
-      locationValue: location.value,
-      price: parseInt(price, 10),
-      user: {
-        connect: {
-          id: currentUser.id,
-        },
-      },
-      images: {
-        create: images.map((imageUrl: any) => ({
-          url: imageUrl,
-        })),
-      },
-    } as ListingCreateInput,
-    include: { images: true },
-  });
-
-
-  return NextResponse.json(listing);
-}
-export default async function viewCounter (
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-  if (req.method !== "PUT") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
-  const { listingId } = req.query;
-
-  if (!listingId) {
-    return res.status(400).json({ message: "Listing ID is required" });
+    return NextResponse.json(
+      { error: "User not authenticated" },
+      { status: 401 },
+    );
   }
 
   try {
-    await prisma.listing.update({
-      where: { id: listingId as string },
+    const data = await request.json();
+
+    const {
+      category,
+      location,
+      guestCount,
+      roomCount,
+      bathroomCount,
+      price,
+      title,
+      description,
+      phone,
+      paymentMethod,
+      imageSrc,
+    } = data;
+
+    const locationValue = location.value;
+    const updatedDescription = `${description}\n\nرقم الهاتف: ${phone}\nطريقة الدفع المفضلة: ${paymentMethod}`;
+
+    const newListing = await prisma.listing.create({
       data: {
-        viewCounter: { // Update this line to use 'viewCounter'
-          increment: 1
+        category,
+        locationValue,
+        guestCount,
+        roomCount,
+        bathroomCount,
+        price: parseInt(price, 10),
+        title,
+        description: updatedDescription,
+        userId: currentUser.id,
+        images: {
+          create: imageSrc.map((url: string) => ({ url })),
         },
       },
     });
 
-    return res.status(200).json({ message: "View count incremented successfully" });
-  } catch (error: any) {
-    console.error("Error incrementing view count:", error);
-    return res.status(500).json({ message: "An error occurred while incrementing the view count" });
+    return NextResponse.json(newListing);
+  } catch (error) {
+    console.error("Error creating listing:", error);
+    return NextResponse.json(
+      { error: "An error occurred while creating the listing" },
+      { status: 500 },
+    );
   }
 }

@@ -1,4 +1,3 @@
-
 import EmptyState from "@/app/components/EmptyState";
 import ClientOnly from "@/app/components/ClientOnly";
 
@@ -7,16 +6,31 @@ import getFavoriteListings from "@/app/actions/getFavoriteListings";
 
 import FavoritesClient from "./FavoritesClient";
 
-const ListingPage = async () => {
-  const listings = await getFavoriteListings();
+/**
+ * FavoritesPage Component
+ *
+ * Server component that fetches and displays a user's favorited property listings.
+ * Requires authentication - redirects to empty state if user is not logged in.
+ *
+ * Features:
+ * - Server-side data fetching for favorite listings
+ * - Authentication state validation
+ * - Client-side rendering with ClientOnly wrapper
+ * - Empty state display when no favorites exist
+ *
+ * @component
+ * @returns {Promise<JSX.Element>} Rendered favorites page with user's saved listings
+ */
+export default async function FavoritesPage() {
   const currentUser = await getCurrentUser();
+  const favorites = await getFavoriteListings();
 
-  if (listings.length === 0) {
+  if (favorites.length === 0) {
     return (
       <ClientOnly>
         <EmptyState
-          title="No favorites found"
-          subtitle="Looks like you have no favorite listings."
+          title="لا توجد مفضلات"
+          subtitle="يبدو أنه ليس لديك أي مفضلات حتى الان."
         />
       </ClientOnly>
     );
@@ -24,12 +38,7 @@ const ListingPage = async () => {
 
   return (
     <ClientOnly>
-      <FavoritesClient
-        listings={listings}
-        currentUser={currentUser}
-      />
+      <FavoritesClient listings={favorites} currentUser={currentUser} />
     </ClientOnly>
   );
 }
- 
-export default ListingPage;

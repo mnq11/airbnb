@@ -1,61 +1,68 @@
-import Container from "@/app/components/Container";
-import ListingCard from "@/app/components/listings/ListingCard";
-import EmptyState from "@/app/components/EmptyState";
-import getListings, { 
-  IListingsParams
-} from "@/app/actions/getListings";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import ClientOnly from "./components/ClientOnly";
+import getListings, { IListingsParams } from "@/app/actions/getListings";
+import ListingPagination from "@/app/components/ListingPagination";
+import ClientOnly from "@/app/components/ClientOnly";
+import EmptyState from "@/app/components/EmptyState";
 
-interface HomeProps {
-  searchParams: IListingsParams
-}
+/**
+ * Force dynamic rendering for this page to ensure fresh data on each request
+ * This prevents static generation and ensures the most up-to-date listings are displayed
+ */
+export const dynamic = "force-dynamic";
 
-const Home = async ({ searchParams }: HomeProps) => {
-  const listings = await getListings(searchParams);
-  const currentUser = await getCurrentUser();
+/**
+ * Home Page Component - Main entry point of the application
+ *
+ * This component serves as the landing page and displays paginated property listings.
+ * It handles fetching listings data with search parameters and pagination support.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {IListingsParams} props.searchParams - URL search parameters for filtering listings
+ * @returns {Promise<JSX.Element>} Rendered page component with listings or error state
+ */
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: IListingsParams;
+}) {
+  // Set default pagination values
+  const page = searchParams.page || 1;
+  const limit = 10;
 
-  if (listings.length === 0) {
+  try {
+    // Fetch paginated listings data and total count based on search parameters
+    const { listings, total } = await getListings({
+      ...searchParams,
+      page,
+      limit,
+    });
+
+    // Fetch current user information for favoriting functionality
+    const currentUser = await getCurrentUser();
+
+    // Calculate total number of pages for pagination
+    const totalPages = Math.ceil(total / limit);
+
+    // Render the listings with pagination component
     return (
       <ClientOnly>
-        <EmptyState showReset />
+        <ListingPagination
+          initialListings={listings}
+          initialPage={page}
+          totalPages={totalPages}
+          currentUser={currentUser}
+          searchParams={searchParams}
+        />
+      </ClientOnly>
+    );
+  } catch (error) {
+    // Handle any errors during data fetching and display error state
+    console.error("Error fetching data:", error);
+    return (
+      <ClientOnly>
+        <EmptyState title="Error" subtitle="Failed to load listings." />
       </ClientOnly>
     );
   }
-
-  return (
-    <ClientOnly>
-      <Container>
-        <div
-            className="
-            pt-24
-            grid
-            grid-cols-1
-            sm:grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            2xl:grid-cols-6
-            gap-8
-          "
-        >
-          {listings.map((listing: any) => {
-            const imageSrcs = listing.images.map((image: any) => image.url);
-
-            return (
-                <ListingCard
-                    currentUser={currentUser}
-                    key={listing.id}
-                    data={listing}
-                    imageSrcs={imageSrcs}
-
-                />
-            );
-          })}
-        </div>
-      </Container>
-    </ClientOnly>
-  )
 }
-
-export default Home;
