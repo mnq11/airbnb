@@ -11,6 +11,8 @@ import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 import Pagination from "@/app/components/listings/Pagination";
+import TripCalendarView from "./TripCalendarView";
+import ViewToggle from "./ViewToggle";
 
 /**
  * Interface for TripsClient component props
@@ -41,6 +43,8 @@ interface TripsClientProps {
  * - Pagination with server-side data fetching
  * - Arabic localization for headings and actions
  * - Displays detailed trip information via ListingCard components
+ * - Calendar view with color-coded reservations by property
+ * - Toggle between list and calendar views
  *
  * @component
  * @param {TripsClientProps} props - Component props
@@ -56,6 +60,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
   const [page, setPage] = useState(initialPage);
   const [reservations, setReservations] = useState(initialReservations);
   const [deletingId, setDeletingId] = useState("");
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
 
   /**
    * Handles reservation cancellation
@@ -110,43 +115,63 @@ const TripsClient: React.FC<TripsClientProps> = ({
     fetchReservations();
   }, [page, currentUser?.id]);
 
+  /**
+   * Handles view mode change
+   * @param {('list'|'calendar')} mode - The view mode to change to
+   */
+  const handleViewChange = (mode: 'list' | 'calendar') => {
+    setViewMode(mode);
+  };
+
   return (
     <Container>
       <div dir="rtl" className="text-right">
         <Heading title="رحلات" subtitle="أين كنت وأين تذهب" />
+        
+        {reservations.length > 0 && (
+          <ViewToggle view={viewMode} onChange={handleViewChange} />
+        )}
       </div>
-      <div
-        className="
-          mt-10
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          md:grid-cols-3
-          lg:grid-cols-4
-          xl:grid-cols-5
-          2xl:grid-cols-6
-          gap-8
-        "
-      >
-        {reservations.map((reservation: SafeReservation) => (
-          <ListingCard
-            key={reservation.id}
-            data={reservation.listing}
-            reservation={reservation}
-            actionId={reservation.id}
-            onAction={onCancel}
-            disabled={deletingId === reservation.id}
-            actionLabel="إلغاء الحجز"
-            currentUser={currentUser}
-            imageSrcs={reservation.listing.images.map((image) => image.url)}
-          />
-        ))}
-      </div>
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+
+      {viewMode === 'list' ? (
+        <div
+          className="
+            mt-6
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            md:grid-cols-3
+            lg:grid-cols-4
+            xl:grid-cols-5
+            2xl:grid-cols-6
+            gap-8
+          "
+        >
+          {reservations.map((reservation: SafeReservation) => (
+            <ListingCard
+              key={reservation.id}
+              data={reservation.listing}
+              reservation={reservation}
+              actionId={reservation.id}
+              onAction={onCancel}
+              disabled={deletingId === reservation.id}
+              actionLabel="إلغاء الحجز"
+              currentUser={currentUser}
+              imageSrcs={reservation.listing.images.map((image) => image.url)}
+            />
+          ))}
+        </div>
+      ) : (
+        <TripCalendarView reservations={reservations} />
+      )}
+
+      {viewMode === 'list' && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </Container>
   );
 };

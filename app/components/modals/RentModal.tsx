@@ -53,11 +53,11 @@ enum STEPS {
 
 // Define Payment Options
 const paymentMethodOptions = [
-  { value: 'cash', label: 'كاش' },
-  { value: 'bank_transfer', label: 'تحويل مالي' },
-  { value: 'on_arrival', label: 'دفع عند الوصول' },
-  { value: 'deposit', label: 'دفع عربون مقدم' },
-  { value: 'full_prepayment', label: 'دفع مقدم' },
+  { value: 'كاش', label: 'كاش' },
+  { value: 'تحويل مالي', label: 'تحويل مالي' },
+  { value: 'دفع عند الوصول', label: 'دفع عند الوصول' },
+  { value: 'دفع عربون مقدم', label: 'دفع عربون مقدم' },
+  { value: 'دفع مقدم' , label: 'دفع مقدم' },
 ];
 
 const RentModal = () => {
