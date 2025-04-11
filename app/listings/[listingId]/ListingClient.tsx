@@ -25,9 +25,11 @@ import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
 import { motion } from 'framer-motion';
+import L, { LatLngTuple } from "leaflet";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import useCountries from "@/app/hooks/useCountries";
 
 import Container from "@/app/components/Container";
 import { categories } from "@/app/components/navbar/Categories";
@@ -74,6 +76,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 }) => {
   const loginModal = useLoginModal();
   const router = useRouter();
+  const { getByValue } = useCountries();
 
   /**
    * Calculates dates that are already reserved and should be disabled in the calendar
@@ -105,6 +108,38 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+
+  /**
+   * Determine the coordinates for the map
+   */
+  const mapCoordinates: LatLngTuple | undefined = useMemo(() => {
+    // 1. Prioritize explicitly saved latitude/longitude
+    if (listing.latitude != null && listing.longitude != null) {
+      return [listing.latitude, listing.longitude];
+    }
+    
+    // 2. Fallback: Try parsing coordinates from locationValue (format "lat,lng")
+    if (listing.locationValue && listing.locationValue.includes(',')) {
+      const parts = listing.locationValue.split(',');
+      if (parts.length === 2) {
+          const lat = parseFloat(parts[0]);
+          const lng = parseFloat(parts[1]);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            return [lat, lng]; // Return as LatLngTuple
+          }
+      }
+    }
+    
+    // 3. Fallback: Get coordinates from the country data based on locationValue
+    const countryData = getByValue(listing.locationValue);
+    // Ensure countryData.latlng is a valid tuple [number, number]
+    if (countryData?.latlng && countryData.latlng.length === 2) {
+        return [countryData.latlng[0], countryData.latlng[1]]; // Return as LatLngTuple
+    }
+    
+    // If no valid coordinates found, return undefined
+    return undefined;
+  }, [listing.latitude, listing.longitude, listing.locationValue, getByValue]);
 
   /**
    * Handles reservation creation
@@ -196,7 +231,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
           <ListingHead
             title={listing.title}
             images={listing.images}
-            locationValue={listing.locationValue}
+            locationValue={mapCoordinates ? `${mapCoordinates[0].toFixed(4)}, ${mapCoordinates[1].toFixed(4)}` : listing.locationValue}
             id={listing.id}
             currentUser={currentUser}
             favoritesCount={listing.favoritesCount}
@@ -212,6 +247,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
+              coordinates={mapCoordinates}
             />
             <div className="order-first mb-10 md:order-last md:col-span-3">
               <ListingReservation

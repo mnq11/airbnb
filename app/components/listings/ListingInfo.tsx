@@ -2,13 +2,13 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { IconType } from "react-icons";
 import { IoMdPerson, IoMdBed, IoMdWater } from "react-icons/io"; // Import the icons
+import { LatLngTuple } from "leaflet"; // Import LatLngTuple
 
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
 
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
-import { LatLngTuple } from "leaflet";
 
 const Map = dynamic(() => import("../Map"), {
   ssr: false,
@@ -27,7 +27,8 @@ const Map = dynamic(() => import("../Map"), {
  * @property {IconType} category.icon - Icon component representing the category
  * @property {string} category.label - Category name
  * @property {string} category.description - Detailed description of the category
- * @property {string} locationValue - Location identifier for country/region lookup
+ * @property {string} locationValue - Original location identifier (for display text)
+ * @property {LatLngTuple} [coordinates] - Optional precise coordinates for the map
  */
 interface ListingInfoProps {
   user: SafeUser | null;
@@ -42,7 +43,8 @@ interface ListingInfoProps {
         description: string;
       }
     | undefined;
-  locationValue: string;
+  locationValue: string; // Keep for displaying original selection text if needed
+  coordinates?: LatLngTuple; // Add optional coordinates prop
 }
 
 /**
@@ -76,11 +78,12 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   roomCount,
   bathroomCount,
   category,
-  locationValue,
+  locationValue, // Receive original locationValue
+  coordinates,   // Receive precise coordinates
 }) => {
-  const { getByValue } = useCountries();
-
-  const coordinates = getByValue(locationValue)?.latlng;
+  // No need to use getByValue here anymore for coordinates
+  // const { getByValue } = useCountries();
+  // const coordinates = getByValue(locationValue)?.latlng;
 
   // Helper function for number formatting
   const formatNumberAr = (num: number) => num.toLocaleString("ar-EG");
@@ -128,7 +131,8 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
       <hr />
 
       <div className="h-[35vh] rounded-lg overflow-hidden">
-        <Map center={coordinates as LatLngTuple | undefined} />
+        {/* Pass the received coordinates directly to the Map */}
+        <Map center={coordinates} /> 
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ import { toast } from "react-hot-toast";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Select from 'react-select';
 
 import useRentModal from "@/app/hooks/useRentModal";
@@ -35,7 +35,7 @@ import ImageUpload from "../inputs/ImageUpload";
 
 import Input from "../inputs/Input";
 import Heading from "../Heading";
-import CountrySelect from "@/app/components/inputs/CountrySelect";
+import CountrySelect, { CountrySelectValue } from "@/app/components/inputs/CountrySelect";
 
 /**
  * Enum defining the steps in the listing creation process
@@ -53,11 +53,11 @@ enum STEPS {
 
 // Define Payment Options
 const paymentMethodOptions = [
-  { value: 'cash', label: 'كاش' },
-  { value: 'bank_transfer', label: 'تحويل مالي' },
-  { value: 'on_arrival', label: 'دفع عند الوصول' },
-  { value: 'deposit', label: 'دفع عربون مقدم' },
-  { value: 'full_prepayment', label: 'دفع مقدم' },
+  { value: 'كاش', label: 'كاش' },
+  { value: 'تحويل مالي', label: 'تحويل مالي' },
+  { value: 'دفع عند الوصول', label: 'دفع عند الوصول' },
+  { value: 'دفع عربون مقدم', label: 'دفع عربون مقدم' },
+  { value: 'دفع مقدم' , label: 'دفع مقدم' },
 ];
 
 const RentModal = () => {
@@ -121,11 +121,28 @@ const RentModal = () => {
    * @param {any} value - New value to set for the field
    */
   const setCustomValue = (id: string, value: any) => {
-    setValue(id, value, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    });
+    // Special handling for location to store coords separately if needed
+    if (id === 'location' && value && typeof value === 'object' && value.latlng) {
+      // We might want to store a simplified location object
+      const simplifiedLocation: CountrySelectValue = {
+        flag: value.flag,
+        label: value.label,
+        latlng: value.latlng,
+        region: value.region,
+        value: value.value
+      };
+      setValue(id, simplifiedLocation, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+    } else {
+       setValue(id, value, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+    }
   };
 
   /**
@@ -233,6 +250,31 @@ const RentModal = () => {
   };
 
   /**
+   * Callback to handle location selection from the map
+   */
+  const handleMapLocationSelect = useCallback((coords: L.LatLngTuple) => {
+    console.log("Map selected coords:", coords);
+
+    const currentLocation = watch("location");
+    
+    // Create a *new* location object prioritizing map coordinates
+    const updatedLocation: CountrySelectValue = {
+      // Keep flag/region if they exist from CountrySelect
+      flag: currentLocation?.flag,
+      region: currentLocation?.region,
+      // Update latlng with the precise coordinates from the map
+      latlng: coords,
+      // Update label and value to reflect map selection
+      label: `موقع محدد (${coords[0].toFixed(4)}, ${coords[1].toFixed(4)})`, // Indicate map selection
+      value: `${coords[0]},${coords[1]}`, // Use coordinates as the primary value
+    };
+
+    setCustomValue("location", updatedLocation);
+    toast.success("تم تحديث الموقع من الخريطة");
+
+  }, [setValue, watch, setCustomValue]);
+
+  /**
    * Handles form submission
    * Validates current step and either progresses to next step or submits data
    *
@@ -260,12 +302,15 @@ const RentModal = () => {
       return;
     }
 
-    // Prepare final payload
+    // Prepare final payload - locationValue will now use the coords if map was used
     const payload = {
       ...data,
+      locationValue: data.location?.value, // This now correctly reflects map coords if map was used
+      // Ensure latlng is also sent explicitly if needed by backend
+      latitude: data.location?.latlng?.[0],
+      longitude: data.location?.latlng?.[1],
       description: data.description, 
       imageSrc: finalImageSrc,
-      location: data.location,
       price: parseInt(data.price, 10),
       phoneNumber: data.phone,
       preferredPayment: data.paymentMethod,
@@ -370,12 +415,18 @@ const RentModal = () => {
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="أين يقع مكانك" subtitle="ساعد الضيوف في العثور عليك!" />
+        <Heading title="أين يقع مكانك" subtitle="اختر المنطقة ثم حدد الموقع على الخريطة أو استخدم موقعك الحالي" />
         <CountrySelect
           value={location}
           onChange={(value) => setCustomValue("location", value)}
         />
-        <Map center={location?.latlng} />
+        <div className="text-sm text-neutral-600 text-right">
+          اسحب الدبوس لتحديد الموقع بدقة، أو اضغط على أي مكان في الخريطة لوضع الدبوس.
+        </div>
+        <Map 
+          center={location?.latlng} 
+          onLocationSelect={handleMapLocationSelect}
+        />
       </div>
     );
   }

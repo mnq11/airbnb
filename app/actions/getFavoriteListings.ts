@@ -3,47 +3,10 @@ import getCurrentUser from "./getCurrentUser";
 import { SafeListing } from "@/app/types"; // Import SafeListing type
 
 /**
- * Interface representing a property listing favorited by a user
- *
- * Contains all listing data plus favorite-specific metadata
- *
- * @interface Favorite
- * @property {string} id - Unique identifier for the listing
- * @property {Date} createdAt - Date when the listing was created
- * @property {Array<{url: string}>} images - Array of image objects with URLs
- * @property {string} title - Title of the property listing
- * @property {string} description - Detailed description of the property
- * @property {string} category - Category type of the property
- * @property {number} roomCount - Number of rooms in the property
- * @property {number} bathroomCount - Number of bathrooms in the property
- * @property {number} guestCount - Maximum number of guests allowed
- * @property {string} locationValue - Location identifier value
- * @property {string|null} userId - ID of the user who owns the property
- * @property {number} price - Price per night in local currency
- * @property {number} favoritesCount - Number of users who favorited this listing
- * @property {number} viewCounter - Number of times the listing has been viewed
- */
-interface Favorite {
-  id: string;
-  createdAt: Date;
-  images: Array<{ url: string }>;
-  title: string;
-  description: string;
-  category: string;
-  roomCount: number;
-  bathroomCount: number;
-  guestCount: number;
-  locationValue: string;
-  userId: string | null;
-  price: number;
-  favoritesCount: number;
-  viewCounter: number;
-}
-
-/**
  * Gets all property listings favorited by the current user
  *
  * Fetches listings that match the IDs stored in the user's favoriteIds array.
+ * Includes latitude and longitude fields.
  * Transforms database listings into safe objects for client-side use by
  * stringifying dates and formatting nested objects.
  *
@@ -60,27 +23,45 @@ export default async function getFavoriteListings(): Promise<SafeListing[]> {
       return [];
     }
 
-    const favorites: Favorite[] = await prisma.listing.findMany({
+    // Fetch favorite listings directly using Prisma type
+    const favorites = await prisma.listing.findMany({
       where: {
         id: {
           in: [...(currentUser.favoriteIds || [])],
         },
       },
-      include: {
-        images: true, // Include the images relation
+      select: { // Use select to ensure all required fields are included
+        id: true,
+        title: true,
+        description: true,
+        createdAt: true,
+        category: true,
+        roomCount: true,
+        bathroomCount: true,
+        guestCount: true,
+        locationValue: true,
+        userId: true,
+        price: true,
+        favoritesCount: true,
+        viewCounter: true,
+        latitude: true, // Explicitly select latitude
+        longitude: true, // Explicitly select longitude
+        images: {
+          select: { url: true } // Select only the URL from images
+        },
       },
     });
 
+    // Map the fetched data to SafeListing type
     const safeFavorites: SafeListing[] = favorites.map((favorite) => ({
       ...favorite,
       createdAt: favorite.createdAt.toString(),
-      images: favorite.images.map((image) => ({
-        url: image.url,
-      })),
+      // Images are already in the correct format due to the select statement
     }));
 
     return safeFavorites;
   } catch (error: any) {
-    throw new Error(error);
+    console.error("Error fetching favorite listings:", error);
+    throw new Error("Failed to fetch favorite listings.");
   }
 }
