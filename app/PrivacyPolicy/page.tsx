@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
   /**
    * Email address for data deletion requests
    */
-  const deleteEmail = "mnq_11@yahoo.com";
+  const deleteEmail = "jolatna@gmail.com";
 
   /**
    * Expected time frame for processing deletion requests
