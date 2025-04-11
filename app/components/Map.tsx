@@ -192,6 +192,18 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
     );
   }, [onLocationSelect]);
 
+  // Function to open Google Maps directions
+  const handleGetDirections = useCallback(() => {
+    if (markerPosition) {
+      const lat = markerPosition[0];
+      const lng = markerPosition[1];
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      toast.error("لا يوجد موقع محدد للحصول على الاتجاهات.");
+    }
+  }, [markerPosition]);
+
   return (
     <div className={`${styles.mapWrapper} relative`}>
       <MapContainer
@@ -245,6 +257,26 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
             <MapPinIcon className="h-5 w-5" />
           )}
         </button>
+      )}
+
+      {/* NEW: Google Maps Directions Button */}
+      {markerPosition && !onLocationSelect && ( // Show only if marker exists AND not in selection mode
+          <button
+            type="button"
+            onClick={handleGetDirections}
+            className="
+              absolute bottom-2 right-2 z-[1000] 
+              bg-blue-600 hover:bg-blue-700 text-white
+              p-2 rounded-md shadow-md 
+              transition flex items-center gap-1.5 text-sm
+            "
+            title="الحصول على الاتجاهات في خرائط جوجل"
+          >
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+               <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 0 1-1.161.886l-.143.048a1.107 1.107 0 0 0-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 0 1-1.652.928l-.679-.906a1.125 1.125 0 0 0-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 0 0-8.862 12.872l.058.088c.3.44.849.725 1.386.725h4.305a1.125 1.125 0 0 1 .848.354l.048.062c.303.396.408.92.308 1.425a1.125 1.125 0 0 1-.247.654l-.06.086c-.4.566-.414 1.316-.027 1.884l.055.08c.34.496.885.78 1.442.78h1.472c.477 0 .92-.184 1.25-.518l.046-.046c.35-.35.518-.82.518-1.31a1.125 1.125 0 0 0-.354-.848l-.048-.062c-.402-.516-.402-1.206 0-1.722l.048-.063c.303-.396.408.92.308-1.425a1.125 1.125 0 0 1-.247-.654l-.06-.086c-.4-.566-.414-1.316-.027-1.884l.055.08c.34.496.885.78 1.442.78h.287c.334 0 .65-.148.864-.405l.89-1.068c.369-.442 1.01-.535 1.49-.216l.766.51a2.25 2.25 0 0 0 1.161-.886l.048-.143c.326-.976-.191-2.056-1.182-2.476l-.244-.102a1.125 1.125 0 0 1-.664-.57l-.048-.143a1.125 1.125 0 0 0-1.664-.57l-.102.244c-.42.99-.47 2.118-.134 3.069l-.076.233a1.125 1.125 0 0 1-.928 1.652l-1.059-.423z" />
+             </svg>
+            <span>الاتجاهات</span>
+          </button>
       )}
     </div>
   );
