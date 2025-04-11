@@ -142,20 +142,26 @@ export default async function getListings(
       };
     }
 
+    // Determine sorting order
+    let orderBy: any = { createdAt: "desc" }; // Default sort: newest first
+    if (!category && !locationValue && !params.userId) { 
+      // If no specific category, location, or user filter is applied,
+      // sort by viewCounter descending for the general home page.
+      orderBy = { viewCounter: "desc" };
+    }
+
     // Get total count of matching listings for pagination
     const total = await prisma.listing.count({ where: query });
 
-    // Fetch the listings with pagination applied
+    // Fetch the listings with pagination and dynamic sorting
     const listings = await prisma.listing.findMany({
       where: query,
-      orderBy: {
-        createdAt: "desc", // Sort by newest first
-      },
+      orderBy: orderBy, // Apply the determined sort order
       include: {
         images: true, // Include the listing images
       },
-      skip: (page - 1) * limit, // Pagination: skip previous pages
-      take: limit, // Pagination: take only the requested number of items
+      skip: (page - 1) * limit,
+      take: limit,
     });
 
     // Transform database listings to safe listings format for client use
@@ -172,6 +178,7 @@ export default async function getListings(
       total,
     };
   } catch (error: any) {
-    throw new Error(error);
+    console.error("Error fetching listings:", error); // Log the error
+    throw new Error("Failed to fetch listings."); // Throw a more specific error
   }
 }

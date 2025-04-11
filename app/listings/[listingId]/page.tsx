@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getListingById from "@/app/actions/getListingById";
 import getReservations from "@/app/actions/getReservations";
+import incrementListingView from "@/app/actions/incrementListingView";
 
 import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
@@ -35,9 +36,15 @@ interface IParams {
  * @returns {Promise<JSX.Element>} Rendered listing detail page or empty state if listing not found
  */
 const ListingPage = async ({ params }: { params: IParams }) => {
-  const listing = await getListingById(params);
-  const reservations = await getReservations({ listingId: params.listingId });
-  const currentUser = await getCurrentUser();
+  // Increment view count (fire-and-forget, no need to await unless necessary)
+  incrementListingView(params.listingId);
+
+  // Fetch data in parallel
+  const [listing, reservations, currentUser] = await Promise.all([
+    getListingById(params),
+    getReservations({ listingId: params.listingId }),
+    getCurrentUser(),
+  ]);
 
   if (!listing) {
     return (
