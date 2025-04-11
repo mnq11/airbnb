@@ -10,6 +10,6 @@
     }
   ],
   "installCommand": "npm install",
-  "buildCommand": "(rm -f app/api/listings/[listingId]/page.tsx app/api/listings/[listingId]/page.js app/api/listings/[listingId]/page.jsx || true) && npm run build",
+  "buildCommand": "prisma generate && next build",
   "regions": ["iad1"] 
 } 
