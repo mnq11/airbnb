@@ -60,6 +60,8 @@ model Listing {
   price          Int
   favoritesCount Int            @default(0)
   viewCounter    Int            @default(0)
+  latitude       Float?
+  longitude      Float?
   reservations   Reservation[]
   images         ListingImage[]
 }

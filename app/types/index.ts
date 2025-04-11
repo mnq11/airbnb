@@ -63,6 +63,7 @@ export type SafeUser = Omit<
  *
  * Converts dates to strings and includes image URLs
  * in an appropriate format for rendering.
+ * Also includes latitude and longitude if available.
  *
  * @typedef {Object} SafeListing
  */
@@ -70,4 +71,6 @@ export type SafeListing = Omit<Listing, "createdAt"> & {
   createdAt: string;
   images: { url: string }[];
   viewCounter?: number;
+  latitude?: number | null;
+  longitude?: number | null;
 };

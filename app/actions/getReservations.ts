@@ -1,6 +1,7 @@
 // File: /app/actions/getReservations.ts
 
 import prisma from "@/app/libs/prismadb";
+import { SafeReservation } from "@/app/types"; // Import the correct SafeReservation type
 
 /**
  * Interface for getReservations parameters
@@ -21,59 +22,6 @@ interface IParams {
 }
 
 /**
- * Interface for reservation data returned from the database
- *
- * @interface Reservation
- * @property {string} id - Unique identifier for the reservation
- * @property {Date} createdAt - When the reservation was created
- * @property {Date} startDate - Check-in date
- * @property {Date} endDate - Check-out date
- * @property {string} userId - ID of user who made the reservation
- * @property {string} listingId - ID of the property being reserved
- * @property {number} totalPrice - Total price for the entire stay
- * @property {Object} listing - Detailed property information
- * @property {string} listing.id - Property ID
- * @property {Date} listing.createdAt - When the property listing was created
- * @property {Array<{url: string}>} listing.images - Property images
- * @property {string} listing.title - Property title
- * @property {string} listing.description - Property description
- * @property {string} listing.category - Property category/type
- * @property {number} listing.roomCount - Number of rooms
- * @property {number} listing.bathroomCount - Number of bathrooms
- * @property {number} listing.guestCount - Maximum number of guests
- * @property {string} listing.locationValue - Location identifier
- * @property {string|null} listing.userId - ID of property owner
- * @property {number} listing.price - Base price per night
- * @property {number} listing.favoritesCount - Number of users who favorited this property
- * @property {number} listing.viewCounter - Number of times this property has been viewed
- */
-interface Reservation {
-  id: string;
-  createdAt: Date;
-  startDate: Date;
-  endDate: Date;
-  userId: string;
-  listingId: string;
-  totalPrice: number;
-  listing: {
-    id: string;
-    createdAt: Date;
-    images: Array<{ url: string }>;
-    title: string;
-    description: string;
-    category: string;
-    roomCount: number;
-    bathroomCount: number;
-    guestCount: number;
-    locationValue: string;
-    userId: string | null;
-    price: number;
-    favoritesCount: number;
-    viewCounter: number;
-  };
-}
-
-/**
  * Retrieves reservations with filtering and pagination support
  *
  * This function fetches reservation data from the database with various filtering options:
@@ -87,7 +35,7 @@ interface Reservation {
  * @async
  * @function getReservations
  * @param {IParams} params - Filter and pagination parameters
- * @returns {Promise<{reservations: any[], total: number}>} Reservations and total count
+ * @returns {Promise<{reservations: SafeReservation[], total: number}>} Reservations and total count
  * @throws {Error} If database query fails
  */
 export default async function getReservations(params: IParams) {
@@ -110,13 +58,30 @@ export default async function getReservations(params: IParams) {
 
     const total = await prisma.reservation.count({ where: query });
 
-    const reservations: Reservation[] = await prisma.reservation.findMany({
+    const reservations = await prisma.reservation.findMany({
       where: query,
       include: {
         listing: {
-          include: {
-            images: true,
-          },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            createdAt: true,
+            category: true,
+            roomCount: true,
+            bathroomCount: true,
+            guestCount: true,
+            locationValue: true,
+            userId: true,
+            price: true,
+            favoritesCount: true,
+            viewCounter: true,
+            latitude: true,
+            longitude: true,
+            images: {
+              select: { url: true }
+            },
+          }
         },
       },
       orderBy: {
@@ -126,8 +91,8 @@ export default async function getReservations(params: IParams) {
       take: limit,
     });
 
-    return {
-      reservations: reservations.map((reservation: Reservation) => ({
+    const safeReservations: SafeReservation[] = reservations.map(
+      (reservation) => ({
         ...reservation,
         createdAt: reservation.createdAt.toISOString(),
         startDate: reservation.startDate.toISOString(),
@@ -135,14 +100,16 @@ export default async function getReservations(params: IParams) {
         listing: {
           ...reservation.listing,
           createdAt: reservation.listing.createdAt.toISOString(),
-          images: reservation.listing.images.map((image) => ({
-            url: image.url,
-          })),
         },
-      })),
+      })
+    );
+
+    return {
+      reservations: safeReservations,
       total,
     };
   } catch (error: any) {
-    throw new Error(error);
+    console.error("Error fetching reservations:", error);
+    throw new Error("Failed to fetch reservations.");
   }
 }
