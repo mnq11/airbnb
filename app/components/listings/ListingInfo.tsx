@@ -130,9 +130,9 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
 
       <hr />
 
-      <div className="h-[35vh] rounded-lg overflow-hidden">
+      <div className="h-[35vh] rounded-lg overflow-hidden border-2 border-[#f23f5d] shadow-[0_4px_6px_rgb(242,63,93)] my-[10px] relative">
         {/* Pass the received coordinates directly to the Map */}
-        <Map center={coordinates} /> 
+        <Map center={coordinates} />
       </div>
     </div>
   );

@@ -205,12 +205,12 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
   }, [markerPosition]);
 
   return (
-    <div className={`${styles.mapWrapper} relative`}>
+    <div className="relative h-full w-full">
       <MapContainer
         center={currentCenter}
         zoom={markerPosition ? 15 : 10} // Zoom in if marker exists
         scrollWheelZoom={true}
-        className={styles.mapContainer}
+        className={`${styles.mapContainer} h-full w-full`}
       >
         {/* OpenStreetMap tile layer */}
         <TileLayer url={url} attribution={attribution} />
