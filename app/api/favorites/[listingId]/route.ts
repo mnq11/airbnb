@@ -37,41 +37,50 @@ export async function POST(request: Request, { params }: { params: IParams }) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
-    throw new Error("Invalid ID");
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
   let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-  favoriteIds.push(listingId);
+  // Avoid adding duplicates if already favorited
+  if (!favoriteIds.includes(listingId)) {
+      favoriteIds.push(listingId);
+  }
 
-  const user = await prisma.user.update({
-    where: {
-      id: currentUser.id,
-    },
-    data: {
-      favoriteIds,
-    },
-  });
-
-  // Increment the favoritesCount for the listing
-  const listing = await prisma.listing.update({
-    where: {
-      id: listingId,
-    },
-    data: {
-      favoritesCount: {
-        increment: 1,
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: currentUser.id,
       },
-    },
-  });
+      data: {
+        favoriteIds,
+      },
+    });
 
-  return NextResponse.json(user);
+    // Increment the favoritesCount for the listing
+    // Use updateMany to avoid errors if listing doesn't exist, although it ideally should
+    await prisma.listing.updateMany({
+      where: {
+        id: listingId,
+      },
+      data: {
+        favoritesCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return NextResponse.json(user);
+  } catch (error) {
+      console.error("Error adding favorite:", error);
+      return NextResponse.json({ error: "Failed to add favorite" }, { status: 500 });
+  }
 }
 
 /**
@@ -92,39 +101,47 @@ export async function DELETE(
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
-    throw new Error("Invalid ID");
+     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
   let favoriteIds = [...(currentUser.favoriteIds || [])];
 
   favoriteIds = favoriteIds.filter((id) => id !== listingId);
 
-  const user = await prisma.user.update({
-    where: {
-      id: currentUser.id,
-    },
-    data: {
-      favoriteIds,
-    },
-  });
-
-  // Decrement the favoritesCount for the listing
-  const listing = await prisma.listing.update({
-    where: {
-      id: listingId,
-    },
-    data: {
-      favoritesCount: {
-        decrement: 1,
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: currentUser.id,
       },
-    },
-  });
+      data: {
+        favoriteIds,
+      },
+    });
 
-  return NextResponse.json(user);
+    // Decrement the favoritesCount only if it's greater than 0
+    await prisma.listing.updateMany({
+      where: {
+        id: listingId,
+        favoritesCount: {
+          gt: 0, // Only update if count is greater than 0
+        },
+      },
+      data: {
+        favoritesCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    return NextResponse.json(user);
+  } catch (error) {
+      console.error("Error removing favorite:", error);
+      return NextResponse.json({ error: "Failed to remove favorite" }, { status: 500 });
+  }
 }

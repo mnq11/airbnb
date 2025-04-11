@@ -84,45 +84,39 @@ export async function DELETE(
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.error();
+    // Return 401 Unauthorized
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
-    throw new Error("Invalid ID");
+    // Return 400 Bad Request for invalid ID
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
-  // Check if the listing exists and belongs to the current user
+  // Fetch the listing to check ownership before deleting
   const listing = await prisma.listing.findUnique({
-    where: { id: listingId },
-    select: { favoritesCount: true, userId: true },
+    where: { id: listingId, userId: currentUser.id }, // Combine check
+    select: { id: true }, // Only need to know if it exists and belongs to user
   });
 
+  // If listing doesn't exist or doesn't belong to the user
   if (!listing) {
-    return NextResponse.error();
+     // Return 403 Forbidden (or 404 Not Found - 403 is often better for security)
+    return NextResponse.json({ error: "Listing not found or you do not have permission to delete it." }, { status: 403 });
   }
 
-  if (listing.userId !== currentUser.id) {
-    return NextResponse.error();
-  }
-
-  // Decrement the favoritesCount for the listing if it's greater than 0
-  if (listing.favoritesCount > 0) {
-    await prisma.listing.update({
+  // Delete the listing - No need to check/decrement favoritesCount here
+  try {
+    await prisma.listing.delete({
       where: { id: listingId },
-      data: { favoritesCount: { decrement: 1 } },
     });
-  } else {
-    console.log(
-      `Cannot decrement favoritesCount for listing ${listingId}. Current count is ${listing.favoritesCount}`,
-    );
+
+    return NextResponse.json({ message: "Listing deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting listing:", error);
+     // Return 500 Internal Server Error if deletion fails
+    return NextResponse.json({ error: "Failed to delete listing" }, { status: 500 });
   }
-
-  // Delete the listing
-  await prisma.listing.delete({
-    where: { id: listingId },
-  });
-
-  return NextResponse.json({ message: "Listing deleted successfully" });
 }
