@@ -386,28 +386,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 </div>
               </>
             )}
-            
-            {/* Cloudinary alternate option */}
-            {!isUploading && (
-              <button 
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  try {
-                    open();
-                  } catch (e) {
-                    console.error("Failed to open Cloudinary widget:", e);
-                    fileInputRef.current?.click();
-                  }
-                }}
-                className="mt-3 flex items-center gap-2 text-xs text-blue-600 hover:text-blue-800 
-                           hover:underline transition-colors px-3 py-1.5 bg-blue-50 
-                           hover:bg-blue-100 rounded-full"
-              >
-                <TbCloudUpload size={16} />
-                <span>استخدام خدمة Cloudinary للتحميل</span>
-              </button>
-            )}
           </div>
         )}
       </CldUploadWidget>
