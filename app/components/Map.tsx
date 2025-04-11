@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from "react"
 import L, { LatLngTuple, LatLng } from "leaflet";
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { toast } from "react-hot-toast";
-import { MapPinIcon } from "@heroicons/react/24/outline"; // Changed to MapPinIcon
+import { MapPinIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -92,6 +92,44 @@ const ClickHandler = ({ onMapClick }: { onMapClick: (latlng: LatLng) => void }) 
   return null;
 };
 
+// Define different map themes (tile layers)
+const themes = {
+  default: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    label: "Default",
+  },
+  satellite: {
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    label: "Satellite",
+  },
+  topo: {
+      url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+      attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+      label: "Topographic",
+  },
+};
+
+type ThemeKey = keyof typeof themes;
+
+// Helper component to add Zoom control programmatically
+const ZoomControl = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    const zoomControl = L.control.zoom({ position: 'topleft' });
+    map.addControl(zoomControl);
+
+    // Cleanup function to remove the control when the component unmounts
+    return () => {
+      map.removeControl(zoomControl);
+    };
+  }, [map]); // Re-run effect if map instance changes
+
+  return null; // This component does not render anything itself
+};
+
 /**
  * Map Component
  *
@@ -115,6 +153,8 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
   const [currentCenter, setCurrentCenter] = useState<LatLngTuple>(center || yemenCoordinates);
   const [markerPosition, setMarkerPosition] = useState<LatLngTuple | null>(center || null);
   const [isLocating, setIsLocating] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<ThemeKey>('default'); // State for selected theme
+  const [showThemeSelector, setShowThemeSelector] = useState(false); // State to toggle theme selector
   const markerRef = useRef<L.Marker>(null);
 
   // Update internal center and marker when prop changes
@@ -211,9 +251,18 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
         zoom={markerPosition ? 15 : 10} // Zoom in if marker exists
         scrollWheelZoom={true}
         className={`${styles.mapContainer} h-full w-full`}
+        // Remove default zoom control to place it manually
+        zoomControl={false} 
       >
-        {/* OpenStreetMap tile layer */}
-        <TileLayer url={url} attribution={attribution} />
+        {/* Render selected tile layer */}
+        <TileLayer
+          key={selectedTheme} // Add key to force re-render on theme change
+          url={themes[selectedTheme].url}
+          attribution={themes[selectedTheme].attribution}
+        />
+        
+        {/* Add Leaflet's default zoom control in the top-left */}
+        <ZoomControl />
 
         {/* Marker: Draggable only if onLocationSelect is provided */}
         {markerPosition && (
@@ -240,7 +289,7 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
           onClick={handleGetCurrentLocation}
           disabled={isLocating}
           className="
-            absolute top-2 right-2 z-[1000] 
+            absolute top-[70px] right-2 z-[1000] // Adjusted top position
             bg-white p-2 rounded-md shadow-md 
             text-neutral-700 hover:bg-neutral-100 
             disabled:opacity-50 disabled:cursor-not-allowed
@@ -259,8 +308,8 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
         </button>
       )}
 
-      {/* NEW: Google Maps Directions Button */}
-      {markerPosition && !onLocationSelect && ( // Show only if marker exists AND not in selection mode
+      {/* Google Maps Directions Button */}
+      {markerPosition && ( // Show only if a marker exists
           <button
             type="button"
             onClick={handleGetDirections}
@@ -278,6 +327,42 @@ const Map: React.FC<MapProps> = ({ center, onLocationSelect }) => {
             <span>الاتجاهات</span>
           </button>
       )}
+
+      {/* Theme Selector - Moved to bottom-left */}
+      <div className="absolute bottom-2 left-2 z-[1000] flex flex-col items-start">
+         <button
+            type="button"
+            onClick={() => setShowThemeSelector(!showThemeSelector)}
+            className="bg-white p-2 rounded-md shadow-md text-neutral-700 hover:bg-neutral-100 transition"
+            title="Change map theme"
+          >
+            {/* Use the correct icon */}
+            <Squares2X2Icon className="h-5 w-5" /> 
+          </button>
+          {showThemeSelector && (
+            <div className="mt-1 bg-white rounded-md shadow-lg p-1 flex flex-col gap-1">
+              {(Object.keys(themes) as ThemeKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => {
+                    setSelectedTheme(key);
+                    setShowThemeSelector(false); // Close selector after selection
+                  }}
+                  className={`
+                    px-3 py-1 text-sm rounded
+                    ${selectedTheme === key 
+                      ? 'bg-blue-500 text-white' 
+                      : 'text-neutral-700 hover:bg-neutral-100'}
+                  `}
+                >
+                  {themes[key].label}
+                </button>
+              ))}
+            </div>
+          )}
+      </div>
+
     </div>
   );
 };

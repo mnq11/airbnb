@@ -415,18 +415,20 @@ const RentModal = () => {
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="أين يقع مكانك" subtitle="اختر المنطقة ثم حدد الموقع على الخريطة أو استخدم موقعك الحالي" />
+        <Heading
+          title="أين يقع مكانك؟"
+          subtitle="اختر المنطقة ثم حدد الموقع على الخريطة أو استخدم موقعك الحالي"
+        />
         <CountrySelect
           value={location}
           onChange={(value) => setCustomValue("location", value)}
         />
-        <div className="text-sm text-neutral-600 text-right">
-          اسحب الدبوس لتحديد الموقع بدقة، أو اضغط على أي مكان في الخريطة لوضع الدبوس.
+        <div className="h-[45vh] rounded-lg overflow-hidden border border-neutral-200 shadow-sm">
+          <Map 
+            center={location?.latlng} 
+            onLocationSelect={handleMapLocationSelect}
+          />
         </div>
-        <Map 
-          center={location?.latlng} 
-          onLocationSelect={handleMapLocationSelect}
-        />
       </div>
     );
   }
