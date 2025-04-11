@@ -5,7 +5,7 @@
       "src": "next.config.js",
       "use": "@vercel/next",
       "config": {
-        // Use the main buildCommand below instead of configuring here
+
       }
     }
   ],
